@@ -29,6 +29,69 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+      - name: Add save-to-phone support
+        run: |
+          D=android/app/src/main/java/com/kasign/kalendar
+          mkdir -p $D
+          cat > $D/SaveBridge.java <<'EOF'
+          package com.kasign.kalendar;
+
+          import android.content.ContentResolver;
+          import android.content.ContentValues;
+          import android.content.Context;
+          import android.net.Uri;
+          import android.os.Build;
+          import android.os.Environment;
+          import android.provider.MediaStore;
+          import android.util.Base64;
+          import android.webkit.JavascriptInterface;
+          import java.io.OutputStream;
+
+          public class SaveBridge {
+            private final Context ctx;
+            public SaveBridge(Context c) { ctx = c; }
+
+            @JavascriptInterface
+            public String save(String name, String mime, String b64) {
+              try {
+                if (Build.VERSION.SDK_INT < 29) return "error:Android 10 or newer is required";
+                byte[] data = Base64.decode(b64, Base64.DEFAULT);
+                boolean img = mime.startsWith("image/");
+                String folder = (img ? Environment.DIRECTORY_PICTURES : Environment.DIRECTORY_DOWNLOADS) + "/Kalendar";
+                ContentValues v = new ContentValues();
+                v.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                v.put(MediaStore.MediaColumns.MIME_TYPE, mime);
+                v.put(MediaStore.MediaColumns.RELATIVE_PATH, folder);
+                Uri base = img
+                  ? MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                  : MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                ContentResolver r = ctx.getContentResolver();
+                Uri uri = r.insert(base, v);
+                if (uri == null) return "error:could not create the file";
+                OutputStream o = r.openOutputStream(uri);
+                if (o == null) return "error:could not open the file";
+                try { o.write(data); } finally { o.close(); }
+                return "ok:" + folder;
+              } catch (Exception e) {
+                return "error:" + e.getMessage();
+              }
+            }
+          }
+          EOF
+          cat > $D/MainActivity.java <<'EOF'
+          package com.kasign.kalendar;
+
+          import android.os.Bundle;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+              getBridge().getWebView().addJavascriptInterface(new SaveBridge(this), "KalendarSave");
+            }
+          }
+          EOF
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
