@@ -22,8 +22,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install jspdf --no-audit --no-fund
-      - run: npm run copy:deps
+      - name: Get PDF library
+        run: |
+          npm install jspdf --no-audit --no-fund
+          mkdir -p www/js
+          cp node_modules/jspdf/dist/jspdf.umd.min.js www/js/jspdf.umd.min.js
       - name: Assemble web app
         run: |
           mkdir _site
