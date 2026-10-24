@@ -186,7 +186,11 @@ function render(cv,d0,Y,M,lay,ph,q,pw){
   const cw=gw/7;x.textAlign="center";x.fillStyle=d.ac;x.font="600 "+u*.3+"px "+d.f;
   const wl=(d.np||CU.nl)?WN:WE;for(let i=0;i<7;i++)x.fillText(wl[(i+CU.ws)%7],gx+cw*(i+.5),y);
   y+=u*.3;
-  const av=py+ph2-u*1.3-y,rh=Math.min(av/6,u*(d.box?2.1:1.35)),f0=(new Date(Y,M,1).getDay()-CU.ws+7)%7,dm=new Date(Y,M+1,0).getDate();
+  const dmx=new Date(Y,M+1,0).getDate(),m0=evk(Y,M,1),m1=evk(Y,M,dmx),
+    fo=pw>=500?FEST.filter(f=>f[0]<=m1&&f[1]>=m0).map(f=>{const a=f[0]<m0?m0:f[0],b=f[1]>m1?m1:f[1];return(a==b?a.slice(8):a.slice(8)+"–"+b.slice(8))+" "+f[2]}):[];
+  x.font="400 "+u*.26+"px "+SAN;x.textAlign="left";
+  const fl2=fo.length?wrap(x,"Festivals & holidays: "+fo.join("  ·  "),gw).slice(0,3):[],fh=fl2.length?fl2.length*u*.36+u*.25:0;
+  const av=py+ph2-u*1.3-fh-y,rh=Math.min(av/6,u*(d.box?2.1:1.35)),f0=(new Date(Y,M,1).getDay()-CU.ws+7)%7,dm=new Date(Y,M+1,0).getDate();
   x.strokeStyle=d.ink;x.globalAlpha=.25;x.lineWidth=2;
   if(!d.box){x.beginPath();x.moveTo(gx,y);x.lineTo(gx+gw,y);x.stroke()}
   x.globalAlpha=1;
@@ -203,6 +207,7 @@ function render(cv,d0,Y,M,lay,ph,q,pw){
     const ev=EV[ks];
     if(ev){x.fillStyle=d.ac;if(d.box){x.font="400 "+u*.2+"px "+d.f;x.textAlign="left";let s=ev[0];while(x.measureText(s).width>cw*(md!="ad"?.68:.85)&&s.length>1)s=s.slice(0,-1);x.fillStyle=d.ink;x.globalAlpha=.85;x.fillText(s,cx+cw*.08,cy+rh*.68);x.globalAlpha=1;x.textAlign="center"}else{x.beginPath();x.arc(tx,cy+rh-u*.2,u*.07,0,7);x.fill()}}
   }
+  if(fl2.length){x.fillStyle=d.ink;x.globalAlpha=.85;x.font="400 "+u*.26+"px "+SAN;x.textAlign="left";fl2.forEach((t,i)=>x.fillText(t,gx,py+ph2-u*1.3-fh+u*.45+i*u*.36));x.globalAlpha=1}
   x.fillStyle=d.ink;x.globalAlpha=.55;x.font="400 "+u*.26+"px "+SAN;x.textAlign="center";
   x.fillText(CU.brand+(md!="ad"?"  ·  AD + BS":""),px+pwid/2,py+ph2-u*.6);x.globalAlpha=1;
 }
@@ -250,7 +255,7 @@ function full(){const c=document.createElement("canvas");render(c,S.d,S.y,S.m,S.
 const fname=ext=>"kalendar-"+S.d.n.toLowerCase().replace(/[^a-z]+/g,"-")+"-"+S.y+"-"+String(S.m+1).padStart(2,"0")+"-"+(S.l=="p"?"portrait":"landscape")+"."+ext;
 async function save(name,data){
   if(!DL){say("Saving is not available in this view.");return}
-  try{await DL.save({filename:name,data});say("Saved "+name)}catch(e){say(e&&e.code=="declined"?"Save cancelled.":"Could not save ("+(e&&e.code||"error")+").")}
+  try{await DL.save({filename:name,data});say("Saved "+name)}catch(e){say(e&&e.code=="declined"?"Save cancelled.":"Could not save: "+(e&&(e.message||e.code)||"unknown error"))}
 }
 $("xp").onclick=()=>{full().toBlob(b=>save(fname("png"),b),"image/png")};
 $("xd").onclick=()=>{
@@ -285,13 +290,24 @@ DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]
   if(!DL){
     const P=window.Capacitor&&window.Capacitor.Plugins||{};
     DL={save:async({filename,data})=>{
-      const buf=await new Response(data).arrayBuffer();
+      const buf=await new Response(data).arrayBuffer(),type=/\.pdf$/i.test(filename)?"application/pdf":"image/png",errs=[];
+      const cancelled=e=>/cancel/i.test(String(e&&(e.message||e.name||e)));
       if(P.Filesystem&&P.Share){
-        let b="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)b+=String.fromCharCode.apply(null,a.subarray(i,i+8192));
-        const r=await P.Filesystem.writeFile({path:filename,data:btoa(b),directory:"CACHE"});
-        await P.Share.share({title:filename,url:r.uri});return{status:"saved"};
+        try{
+          let b="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)b+=String.fromCharCode.apply(null,a.subarray(i,i+8192));
+          const r=await P.Filesystem.writeFile({path:filename,data:btoa(b),directory:"CACHE"});
+          await P.Share.share({title:filename,dialogTitle:"Save or share",files:[r.uri]});return{status:"saved"};
+        }catch(e){if(cancelled(e))throw{code:"declined"};errs.push("share: "+(e&&e.message||e))}
       }
-      const u=URL.createObjectURL(new Blob([buf])),l=document.createElement("a");l.href=u;l.download=filename;l.click();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:"saved"};
+      try{
+        const f=new File([buf],filename,{type});
+        if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:filename});return{status:"saved"}}
+      }catch(e){if(e&&e.name=="AbortError")throw{code:"declined"};errs.push("web share: "+(e&&e.message||e))}
+      try{
+        const u=URL.createObjectURL(new Blob([buf],{type})),l=document.createElement("a");l.href=u;l.download=filename;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+        if(!errs.length)return{status:"saved"};
+      }catch(e){errs.push("download: "+(e&&e.message||e))}
+      throw new Error(errs.join("; ")||"no save method available");
     }};
   }
 })();
