@@ -1,0 +1,39 @@
+name: Android release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - run: bash scripts/ci-android.sh
+      - name: Set version from tag
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          sed -i "s/versionCode [0-9]*/versionCode ${GITHUB_RUN_NUMBER}/; s/versionName \".*\"/versionName \"${TAG}\"/" android/app/build.gradle
+      - name: Build unsigned release APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+      - name: Sign APK
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > release.jks
+          BT="$ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools | sort -V | tail -1)"
+          APK=$(ls android/app/build/outputs/apk/release/*.apk | head -1)
+          "$BT/zipalign" -p 4 "$APK" aligned.apk
+          "$BT/apksigner" sign --ks release.jks --ks-pass env:KS_PASS --ks-key-alias "$KEY_ALIAS" --key-pass env:KEY_PASS --out "Kalendar-${GITHUB_REF_NAME}.apk" aligned.apk
+          rm release.jks
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: Kalendar-*.apk
