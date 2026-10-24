@@ -33,14 +33,14 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug
       - name: Name the APK
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk Kalendar-v1.0.${{ github.run_number }}.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk Kalendar.apk
       - uses: actions/upload-artifact@v4
         with:
           name: Kalendar-APK
-          path: Kalendar-v1.0.${{ github.run_number }}.apk
+          path: Kalendar.apk
       - name: Publish to Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: Kalendar v1.0.${{ github.run_number }}
-          files: Kalendar-v1.0.${{ github.run_number }}.apk
+          files: Kalendar.apk
