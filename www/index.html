@@ -252,7 +252,7 @@ $("pv").onclick=()=>mv(-1);$("nx").onclick=()=>mv(1);
 $("lp").onclick=()=>{S.l="p";draw()};$("ll").onclick=()=>{S.l="l";draw()};
 $("qt").onclick=()=>{S.q=S.q?0:1;draw()};
 $("fv").onclick=()=>{const i=S.fav.indexOf(S.d.id);i<0?S.fav.push(S.d.id):S.fav.splice(i,1);try{localStorage.setItem("kk-fav",JSON.stringify(S.fav))}catch(e){}draw()};
-const MAIN_URL="https://claude.ai/artifact/1TE45T3RaoFc8McSi6uuvv"; // change to your main website address
+const MAIN_URL="https://kartproduction.github.io/kalendarbykasign/"; // change to your main website address
 const CDESC=["Clean, modern everyday calendars","Nature photography and scenic art","Quotes, motivation and life lessons","Nepali BS dates, festivals and culture","Productivity and goal-setting planners"];
 const isNative=!!(window.Capacitor&&(window.Capacitor.isNativePlatform?window.Capacitor.isNativePlatform():window.Capacitor.getPlatform&&window.Capacitor.getPlatform()!="web"));
 if(!isNative){const bk=$("bk");bk.href=MAIN_URL;bk.style.display=""}
