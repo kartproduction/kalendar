@@ -284,7 +284,7 @@ function full(){const c=document.createElement("canvas");render(c,S.d,S.y,S.m,S.
 const fname=ext=>"kalendar-"+S.d.n.toLowerCase().replace(/[^a-z]+/g,"-")+"-"+S.y+"-"+String(S.m+1).padStart(2,"0")+"-"+(S.l=="p"?"portrait":"landscape")+"."+ext;
 async function save(name,data){
   if(!DL){say("Saving is not available in this view.");return}
-  try{await DL.save({filename:name,data});say("Saved "+name)}catch(e){say(e&&e.code=="declined"?"Save cancelled.":"Could not save: "+(e&&(e.message||e.code)||"unknown error"))}
+  try{const r=await DL.save({filename:name,data});say("Saved "+name+(r&&r.where?" to "+r.where.replace(/^(Download|Pictures)/,(m)=>m=="Download"?"Downloads":"Pictures"):""))}catch(e){say(e&&e.code=="declined"?"Save cancelled.":"Could not save: "+(e&&(e.message||e.code)||"unknown error"))}
 }
 $("xp").onclick=()=>{full().toBlob(b=>save(fname("png"),b),"image/png")};
 $("xd").onclick=()=>{
@@ -321,10 +321,14 @@ DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]
     DL={save:async({filename,data})=>{
       const buf=await new Response(data).arrayBuffer(),type=/\.pdf$/i.test(filename)?"application/pdf":"image/png",errs=[];
       const cancelled=e=>/cancel/i.test(String(e&&(e.message||e.name||e)));
+      const b64=()=>{let b="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)b+=String.fromCharCode.apply(null,a.subarray(i,i+8192));return btoa(b)};
+      if(window.KalendarSave){
+        try{const r=String(window.KalendarSave.save(filename,type,b64()));if(r.indexOf("ok:")==0)return{status:"saved",where:r.slice(3)};errs.push("save: "+r)}
+        catch(e){errs.push("save: "+(e&&e.message||e))}
+      }
       if(P.Filesystem&&P.Share){
         try{
-          let b="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)b+=String.fromCharCode.apply(null,a.subarray(i,i+8192));
-          const r=await P.Filesystem.writeFile({path:filename,data:btoa(b),directory:"CACHE"});
+          const r=await P.Filesystem.writeFile({path:filename,data:b64(),directory:"CACHE"});
           await P.Share.share({title:filename,dialogTitle:"Save or share",files:[r.uri]});return{status:"saved"};
         }catch(e){if(cancelled(e))throw{code:"declined"};errs.push("share: "+(e&&e.message||e))}
       }
