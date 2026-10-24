@@ -35,7 +35,7 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
 input[type=file]{display:none}
 input.t{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:8px 14px;flex:1;min-width:140px}
 label{display:inline-flex;gap:6px;align-items:center}
-.bar{position:sticky;top:0;z-index:20;display:flex;gap:8px;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
+.bar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
 .bk{color:var(--tx);text-decoration:none;border:1px solid var(--bd);border-radius:999px;padding:8px 14px;background:var(--sf)}
 .grow{flex:1}
 .mp{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end}
@@ -47,7 +47,7 @@ label{display:inline-flex;gap:6px;align-items:center}
 </head>
 <body>
 <div class="w">
-<div class="bar"><a id="bk" class="bk" href="#" style="display:none">← Main page</a><span class="grow"></span><button id="mb" class="pri">☰ Collections</button></div>
+<div class="bar"><a id="bk" class="bk" href="#" style="display:none">← Main page</a><span class="grow"></span><a id="dla" class="bk" href="#" style="display:none">Download for Android</a><button id="mb" class="pri">☰ Collections</button></div>
 <div id="mp" class="mp" hidden></div>
 <h1>Kalendar by Kasign</h1>
 <p class="sub">10 designs · 5 collections · portrait &amp; landscape · PNG &amp; PDF export</p>
@@ -256,7 +256,7 @@ $("fv").onclick=()=>{const i=S.fav.indexOf(S.d.id);i<0?S.fav.push(S.d.id):S.fav.
 const MAIN_URL="https://kartproduction.github.io/kalendarbykasign/"; // change to your main website address
 const CDESC=["Clean, modern everyday calendars","Nature photography and scenic art","Quotes, motivation and life lessons","Nepali BS dates, festivals and culture","Productivity and goal-setting planners"];
 const isNative=!!(window.Capacitor&&(window.Capacitor.isNativePlatform?window.Capacitor.isNativePlatform():window.Capacitor.getPlatform&&window.Capacitor.getPlatform()!="web"));
-if(!isNative){const bk=$("bk");bk.href=MAIN_URL;bk.style.display=""}
+if(!isNative){const bk=$("bk");bk.href=MAIN_URL;bk.style.display="";const da=$("dla");da.href="https://kartproduction.github.io/kalendarbykasign/download.html";da.style.display=""}
 function pick(v){S.f=v;if(v>=0&&S.d.c!=v)S.d=DESIGNS.find(d=>d.c==v);chips();draw();mlabel()}
 function mlabel(){$("mb").textContent="☰ "+(S.f==-1?"Collections":S.f==-2?"♥ Favorites":COLS[S.f])}
 function cmenu(){
