@@ -15,7 +15,21 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - run: bash scripts/ci-android.sh
+      - uses: android-actions/setup-android@v3
+      - name: Create project files
+        run: |
+          echo '{"name":"kalendar","version":"1.0.0","private":true}' > package.json
+          echo '{"appId":"com.kasign.kalendar","appName":"Kalendar by Kasign","webDir":"www"}' > capacitor.config.json
+      - name: Install Capacitor and PDF library
+        run: |
+          npm install --no-audit --no-fund @capacitor/core @capacitor/android @capacitor/filesystem @capacitor/share jspdf
+          npm install -D --no-audit --no-fund @capacitor/cli
+          mkdir -p www/js
+          cp node_modules/jspdf/dist/jspdf.umd.min.js www/js/jspdf.umd.min.js
+      - name: Add Android project
+        run: |
+          npx cap add android
+          npx cap sync android
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
