@@ -1,151 +1,357 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kalendar by Kasign — beautiful calendars, AD and Nepali BS</title>
-<meta name="description" content="Beautiful calendar designs with portrait and landscape layouts, Nepali BS dates, your own events, and PNG/PDF export. Use it in your browser or install the Android app.">
-<link rel="icon" href="data:image/png;base64,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">
-<script>try{if(/Android/i.test(navigator.userAgent)&&!sessionStorage.getItem("kk-site")){location.replace("download.html")}}catch(e){}</script>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kalendar by Kasign</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#b5562b">
+<link rel="icon" href="icons/icon-192.png">
+<script src="js/jspdf.umd.min.js"></script>
 <style>
-:root{--bg:#faf8f4;--sf:#fff;--tx:#1f1d1a;--mu:#6f695f;--ac:#b5562b;--ac2:#8f3f1b;--bd:#e7e0d5;--soft:#f3ece1}
-@media(prefers-color-scheme:dark){:root{--bg:#161412;--sf:#201d1a;--tx:#f2eee8;--mu:#a69e92;--ac:#e08a5c;--ac2:#f0a982;--bd:#38332d;--soft:#1d1a17}}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
-a{color:inherit}.w{max-width:1080px;margin:0 auto;padding:0 22px}
-nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
-nav .w{display:flex;align-items:center;gap:22px;height:62px}
-.logo{font:700 20px Georgia,serif;text-decoration:none;display:flex;align-items:center;gap:8px}
-.logo img{width:28px;height:28px;border-radius:7px}
-nav .l{display:flex;gap:20px;margin-left:auto;font-size:15px}nav .l a{text-decoration:none;color:var(--mu)}nav .l a:hover{color:var(--tx)}
-.btn{display:inline-block;padding:11px 22px;border-radius:999px;background:var(--ac);color:#fff;text-decoration:none;font-weight:600;font-size:15px}
-.btn:hover{background:var(--ac2)}.btn.o{background:transparent;color:var(--tx);border:1px solid var(--bd)}.btn.o:hover{background:var(--soft)}
-@media(max-width:700px){nav .l a:not(.btn){display:none}}
-.hero{padding:70px 0 30px;text-align:center}
-.eb{display:inline-block;padding:5px 14px;border:1px solid var(--bd);border-radius:999px;color:var(--mu);font-size:13px;margin-bottom:18px}
-h1{font:600 clamp(34px,6.4vw,64px)/1.07 Georgia,serif;margin:0 0 16px;letter-spacing:-.01em}h1 em{color:var(--ac)}
-.lead{color:var(--mu);font-size:19px;max-width:620px;margin:0 auto 26px}
-.sm{color:var(--mu);font-size:13px;margin-top:14px}
-.win{max-width:860px;margin:44px auto 0;background:var(--sf);border:1px solid var(--bd);border-radius:18px;box-shadow:0 24px 60px rgba(60,40,20,.14);overflow:hidden;text-align:left}
-.bar{display:flex;align-items:center;gap:7px;padding:11px 16px;border-bottom:1px solid var(--bd);color:var(--mu);font-size:13px}
-.bar i{width:10px;height:10px;border-radius:50%;background:var(--bd)}.bar span{margin-left:10px}
-.app{display:grid;grid-template-columns:1fr 240px}@media(max-width:720px){.app{grid-template-columns:1fr}}
-.cal{padding:18px 20px}.ch{display:flex;align-items:center;gap:10px;margin-bottom:12px}.ch b{font:600 22px Georgia,serif;flex:1}
-.ch button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px}
-.gr{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
-.gr div{padding:9px 0;border-radius:10px;font-size:15px}.gr .h{font-size:11px;color:var(--mu);letter-spacing:.08em;padding:4px 0}
-.gr .d{cursor:default;position:relative}.gr .d:hover{background:var(--soft)}.gr .o{color:var(--mu);opacity:.45}
-.gr .t{background:var(--ac);color:#fff;font-weight:700}.gr .e::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--ac)}.gr .t.e::after{background:#fff}
-.side{border-left:1px solid var(--bd);padding:18px;background:var(--soft)}@media(max-width:720px){.side{border-left:0;border-top:1px solid var(--bd)}}
-.side h4{margin:0 0 10px;font-size:13px;color:var(--mu);letter-spacing:.06em;text-transform:uppercase}
-.chip{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px}.chip i{width:34px;height:34px;border-radius:9px;flex:none}
-section{padding:64px 0}h2{font:600 clamp(26px,4vw,38px)/1.15 Georgia,serif;margin:0 0 10px}h2 em{color:var(--ac)}
-.sub{color:var(--mu);max-width:600px;margin:0 0 30px}
-.g5{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
-.c{background:var(--sf);border:1px solid var(--bd);border-radius:16px;overflow:hidden;transition:transform .2s}.c:hover{transform:translateY(-3px)}
-.c i{display:block;height:110px}.c div{padding:13px 15px}.c b{display:block}.c span{color:var(--mu);font-size:14px}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.tabs button{font:inherit;padding:9px 16px;border:1px solid var(--bd);border-radius:999px;background:var(--sf);color:var(--tx);cursor:pointer}
-.tabs button.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.pn{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:var(--sf);border:1px solid var(--bd);border-radius:20px;padding:30px}
-@media(max-width:760px){.pn{grid-template-columns:1fr}}
-.pn h3{font:600 26px Georgia,serif;margin:0 0 8px}.pn p{color:var(--mu);margin:0 0 12px}.pn ul{margin:0;padding-left:18px;color:var(--mu)}.pn li{margin:4px 0}
-.vis{border-radius:16px;min-height:230px;display:flex;align-items:center;justify-content:center;color:#fff;font:600 30px Georgia,serif;text-align:center;padding:20px}
-.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
-.st div{background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:22px}.st .n{font:600 34px Georgia,serif;color:var(--ac)}
-details{border-bottom:1px solid var(--bd);padding:16px 0}summary{cursor:pointer;font-weight:600;list-style:none}summary::after{content:"+";float:right;color:var(--mu)}details[open] summary::after{content:"–"}
-details p{color:var(--mu);margin:10px 0 0}
-.cta{background:linear-gradient(135deg,#7a2f12,#b5562b);color:#fff;border-radius:24px;padding:54px 28px;text-align:center}
-.cta h2{color:#fff}.cta .btn{background:#fff;color:#7a2f12}.cta .btn.o{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
-footer{padding:48px 0 40px;color:var(--mu);font-size:14px}
-.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px}@media(max-width:700px){.fg{grid-template-columns:1fr 1fr}}
-footer h5{margin:0 0 10px;color:var(--tx);font-size:13px;letter-spacing:.06em;text-transform:uppercase}footer a{display:block;text-decoration:none;margin:6px 0}footer a:hover{color:var(--tx)}
-.cp{margin-top:30px;padding-top:18px;border-top:1px solid var(--bd);text-align:center}
-</style></head><body>
-<nav><div class="w"><a class="logo" href="#"><img src="data:image/png;base64,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" alt="">Kalendar</a>
-<div class="l"><a href="#designs">Designs</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a class="btn" href="#" data-web>Open app</a></div></div></nav>
+:root{--bg:#faf8f4;--sf:#fff;--tx:#1f1d1a;--mu:#7a746b;--ac:#b5562b;--bd:#e5dfd5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171513;--sf:#211e1b;--tx:#f2eee8;--mu:#a49c90;--ac:#e08a5c;--bd:#37322c}}
+:root[data-theme="dark"]{--bg:#171513;--sf:#211e1b;--tx:#f2eee8;--mu:#a49c90;--ac:#e08a5c;--bd:#37322c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:960px;margin:0 auto;padding:16px}
+h1{font:600 26px Georgia,serif;margin:4px 0 2px}
+.sub{color:var(--mu);margin:0 0 14px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:16px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select,.fb{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:8px 14px;cursor:pointer}
+button.on,.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+#stage{text-align:center;padding:12px 0}
+#cv{max-width:100%;max-height:68vh;border-radius:6px;box-shadow:0 6px 28px rgba(0,0,0,.25)}
+.mn{font-weight:600;min-width:150px;text-align:center}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+.th{background:var(--sf);border:2px solid var(--bd);border-radius:10px;padding:6px;cursor:pointer;text-align:center}
+.th.sel{border-color:var(--ac)}
+.th canvas{max-width:100%;height:auto;max-height:190px;border-radius:4px}
+.th b{display:block;font-size:12px;margin-top:4px}.th i{font-size:11px;color:var(--mu);font-style:normal}
+.note{color:var(--mu);font-size:13px}
+input[type=file]{display:none}
+input.t{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:8px 14px;flex:1;min-width:140px}
+label{display:inline-flex;gap:6px;align-items:center}
+.bar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
+.bk{color:var(--tx);text-decoration:none;border:1px solid var(--bd);border-radius:999px;padding:8px 14px;background:var(--sf)}
+.grow{flex:1}
+.mp{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end}
+.mp[hidden]{display:none}
+.mp .sheet{background:var(--sf);width:min(340px,88vw);height:100%;padding:16px;overflow:auto;padding-top:calc(16px + env(safe-area-inset-top,0px))}
+.mi{display:block;width:100%;text-align:left;border-radius:12px;margin:8px 0 0;padding:12px}
+.mi b{display:block}.mi small{color:var(--mu)}.mi.on small{color:#fff}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="bar"><a id="bk" class="bk" href="#" style="display:none">← Main page</a><span class="grow"></span><a id="dla" class="bk" href="#" style="display:none">Download for Android</a><button id="mb" class="pri">☰ Collections</button></div>
+<div id="mp" class="mp" hidden></div>
+<h1>Kalendar by Kasign</h1>
+<p class="sub">10 designs · 5 collections · portrait &amp; landscape · PNG &amp; PDF export</p>
 
-<header class="hero"><div class="w">
-<span class="eb">Calendars by Kasign · AD &amp; Nepali BS</span>
-<h1>Every month, <em>beautifully yours.</em></h1>
-<p class="lead">Pick a design built around real photographs and quotes, add your own events, and save it as a wallpaper or printable PDF. Free, private, and no account.</p>
-<a class="btn" href="#" data-web>Open in browser</a> <a class="btn o" href="https://kartproduction.github.io/kalendarbykasign/download.html">Download for Android</a>
-<div class="sm">Works offline · Android app version: <span class="ver">see Releases</span></div>
-<div class="win"><div class="bar"><i></i><i></i><i></i><span>kalendar · this month</span></div>
-<div class="app"><div class="cal"><div class="ch"><b id="mt"></b><button id="pv" aria-label="Previous month">‹</button><button id="nx" aria-label="Next month">›</button></div><div class="gr" id="gr"></div></div>
-<div class="side"><h4>Designs</h4>
-<div class="chip"><i style="background:linear-gradient(#f6c7a1,#3f4d73)"></i>Mountain Serenity</div>
-<div class="chip"><i style="background:linear-gradient(#a3162a,#d9a441)"></i>Nepali Heritage</div>
-<div class="chip"><i style="background:linear-gradient(#fde6ec,#f06f8f)"></i>Blooming Seasons</div>
-<div class="chip"><i style="background:linear-gradient(#fff,#e1d2bb)"></i>Pure Minimal</div>
-<h4 style="margin-top:14px">Export</h4><div class="chip" style="color:var(--mu)">PNG · PDF · A4 · Letter</div></div></div></div>
-</div></header>
+<div class="card">
+  <div class="row" style="justify-content:center">
+    <button id="pv">‹</button><span class="mn" id="mn"></span><button id="nx">›</button>
+  </div>
+  <div id="stage"><canvas id="cv"></canvas></div>
+  <div class="row" style="justify-content:center">
+    <button id="lp" class="on">Portrait 9:16</button><button id="ll">Landscape 16:9</button>
+    <button id="qt" class="on">Quote</button>
+    <label class="fb">Add photos<input type="file" id="ph" accept="image/*" multiple></label><button id="cp">Clear photo</button>
+    <button id="fv">♡ Favorite</button>
+  </div>
+  <div class="row" style="justify-content:center;margin-top:10px">
+    <select id="pz"><option value="a4">A4</option><option value="letter">Letter</option></select>
+    <button class="pri" id="xp">Save PNG</button><button class="pri" id="xd">Save PDF</button>
+  </div>
+  <div class="row" id="tray" style="justify-content:center;margin-top:10px"></div>
+  <p class="note" id="msg" style="text-align:center;margin:10px 0 0"></p>
+  <p class="note" id="fl" style="text-align:center;margin:6px 0 0"></p>
+</div>
 
-<section id="designs"><div class="w"><h2>Five collections, <em>ten designs.</em></h2><p class="sub">Each design comes in phone (9:16) and desktop (16:9) layouts, ready for your own photographs.</p>
-<div class="g5">
-<div class="c"><i style="background:linear-gradient(#fff,#e1d2bb)"></i><div><b>Kasign Minimal</b><span>Pure Minimal · Modern Neutral</span></div></div>
-<div class="c"><i style="background:linear-gradient(#f6c7a1,#3f4d73)"></i><div><b>Kasign Nature</b><span>Mountain Serenity · Earth &amp; Sky</span></div></div>
-<div class="c"><i style="background:linear-gradient(#2b2d5b,#e9a06d)"></i><div><b>Kasign Inspire</b><span>Daily Inspiration · Life in Perspective</span></div></div>
-<div class="c"><i style="background:linear-gradient(#a3162a,#d9a441)"></i><div><b>Kasign Nepali Patro</b><span>Nepali Heritage · Nepal Panorama</span></div></div>
-<div class="c"><i style="background:linear-gradient(#cfe3c4,#f8c4d2)"></i><div><b>Kasign Planner</b><span>Botanical Grace · Blooming Seasons</span></div></div>
-</div></div></section>
-
-<section id="features" style="background:var(--soft)"><div class="w"><h2>One app. <em>Every month.</em></h2><p class="sub">Everything you need to make a calendar you’ll actually use.</p>
-<div class="tabs" id="tb"></div><div class="pn" id="pn"></div></div></section>
-
-<section id="how"><div class="w"><h2>Ready in <em>three steps.</em></h2><p class="sub">No sign-up, no waiting.</p>
-<div class="st"><div><div class="n">1</div><b>Choose a design</b><p style="color:var(--mu)">Browse the collections and flip between portrait and landscape.</p></div>
-<div><div class="n">2</div><b>Make it yours</b><p style="color:var(--mu)">Add your photo, quote, colors, fonts, BS dates, and personal events.</p></div>
-<div><div class="n">3</div><b>Save or share</b><p style="color:var(--mu)">Export a PNG wallpaper or a PDF in A4 or Letter, or share it from your phone.</p></div></div></div></section>
-
-<section id="faq" style="background:var(--soft)"><div class="w" style="max-width:760px"><h2>Questions, <em>answered.</em></h2>
-<details><summary>Is it free?</summary><p>Yes. There are no accounts, subscriptions, or ads.</p></details>
-<details><summary>Does it work offline?</summary><p>Yes. After your first visit the website works offline, and the Android app works offline from the start.</p></details>
-<details><summary>Where is my data stored?</summary><p>Settings, favorites, and events are saved on your own device and never sent to a server. See the <a href="privacy.html" style="color:var(--ac)">privacy policy</a>.</p></details>
-<details><summary>How accurate are the Nepali BS dates?</summary><p>BS dates are built in for 2082–2088 BS. Dates for 2083 match published calendars; later years come from public converter tables, so check important dates against an official patro before printing.</p></details>
-<details><summary>How do I install the Android app?</summary><p>Tap Download for Android, open the file, and allow the install if Android asks. The file is the Kalendar app installer.</p></details>
-<details><summary>Can I use my own photos?</summary><p>Yes. Add photos in the app to try them on a design, and the project owner can bundle final photos so they load automatically.</p></details>
-</div></section>
-
-<section><div class="w"><div class="cta"><h2>Make this month <em style="color:#ffd9bd">yours.</em></h2><p style="opacity:.85;margin:0 0 22px">Open it in your browser or install it on your phone.</p>
-<a class="btn" href="#" data-web>Open in browser</a> <a class="btn o" href="https://kartproduction.github.io/kalendarbykasign/download.html">Download for Android</a></div></div></section>
-
-<footer><div class="w"><div class="fg">
-<div><a class="logo" href="#" style="margin-bottom:8px"><img src="data:image/png;base64,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" alt="">Kalendar</a>Calendars by Kasign. A calmer, more beautiful way to see your month.</div>
-<div><h5>Product</h5><a href="#designs">Designs</a><a href="#features">Features</a><a href="#" data-web>Web app</a></div>
-<div><h5>Get it</h5><a class="apk" href="#">Android APK</a><a id="src" href="#">Source on GitHub</a></div>
-<div><h5>Legal</h5><a href="download.html">Download page</a><a href="privacy.html">Privacy</a></div></div>
-<div class="cp"><a href="https://kartproduction.github.io/kasign/" style="color:inherit;text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">© 2026 Kasign, a Kart Production practice.</a> Photos, quotes and fonts remain the property of their owners.</div></div></footer>
+<div class="card"><b>My Calendar</b>
+<div class="row" style="margin-top:10px"><input type="date" id="ed" class="t"><input class="t" id="et" placeholder="Event or note"><button class="pri" id="ea">Add</button></div>
+<div id="el" style="margin-top:10px"></div></div>
+<div class="card"><b>Customize</b>
+<div class="row" style="margin-top:10px">
+<label>Accent <input type="color" id="ca" value="#b5562b"></label>
+<select id="cf"><option value="">Design font</option><option value="s">Serif</option><option value="n">Sans</option></select>
+<select id="cw"><option value="0">Week starts Sunday</option><option value="1">Week starts Monday</option></select>
+<select id="cm"><option value="auto">Dates: auto</option><option value="ad">AD only</option><option value="both">AD + BS</option><option value="bs">BS emphasis</option></select>
+<label><input type="checkbox" id="cn"> Nepali weekdays</label></div>
+<div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
+<div class="row" id="chips" style="margin-bottom:12px"></div>
+<div id="grid"></div>
+<p class="note" style="margin-top:16px">Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates (a short list for 2026) are editable in the FEST list. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.</p>
+</div>
 
 <script>
-(function(){
-var M=["January","February","March","April","May","June","July","August","September","October","November","December"],T=new Date(),y=T.getFullYear(),m=T.getMonth(),EV={};
-try{EV=JSON.parse(localStorage.getItem("kk-ev")||"{}")}catch(e){}
-function pad(n){return String(n).padStart(2,"0")}
-function cal(){
-  var g=document.getElementById("gr");g.innerHTML="";document.getElementById("mt").textContent=M[m]+" "+y;
-  ["S","M","T","W","T","F","S"].forEach(function(s){var d=document.createElement("div");d.className="h";d.textContent=s;g.appendChild(d)});
-  var f=new Date(y,m,1).getDay(),dm=new Date(y,m+1,0).getDate(),pm=new Date(y,m,0).getDate();
-  for(var i=0;i<42;i++){var d=document.createElement("div"),n=i-f+1,out=n<1||n>dm;d.className="d"+(out?" o":"");
-    d.textContent=n<1?pm+n:n>dm?n-dm:n;
-    if(!out){if(y==T.getFullYear()&&m==T.getMonth()&&n==T.getDate())d.className+=" t";if(EV[y+"-"+pad(m+1)+"-"+pad(n)])d.className+=" e"}
-    g.appendChild(d)}
-}
-document.getElementById("pv").onclick=function(){m--;if(m<0){m=11;y--}cal()};
-document.getElementById("nx").onclick=function(){m++;if(m>11){m=0;y++}cal()};cal();
-var TABS=[
-["Designs","Ten designs, five collections","Minimal, Nature, Inspire, Nepali Patro, and Planner, each built from one reusable layout.",["Portrait 9:16 and landscape 16:9","Your photograph as the main artwork","Readable dates over any background"],"linear-gradient(135deg,#3f4d73,#f6c7a1)","10 designs<br>20 layouts"],
-["Nepali dates","AD, BS, or both","Show Bikram Sambat dates beside the Gregorian ones, with Nepali weekday names and a short festival list.",["AD only, AD + BS, or BS emphasis","Nepali weekdays and numerals","Editable festival list"],"linear-gradient(135deg,#7a0f1f,#d9a441)","२०८३ कार्तिक"],
-["Export","PNG wallpapers and PDFs","Save a wallpaper for your phone or desktop, or a print-ready PDF.",["PNG at 1080×1920 or 1920×1080","PDF in A4 or Letter","Share from your phone"],"linear-gradient(135deg,#2f4a35,#8fbb78)","PNG · PDF"],
-["Customize","Make it yours","Change the accent color and font, pick the first day of the week, set your own brand line, and add your own quote.",["Accent color and fonts","Week starts Sunday or Monday","Your own quote and author"],"linear-gradient(135deg,#b5562b,#f0a96c)","Your colors,<br>your quote"],
-["Events","Personal events and notes","Add events to any date. They appear on your calendar and stay on your device.",["Dots on dates with events","Notes shown inside planner boxes","Saved locally, no account"],"linear-gradient(135deg,#6b2a3d,#f06f8f)","Plan your<br>month"],
-["Offline","Works without internet","Install the Android app or add the website to your home screen and keep using it anywhere.",["No account or sign-in","Private by design","Free and open source"],"linear-gradient(135deg,#1c1b33,#473a6b)","Offline<br>first"]];
-var tb=document.getElementById("tb"),pn=document.getElementById("pn");
-function show(i){
-  Array.prototype.forEach.call(tb.children,function(b,k){b.className=k==i?"on":""});var t=TABS[i];
-  pn.innerHTML="";var l=document.createElement("div"),h=document.createElement("h3"),p=document.createElement("p"),u=document.createElement("ul"),v=document.createElement("div");
-  h.textContent=t[1];p.textContent=t[2];t[3].forEach(function(s){var li=document.createElement("li");li.textContent=s;u.appendChild(li)});
-  l.appendChild(h);l.appendChild(p);l.appendChild(u);v.className="vis";v.style.background=t[4];v.innerHTML=t[5];pn.appendChild(l);pn.appendChild(v);
-}
-TABS.forEach(function(t,i){var b=document.createElement("button");b.textContent=t[0];b.onclick=function(){show(i)};tb.appendChild(b)});show(0);
+const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const WE=["SUN","MON","TUE","WED","THU","FRI","SAT"],WN=["आइत","सोम","मङ्गल","बुध","बिहि","शुक्र","शनि"];
+const BRAND="Kalendar By Kasign";
+const COLS=["Minimal","Nature","Inspire","Nepali Patro","Planner"];
+const SER="Georgia,'Times New Roman',serif",SAN="system-ui,-apple-system,'Segoe UI',sans-serif";
+const DESIGNS=[
+{id:"01",n:"Pure Minimal",c:0,bg:["#ffffff","#ffffff"],ink:"#1a1a1a",ac:"#1a1a1a",f:SAN},
+{id:"02",n:"Modern Neutral",c:0,bg:["#efe6d8","#e1d2bb"],ink:"#4a3b2c",ac:"#9a7b57",f:SER},
+{id:"03",n:"Mountain Serenity",c:1,art:"range",sky:["#f6c7a1","#8a97bd"],rd:["#5b6c91","#3f4d73","#26324f"],sun:1,panel:"#f7f4ef",ink:"#26324f",ac:"#c26a3d",f:SER},
+{id:"04",n:"Earth & Sky",c:1,art:"hills",sky:["#7fbdee","#eaf5fc"],rd:["#8fbb78","#5f9650","#3d6b3a"],sun:1,panel:"#fbfaf5",ink:"#2f4a35",ac:"#3a86c6",f:SAN},
+{id:"05",n:"Daily Inspiration",c:2,art:"range",sky:["#2b2d5b","#e9a06d"],rd:["#473a6b","#2e2a52","#1a1a38"],sun:1,panel:"#1c1b33",ink:"#f4ecdf",ac:"#f0a96c",f:SER,q:["Look closely; the quiet places hold the most light.","Kasign"]},
+{id:"06",n:"Life in Perspective",c:2,art:"hills",sky:["#f4c9b6","#fbeee4"],rd:["#d99a85","#b8715f","#8a4b42"],sun:1,panel:"#fdf6ee",ink:"#5a2f2a",ac:"#b8503f",f:SER,q:["Every horizon is only the beginning of a wider view.","Kasign"]},
+{id:"07",n:"Nepali Heritage",c:3,art:"mandala",sky:["#f6ead2","#efd9ae"],rd:["#a3162a","#d9a441","#7a0f1f","#e8c36a"],panel:"#fbf3e2",ink:"#6b1020",ac:"#a3162a",f:SER,np:1},
+{id:"08",n:"Nepal Panorama",c:3,art:"range",sky:["#ffd9a0","#e98a5b"],rd:["#f3efe8","#8c6b8a","#3b2f4d"],sun:1,panel:"#fff7ea",ink:"#4a2a1f",ac:"#d9532b",f:SAN,np:1},
+{id:"09",n:"Botanical Grace",c:4,art:"flora",sky:["#e9f2e2","#cfe3c4"],rd:["#5e8a52"],petal:"#ffffff",core:"#e8b84a",panel:"#f6faf2",ink:"#2c4a2a",ac:"#5e8a52",f:SAN,box:1},
+{id:"10",n:"Blooming Seasons",c:4,art:"flora",sky:["#fde6ec","#f8c4d2"],rd:["#7fa56a"],petal:"#f06f8f",core:"#ffd36b",panel:"#fff8fa",ink:"#6b2a3d",ac:"#d6486f",f:SER,box:1}
+];
+const T=new Date();
+const S={d:DESIGNS[0],y:T.getFullYear(),m:T.getMonth(),l:"p",q:1,f:-1,ph:{},fav:[]};
+try{S.fav=JSON.parse(localStorage.getItem("kk-fav")||"[]")}catch(e){}
 
+const BSM=["Baisakh","Jestha","Ashadh","Shrawan","Bhadra","Ashwin","Kartik","Mangsir","Poush","Magh","Falgun","Chaitra"],BSN=["बैशाख","जेठ","असार","श्रावण","भदौ","असोज","कार्तिक","मंसिर","पौष","माघ","फागुन","चैत"];
+// BS month lengths. Anchor: Baisakh 1, 2083 = 14 Apr 2026. Only add years after verifying them.
+const BSD={2082:[30,32,31,32,31,30,30,30,29,30,30,30],2083:[31,31,32,31,31,31,30,29,30,29,30,30],2084:[31,31,32,31,31,31,30,29,30,29,30,30],2085:[31,32,31,32,30,31,30,30,29,30,30,30],2086:[30,32,31,32,31,30,30,30,29,30,30,30],2087:[31,31,32,31,31,31,30,30,29,30,30,30],2088:[30,31,32,32,30,31,30,30,29,30,30,30]};
+const yl=y=>BSD[y].reduce((a,b)=>a+b,0),toNp=s=>String(s).replace(/\d/g,c=>"०१२३४५६७८९"[c]);
+function ad2bs(y,m,d){
+  let n=Math.round((Date.UTC(y,m,d)-Date.UTC(2026,3,14))/864e5),by=2083;
+  while(n<0){by--;if(!BSD[by])return null;n+=yl(by)}
+  while(BSD[by]&&n>=yl(by)){n-=yl(by);by++}
+  if(!BSD[by])return null;
+  let bm=0;while(n>=BSD[by][bm]){n-=BSD[by][bm];bm++}
+  return{y:by,m:bm,d:n+1};
+}
+const CU={ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""};
+try{Object.assign(CU,JSON.parse(localStorage.getItem("kk-cu")||"{}"))}catch(e){}
+let EV={};try{EV=JSON.parse(localStorage.getItem("kk-ev")||"{}")}catch(e){}
+const sev=()=>{try{localStorage.setItem("kk-ev",JSON.stringify(EV))}catch(e){}},evk=(y,m,d)=>y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+const FEST=[["2026-04-14","2026-04-14","Nepali New Year"],["2026-10-11","2026-10-11","Ghatasthapana"],["2026-10-17","2026-10-23","Dashain holidays"],["2026-11-08","2026-11-12","Tihar holidays"]];
+function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);$("fl").textContent=o.length?"Festivals: "+o.join(" · "):""}
+function custom(d){const o=Object.assign({},d);if(CU.ac)o.ac=CU.ac;if(CU.f)o.f=CU.f=="s"?SER:SAN;if(CU.quote)o.q=[CU.quote,CU.author];return o}
+function ridge(x,ax,aw,base,amp,seed,bot,col,smooth){
+  x.beginPath();x.moveTo(ax,bot);
+  for(let t=0;t<=aw;t+=6){
+    const v=smooth?.5+.5*Math.sin(t*.004+seed)*.7+.3*Math.sin(t*.011+seed*2)*.5
+      :.6*Math.abs(Math.sin(t*.0045+seed))+.4*Math.abs(Math.sin(t*.013+seed*2));
+    x.lineTo(ax+t,base-amp*v);
+  }
+  x.lineTo(ax+aw,bot);x.closePath();x.fillStyle=col;x.fill();
+}
+function art(x,d,r,ph){
+  const[ax,ay,aw,ah]=r;x.save();x.beginPath();x.rect(ax,ay,aw,ah);x.clip();
+  if(ph){const s=Math.max(aw/ph.width,ah/ph.height);x.drawImage(ph,ax+(aw-ph.width*s)/2,ay+(ah-ph.height*s)/2,ph.width*s,ph.height*s);x.restore();return}
+  const g=x.createLinearGradient(0,ay,0,ay+ah);g.addColorStop(0,d.sky[0]);g.addColorStop(1,d.sky[1]);x.fillStyle=g;x.fillRect(ax,ay,aw,ah);
+  if(d.sun){x.fillStyle="rgba(255,255,255,.55)";x.beginPath();x.arc(ax+aw*.7,ay+ah*.3,Math.min(aw,ah)*.09,0,7);x.fill()}
+  if(d.art=="range"||d.art=="hills")d.rd.forEach((c,i)=>ridge(x,ax,aw,ay+ah*(.6+.14*i),ah*(.3-.06*i),parseInt(d.id)+i*7,ay+ah,c,d.art=="hills"));
+  if(d.art=="flora"){
+    for(let i=0;i<9;i++){
+      const fx=ax+aw*((i*.37+.1)%1),fy=ay+ah*((i*.53+.15)%1),fr=Math.min(aw,ah)*(.1+.05*((i*7)%3));
+      x.fillStyle=d.rd[0];x.beginPath();x.ellipse(fx+fr*.9,fy+fr*.5,fr*.7,fr*.22,.6,0,7);x.fill();
+      for(let k=0;k<8;k++){x.save();x.translate(fx,fy);x.rotate(k*Math.PI/4);x.fillStyle=d.petal;x.globalAlpha=.92;x.beginPath();x.ellipse(fr*.6,0,fr*.55,fr*.24,0,0,7);x.fill();x.restore()}
+      x.fillStyle=d.core;x.beginPath();x.arc(fx,fy,fr*.22,0,7);x.fill();
+    }
+  }
+  if(d.art=="mandala"){
+    const cx=ax+aw/2,cy=ay+ah/2,R=Math.min(aw,ah)*.44;
+    for(let j=0;j<5;j++){
+      const r2=R*(1-j*.17),n=8+j*4;
+      for(let k=0;k<n;k++){x.save();x.translate(cx,cy);x.rotate(k*2*Math.PI/n);x.fillStyle=d.rd[j%4];x.globalAlpha=.85;x.beginPath();x.ellipse(r2*.72,0,r2*.26,r2*.09,0,0,7);x.fill();x.restore()}
+    }
+    x.fillStyle=d.rd[1];x.beginPath();x.arc(cx,cy,R*.12,0,7);x.fill();
+  }
+  x.restore();
+}
+function wrap(x,t,w){const o=[];let l="";t.split(" ").forEach(s=>{const n=l?l+" "+s:s;if(x.measureText(n).width>w&&l){o.push(l);l=s}else l=n});if(l)o.push(l);return o}
+
+function render(cv,d0,Y,M,lay,ph,q,pw){
+  const d=custom(d0),md=CU.mode=="auto"?(d.np?"both":"ad"):CU.mode;
+  const W=lay=="p"?1080:1920,H=lay=="p"?1920:1080;
+  cv.width=pw;cv.height=Math.round(pw*H/W);
+  const x=cv.getContext("2d");x.setTransform(pw/W,0,0,pw/W,0,0);
+  const bg=x.createLinearGradient(0,0,W,H);bg.addColorStop(0,d.bg?d.bg[0]:d.panel);bg.addColorStop(1,d.bg?d.bg[1]:d.panel);
+  x.fillStyle=bg;x.fillRect(0,0,W,H);
+  let px=0,py=0,pwid=W,ph2=H;
+  if(d.art){
+    const p=lay=="p";
+    art(x,d,p?[0,0,W,H*.42]:[0,0,W*.42,H],ph);
+    px=p?0:W*.42;py=p?H*.42:0;pwid=p?W:W*.58;ph2=p?H*.58:H;
+    x.fillStyle=d.panel;x.fillRect(px,py,pwid,ph2);
+  }
+  const u=Math.min(pwid/11,ph2/12),gw=Math.min(pwid-u*1.6,u*11.5),gx=px+(pwid-gw)/2;
+  let y=py+u*1.7;
+  x.textBaseline="alphabetic";x.fillStyle=d.ink;x.font="600 "+u*1.15+"px "+d.f;x.textAlign="left";x.fillText(MN[M],gx,y);
+  x.fillStyle=d.ac;x.font="400 "+u*.6+"px "+d.f;x.textAlign="right";x.fillText(Y,gx+gw,y);
+  y+=u*.35;
+  if(md!="ad"){
+    const a=ad2bs(Y,M,1),b=ad2bs(Y,M,new Date(Y,M+1,0).getDate());
+    const nm=a&&b?BSN[a.m]+(a.m!=b.m?" – "+BSN[b.m]:"")+" "+toNp(b.y)+"  ·  "+BSM[a.m]+(a.m!=b.m?" – "+BSM[b.m]:"")+" "+b.y+" BS":"BS data covers 2082–2088 BS only";
+    x.fillStyle=d.ink;x.globalAlpha=.7;x.font="400 "+u*.32+"px "+d.f;x.textAlign="left";x.fillText(nm,gx,y+u*.4);x.globalAlpha=1;y+=u*.45;
+  }
+  if(q&&d.q){
+    x.fillStyle=d.ink;x.globalAlpha=.85;x.font="italic "+u*.4+"px "+d.f;x.textAlign="left";
+    wrap(x,"“"+d.q[0]+"”",gw).slice(0,3).forEach(s=>{y+=u*.55;x.fillText(s,gx,y)});
+    x.font="400 "+u*.3+"px "+d.f;x.fillStyle=d.ac;if(d.q[1]){y+=u*.5;x.fillText("— "+d.q[1],gx,y)}x.globalAlpha=1;y+=u*.1;
+  }
+  y+=u*.75;
+  const cw=gw/7;x.textAlign="center";x.fillStyle=d.ac;x.font="600 "+u*.3+"px "+d.f;
+  const wl=(d.np||CU.nl)?WN:WE;for(let i=0;i<7;i++)x.fillText(wl[(i+CU.ws)%7],gx+cw*(i+.5),y);
+  y+=u*.3;
+  const dmx=new Date(Y,M+1,0).getDate(),m0=evk(Y,M,1),m1=evk(Y,M,dmx),
+    fo=pw>=500?FEST.filter(f=>f[0]<=m1&&f[1]>=m0).map(f=>{const a=f[0]<m0?m0:f[0],b=f[1]>m1?m1:f[1];return(a==b?a.slice(8):a.slice(8)+"–"+b.slice(8))+" "+f[2]}):[];
+  x.font="400 "+u*.26+"px "+SAN;x.textAlign="left";
+  const fl2=fo.length?wrap(x,"Festivals & holidays: "+fo.join("  ·  "),gw).slice(0,3):[],fh=fl2.length?fl2.length*u*.36+u*.25:0;
+  const av=py+ph2-u*1.3-fh-y,rh=Math.min(av/6,u*(d.box?2.1:1.35)),f0=(new Date(Y,M,1).getDay()-CU.ws+7)%7,dm=new Date(Y,M+1,0).getDate();
+  x.strokeStyle=d.ink;x.globalAlpha=.25;x.lineWidth=2;
+  if(!d.box){x.beginPath();x.moveTo(gx,y);x.lineTo(gx+gw,y);x.stroke()}
+  x.globalAlpha=1;
+  for(let n=0;n<dm;n++){
+    const k=n+f0,cx=gx+cw*(k%7),cy=y+rh*Math.floor(k/7),td=T.getFullYear()==Y&&T.getMonth()==M&&T.getDate()==n+1;
+    if(d.box){x.globalAlpha=.3;x.strokeStyle=d.ink;x.strokeRect(cx+2,cy+2,cw-4,rh-4);x.globalAlpha=1}
+    const tx=d.box?cx+cw*.2:cx+cw/2,ty=d.box?cy+u*.5:cy+rh/2+u*.15;
+    if(td){x.fillStyle=d.ac;x.beginPath();x.arc(tx,ty-u*.14,u*.38,0,7);x.fill()}
+    x.fillStyle=td?(d.bg&&d.bg[0]=="#ffffff"?"#fff":d.panel||d.bg[0]):((k+CU.ws)%7==0?d.ac:d.ink);
+    const bs=md!="ad"?ad2bs(Y,M,n+1):null,big=md=="bs"&&bs;
+    x.font=(td?"700 ":"400 ")+u*.46+"px "+d.f;x.textAlign="center";x.fillText(big?toNp(bs.d):n+1,tx,ty);
+    if(bs){x.font="400 "+u*.22+"px "+d.f;x.globalAlpha=.85;x.fillStyle=d.ac;x.fillText(big?n+1:toNp(bs.d),d.box?cx+cw*.8:tx+cw*.3,d.box?cy+rh-u*.18:ty+u*.3);x.globalAlpha=1}
+    const ks=evk(Y,M,n+1);if(FEST.some(f=>f[0]<=ks&&f[1]>=ks)){x.fillStyle=d.ac;x.fillRect(tx-u*.22,ty+u*.09,u*.44,u*.05)}
+    const ev=EV[ks];
+    if(ev){x.fillStyle=d.ac;if(d.box){x.font="400 "+u*.2+"px "+d.f;x.textAlign="left";let s=ev[0];while(x.measureText(s).width>cw*(md!="ad"?.68:.85)&&s.length>1)s=s.slice(0,-1);x.fillStyle=d.ink;x.globalAlpha=.85;x.fillText(s,cx+cw*.08,cy+rh*.68);x.globalAlpha=1;x.textAlign="center"}else{x.beginPath();x.arc(tx,cy+rh-u*.2,u*.07,0,7);x.fill()}}
+  }
+  if(fl2.length){x.fillStyle=d.ink;x.globalAlpha=.85;x.font="400 "+u*.26+"px "+SAN;x.textAlign="left";fl2.forEach((t,i)=>x.fillText(t,gx,py+ph2-u*1.3-fh+u*.45+i*u*.36));x.globalAlpha=1}
+  x.fillStyle=d.ink;x.globalAlpha=.55;x.font="400 "+u*.26+"px "+SAN;x.textAlign="center";
+  x.fillText(BRAND+(md!="ad"?"  ·  AD + BS":""),px+pwid/2,py+ph2-u*.6);x.globalAlpha=1;
+}
+
+const $=id=>document.getElementById(id),cv=$("cv");
+function draw(){
+  render(cv,S.d,S.y,S.m,S.l,S.ph[S.d.id],S.q,S.l=="p"?540:960);
+  $("mn").textContent=MN[S.m]+" "+S.y;
+  $("qt").style.display=(S.d.q||CU.quote)?"":"none";$("qt").classList.toggle("on",!!S.q);
+  $("lp").classList.toggle("on",S.l=="p");$("ll").classList.toggle("on",S.l=="l");
+  $("fv").textContent=S.fav.includes(S.d.id)?"♥ Favorited":"♡ Favorite";
+  tray();evl();fl();thumbs();
+}
+function thumbs(){
+  const g=$("grid");g.innerHTML="";
+  DESIGNS.filter(d=>S.f==-1||(S.f==-2?S.fav.includes(d.id):d.c==S.f)).forEach(d=>{
+    const e=document.createElement("div");e.className="th"+(d===S.d?" sel":"");
+    const c=document.createElement("canvas");render(c,d,S.y,S.m,S.l,S.ph[d.id],1,S.l=="p"?160:240);
+    const b=document.createElement("b");b.textContent=d.n;const i=document.createElement("i");i.textContent=COLS[d.c];
+    e.append(c,b,i);e.onclick=()=>{S.d=d;draw();scrollTo({top:0,behavior:"smooth"})};g.append(e);
+  });
+}
+function chips(){
+  const c=$("chips");c.innerHTML="";
+  [["All",-1],...COLS.map((n,i)=>[n,i]),["♥ Favorites",-2]].forEach(([n,v])=>{
+    const b=document.createElement("button");b.className="chip"+(S.f==v?" on":"");b.textContent=n;
+    b.onclick=()=>pick(v);c.append(b);
+  });
+}
+function mv(k){S.m+=k;if(S.m<0){S.m=11;S.y--}if(S.m>11){S.m=0;S.y++}draw()}
+$("pv").onclick=()=>mv(-1);$("nx").onclick=()=>mv(1);
+$("lp").onclick=()=>{S.l="p";draw()};$("ll").onclick=()=>{S.l="l";draw()};
+$("qt").onclick=()=>{S.q=S.q?0:1;draw()};
+$("fv").onclick=()=>{const i=S.fav.indexOf(S.d.id);i<0?S.fav.push(S.d.id):S.fav.splice(i,1);try{localStorage.setItem("kk-fav",JSON.stringify(S.fav))}catch(e){}draw()};
+const MAIN_URL="https://kartproduction.github.io/kalendarbykasign/"; // change to your main website address
+const CDESC=["Clean, modern everyday calendars","Nature photography and scenic art","Quotes, motivation and life lessons","Nepali BS dates, festivals and culture","Productivity and goal-setting planners"];
+const isNative=!!(window.Capacitor&&(window.Capacitor.isNativePlatform?window.Capacitor.isNativePlatform():window.Capacitor.getPlatform&&window.Capacitor.getPlatform()!="web"));
+if(!isNative){const bk=$("bk");bk.href=MAIN_URL;bk.style.display="";const da=$("dla");da.href="https://kartproduction.github.io/kalendarbykasign/download.html";da.style.display=""}
+function pick(v){S.f=v;if(v>=0&&S.d.c!=v)S.d=DESIGNS.find(d=>d.c==v);chips();draw();mlabel()}
+function mlabel(){$("mb").textContent="☰ "+(S.f==-1?"Collections":S.f==-2?"♥ Favorites":COLS[S.f])}
+function cmenu(){
+  const p=$("mp");p.innerHTML="";const sh=document.createElement("div");sh.className="sheet";
+  const h=document.createElement("b");h.textContent="Choose a collection";sh.append(h);
+  [["All designs","Every design",-1,DESIGNS.length],...COLS.map((n,i)=>[n,CDESC[i],i,DESIGNS.filter(d=>d.c==i).length]),["♥ Favorites","Your saved designs",-2,S.fav.length]].forEach(([n,t,v,c])=>{
+    const b=document.createElement("button");b.className="mi"+(S.f==v?" on":"");
+    const a=document.createElement("b");a.textContent=n+" ("+c+")";const sm=document.createElement("small");sm.textContent=t;b.append(a,sm);
+    b.onclick=()=>{pick(v);p.hidden=true;scrollTo({top:0,behavior:"smooth"})};sh.append(b);
+  });
+  p.append(sh);
+}
+$("mb").onclick=()=>{cmenu();$("mp").hidden=false};
+$("mp").onclick=e=>{if(e.target==$("mp"))$("mp").hidden=true};
+addEventListener("keydown",e=>{if(e.key=="Escape")$("mp").hidden=true});
+const POOL=[];
+$("ph").onchange=e=>{
+  [...e.target.files].forEach(f=>{const im=new Image();im.onload=()=>{POOL.push(im);tray();say("Tap a photo to try it on the current design.")};im.src=URL.createObjectURL(f)});
+  e.target.value="";
+};
+function tray(){const t=$("tray");t.innerHTML="";POOL.forEach(im=>{const b=document.createElement("img");b.src=im.src;b.style.cssText="height:56px;border-radius:6px;cursor:pointer;border:2px solid "+(S.ph[S.d.id]===im?"var(--ac)":"var(--bd)");b.onclick=()=>{if(!S.d.art){say("This design is text-only; choose a photo design.");return}S.ph[S.d.id]=im;say("Photo applied to "+S.d.n+".");draw()};t.append(b)})}
+$("cp").onclick=()=>{delete S.ph[S.d.id];draw()};
+function say(t){$("msg").textContent=t}
+let DL=null;
+function full(){const c=document.createElement("canvas");render(c,S.d,S.y,S.m,S.l,S.ph[S.d.id],S.q,S.l=="p"?1080:1920);return c}
+const fname=ext=>"kalendar-"+S.d.n.toLowerCase().replace(/[^a-z]+/g,"-")+"-"+S.y+"-"+String(S.m+1).padStart(2,"0")+"-"+(S.l=="p"?"portrait":"landscape")+"."+ext;
+async function save(name,data){
+  if(!DL){say("Saving is not available in this view.");return}
+  try{const r=await DL.save({filename:name,data});say("Saved "+name+(r&&r.where?" to "+r.where.replace(/^(Download|Pictures)/,(m)=>m=="Download"?"Downloads":"Pictures"):""))}catch(e){say(e&&e.code=="declined"?"Save cancelled.":"Could not save: "+(e&&(e.message||e.code)||"unknown error"))}
+}
+$("xp").onclick=()=>{full().toBlob(b=>save(fname("png"),b),"image/png")};
+$("xd").onclick=()=>{
+  if(!window.jspdf){say("PDF library did not load; check your connection once.");return}
+  const c=full(),o=S.l=="p"?"portrait":"landscape",doc=new window.jspdf.jsPDF({orientation:o,unit:"mm",format:$("pz").value}),
+  pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),m=8,s=Math.min((pw-2*m)/c.width,(ph-2*m)/c.height),w=c.width*s,h=c.height*s;
+  doc.addImage(c.toDataURL("image/jpeg",.92),"JPEG",(pw-w)/2,(ph-h)/2,w,h);
+  save(fname("pdf"),doc.output("blob"));
+};
+function evl(){
+  const l=$("el");l.innerHTML="";const p=S.y+"-"+String(S.m+1).padStart(2,"0")+"-";let n=0;
+  Object.keys(EV).filter(k=>k.startsWith(p)).sort().forEach(k=>EV[k].forEach((t,i)=>{
+    n++;const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd)";
+    const s=document.createElement("span");s.textContent=k.slice(8)+" "+MN[S.m].slice(0,3)+" — "+t;
+    const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};
+    r.append(s,b);l.append(r);
+  }));
+  if(!n){l.textContent="No events in "+MN[S.m]+" "+S.y+".";l.className="note"}else l.className="";
+}
+$("ea").onclick=()=>{const v=$("ed").value,t=$("et").value.trim();if(!v||!t){say("Pick a date and write a note.");return}(EV[v]=EV[v]||[]).push(t);sev();$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
+$("ed").value=evk(T.getFullYear(),T.getMonth(),T.getDate());
+const ids={ca:"ac",cf:"f",cw:"ws",cm:"mode",cq:"quote",cu:"author"};
+function sv(){try{localStorage.setItem("kk-cu",JSON.stringify(CU))}catch(e){}}
+function fill(){Object.entries(ids).forEach(([i,k])=>{if(k=="ac"&&!CU.ac){$(i).value="#b5562b";return}$(i).value=CU[k]});$("cn").checked=!!CU.nl}
+Object.entries(ids).forEach(([i,k])=>{$(i).oninput=e=>{CU[k]=k=="ws"?+e.target.value:e.target.value;sv();draw()}});
+$("cn").onchange=e=>{CU.nl=e.target.checked?1:0;sv();draw()};
+$("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""});sv();fill();draw()};
+fill();chips();draw();mlabel();
+DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
+(async()=>{
+  try{DL=await claude.use("downloads")}catch(e){}
+  if(!DL){
+    const P=window.Capacitor&&window.Capacitor.Plugins||{};
+    DL={save:async({filename,data})=>{
+      const buf=await new Response(data).arrayBuffer(),type=/\.pdf$/i.test(filename)?"application/pdf":"image/png",errs=[];
+      const cancelled=e=>/cancel/i.test(String(e&&(e.message||e.name||e)));
+      const b64=()=>{let b="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)b+=String.fromCharCode.apply(null,a.subarray(i,i+8192));return btoa(b)};
+      if(!isNative&&!window.KalendarSave){
+        try{
+          const u=URL.createObjectURL(new Blob([buf],{type})),l=document.createElement("a");l.href=u;l.download=filename;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+          return{status:"saved",where:"your browser's downloads"};
+        }catch(e){errs.push("download: "+(e&&e.message||e))}
+      }
+      if(window.KalendarSave){
+        try{const r=String(window.KalendarSave.save(filename,type,b64()));if(r.indexOf("ok:")==0)return{status:"saved",where:r.slice(3)};errs.push("save: "+r)}
+        catch(e){errs.push("save: "+(e&&e.message||e))}
+      }
+      if(P.Filesystem&&P.Share){
+        try{
+          const r=await P.Filesystem.writeFile({path:filename,data:b64(),directory:"CACHE"});
+          await P.Share.share({title:filename,dialogTitle:"Save or share",files:[r.uri]});return{status:"saved"};
+        }catch(e){if(cancelled(e))throw{code:"declined"};errs.push("share: "+(e&&e.message||e))}
+      }
+      try{
+        const f=new File([buf],filename,{type});
+        if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:filename});return{status:"saved"}}
+      }catch(e){if(e&&e.name=="AbortError")throw{code:"declined"};errs.push("web share: "+(e&&e.message||e))}
+      try{
+        const u=URL.createObjectURL(new Blob([buf],{type})),l=document.createElement("a");l.href=u;l.download=filename;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+        if(!errs.length)return{status:"saved"};
+      }catch(e){errs.push("download: "+(e&&e.message||e))}
+      throw new Error(errs.join("; ")||"no save method available");
+    }};
+  }
 })();
 </script>
-<script src="config.js"></script><script src="links.js"></script></body></html>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")==0)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+</body>
+</html>
