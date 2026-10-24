@@ -82,7 +82,7 @@ label{display:inline-flex;gap:6px;align-items:center}
 <select id="cw"><option value="0">Week starts Sunday</option><option value="1">Week starts Monday</option></select>
 <select id="cm"><option value="auto">Dates: auto</option><option value="ad">AD only</option><option value="both">AD + BS</option><option value="bs">BS emphasis</option></select>
 <label><input type="checkbox" id="cn"> Nepali weekdays</label></div>
-<div class="row" style="margin-top:10px"><input class="t" id="cb" placeholder="Brand line"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
+<div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
 <div class="row" id="chips" style="margin-bottom:12px"></div>
 <div id="grid"></div>
 <p class="note" style="margin-top:16px">Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates (a short list for 2026) are editable in the FEST list. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.</p>
@@ -91,6 +91,7 @@ label{display:inline-flex;gap:6px;align-items:center}
 <script>
 const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const WE=["SUN","MON","TUE","WED","THU","FRI","SAT"],WN=["आइत","सोम","मङ्गल","बुध","बिहि","शुक्र","शनि"];
+const BRAND="Kalendar By Kasign";
 const COLS=["Minimal","Nature","Inspire","Nepali Patro","Planner"];
 const SER="Georgia,'Times New Roman',serif",SAN="system-ui,-apple-system,'Segoe UI',sans-serif";
 const DESIGNS=[
@@ -121,7 +122,7 @@ function ad2bs(y,m,d){
   let bm=0;while(n>=BSD[by][bm]){n-=BSD[by][bm];bm++}
   return{y:by,m:bm,d:n+1};
 }
-const CU={ac:"",f:"",ws:0,mode:"auto",nl:0,brand:"KALENDAR BY KASIGN",quote:"",author:""};
+const CU={ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""};
 try{Object.assign(CU,JSON.parse(localStorage.getItem("kk-cu")||"{}"))}catch(e){}
 let EV={};try{EV=JSON.parse(localStorage.getItem("kk-ev")||"{}")}catch(e){}
 const sev=()=>{try{localStorage.setItem("kk-ev",JSON.stringify(EV))}catch(e){}},evk=(y,m,d)=>y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
@@ -219,7 +220,7 @@ function render(cv,d0,Y,M,lay,ph,q,pw){
   }
   if(fl2.length){x.fillStyle=d.ink;x.globalAlpha=.85;x.font="400 "+u*.26+"px "+SAN;x.textAlign="left";fl2.forEach((t,i)=>x.fillText(t,gx,py+ph2-u*1.3-fh+u*.45+i*u*.36));x.globalAlpha=1}
   x.fillStyle=d.ink;x.globalAlpha=.55;x.font="400 "+u*.26+"px "+SAN;x.textAlign="center";
-  x.fillText(CU.brand+(md!="ad"?"  ·  AD + BS":""),px+pwid/2,py+ph2-u*.6);x.globalAlpha=1;
+  x.fillText(BRAND+(md!="ad"?"  ·  AD + BS":""),px+pwid/2,py+ph2-u*.6);x.globalAlpha=1;
 }
 
 const $=id=>document.getElementById(id),cv=$("cv");
@@ -306,12 +307,12 @@ function evl(){
 }
 $("ea").onclick=()=>{const v=$("ed").value,t=$("et").value.trim();if(!v||!t){say("Pick a date and write a note.");return}(EV[v]=EV[v]||[]).push(t);sev();$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
 $("ed").value=evk(T.getFullYear(),T.getMonth(),T.getDate());
-const ids={ca:"ac",cf:"f",cw:"ws",cm:"mode",cb:"brand",cq:"quote",cu:"author"};
+const ids={ca:"ac",cf:"f",cw:"ws",cm:"mode",cq:"quote",cu:"author"};
 function sv(){try{localStorage.setItem("kk-cu",JSON.stringify(CU))}catch(e){}}
 function fill(){Object.entries(ids).forEach(([i,k])=>{if(k=="ac"&&!CU.ac){$(i).value="#b5562b";return}$(i).value=CU[k]});$("cn").checked=!!CU.nl}
 Object.entries(ids).forEach(([i,k])=>{$(i).oninput=e=>{CU[k]=k=="ws"?+e.target.value:e.target.value;sv();draw()}});
 $("cn").onchange=e=>{CU.nl=e.target.checked?1:0;sv();draw()};
-$("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,brand:"KALENDAR BY KASIGN",quote:"",author:""});sv();fill();draw()};
+$("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""});sv();fill();draw()};
 fill();chips();draw();mlabel();
 DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
 (async()=>{
