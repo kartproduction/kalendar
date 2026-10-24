@@ -1,0 +1,31 @@
+name: Build APK
+# Run it from the Actions tab: "Build APK" > "Run workflow". No keystore or computer needed.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - run: bash scripts/ci-android.sh
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+      - name: Name the APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk Kalendar-v1.0.${{ github.run_number }}.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Kalendar-APK
+          path: Kalendar-v1.0.${{ github.run_number }}.apk
+      - name: Publish to Releases (public download link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Kalendar v1.0.${{ github.run_number }}
+          files: Kalendar-v1.0.${{ github.run_number }}.apk

@@ -1,0 +1,11 @@
+{
+  "name": "kalendar-by-kasign",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline-first calendar app with Nepali BS dates and exportable designs",
+  "scripts": {
+    "copy:deps": "node scripts/copy-deps.js",
+    "sync": "npm run copy:deps && npx cap sync android",
+    "apk:debug": "npm run sync && cd android && ./gradlew assembleDebug"
+  }
+}
