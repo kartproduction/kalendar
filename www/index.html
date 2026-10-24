@@ -322,6 +322,12 @@ DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]
       const buf=await new Response(data).arrayBuffer(),type=/\.pdf$/i.test(filename)?"application/pdf":"image/png",errs=[];
       const cancelled=e=>/cancel/i.test(String(e&&(e.message||e.name||e)));
       const b64=()=>{let b="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)b+=String.fromCharCode.apply(null,a.subarray(i,i+8192));return btoa(b)};
+      if(!isNative&&!window.KalendarSave){
+        try{
+          const u=URL.createObjectURL(new Blob([buf],{type})),l=document.createElement("a");l.href=u;l.download=filename;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+          return{status:"saved",where:"your browser's downloads"};
+        }catch(e){errs.push("download: "+(e&&e.message||e))}
+      }
       if(window.KalendarSave){
         try{const r=String(window.KalendarSave.save(filename,type,b64()));if(r.indexOf("ok:")==0)return{status:"saved",where:r.slice(3)};errs.push("save: "+r)}
         catch(e){errs.push("save: "+(e&&e.message||e))}
