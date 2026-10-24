@@ -15,7 +15,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: android-actions/setup-android@v3
       - name: Create project files
         run: |
           echo '{"name":"kalendar","version":"1.0.0","private":true}' > package.json
