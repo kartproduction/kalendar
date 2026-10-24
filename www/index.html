@@ -35,10 +35,20 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
 input[type=file]{display:none}
 input.t{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:8px 14px;flex:1;min-width:140px}
 label{display:inline-flex;gap:6px;align-items:center}
+.bar{position:sticky;top:0;z-index:20;display:flex;gap:8px;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
+.bk{color:var(--tx);text-decoration:none;border:1px solid var(--bd);border-radius:999px;padding:8px 14px;background:var(--sf)}
+.grow{flex:1}
+.mp{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end}
+.mp[hidden]{display:none}
+.mp .sheet{background:var(--sf);width:min(340px,88vw);height:100%;padding:16px;overflow:auto;padding-top:calc(16px + env(safe-area-inset-top,0px))}
+.mi{display:block;width:100%;text-align:left;border-radius:12px;margin:8px 0 0;padding:12px}
+.mi b{display:block}.mi small{color:var(--mu)}.mi.on small{color:#fff}
 </style>
 </head>
 <body>
 <div class="w">
+<div class="bar"><a id="bk" class="bk" href="#" style="display:none">← Main page</a><span class="grow"></span><button id="mb" class="pri">☰ Collections</button></div>
+<div id="mp" class="mp" hidden></div>
 <h1>Kalendar by Kasign</h1>
 <p class="sub">10 designs · 5 collections · portrait &amp; landscape · PNG &amp; PDF export</p>
 
@@ -234,7 +244,7 @@ function chips(){
   const c=$("chips");c.innerHTML="";
   [["All",-1],...COLS.map((n,i)=>[n,i]),["♥ Favorites",-2]].forEach(([n,v])=>{
     const b=document.createElement("button");b.className="chip"+(S.f==v?" on":"");b.textContent=n;
-    b.onclick=()=>{S.f=v;chips();thumbs()};c.append(b);
+    b.onclick=()=>pick(v);c.append(b);
   });
 }
 function mv(k){S.m+=k;if(S.m<0){S.m=11;S.y--}if(S.m>11){S.m=0;S.y++}draw()}
@@ -242,6 +252,25 @@ $("pv").onclick=()=>mv(-1);$("nx").onclick=()=>mv(1);
 $("lp").onclick=()=>{S.l="p";draw()};$("ll").onclick=()=>{S.l="l";draw()};
 $("qt").onclick=()=>{S.q=S.q?0:1;draw()};
 $("fv").onclick=()=>{const i=S.fav.indexOf(S.d.id);i<0?S.fav.push(S.d.id):S.fav.splice(i,1);try{localStorage.setItem("kk-fav",JSON.stringify(S.fav))}catch(e){}draw()};
+const MAIN_URL="https://claude.ai/artifact/1TE45T3RaoFc8McSi6uuvv"; // change to your main website address
+const CDESC=["Clean, modern everyday calendars","Nature photography and scenic art","Quotes, motivation and life lessons","Nepali BS dates, festivals and culture","Productivity and goal-setting planners"];
+const isNative=!!(window.Capacitor&&(window.Capacitor.isNativePlatform?window.Capacitor.isNativePlatform():window.Capacitor.getPlatform&&window.Capacitor.getPlatform()!="web"));
+if(!isNative){const bk=$("bk");bk.href=MAIN_URL;bk.style.display=""}
+function pick(v){S.f=v;if(v>=0&&S.d.c!=v)S.d=DESIGNS.find(d=>d.c==v);chips();draw();mlabel()}
+function mlabel(){$("mb").textContent="☰ "+(S.f==-1?"Collections":S.f==-2?"♥ Favorites":COLS[S.f])}
+function cmenu(){
+  const p=$("mp");p.innerHTML="";const sh=document.createElement("div");sh.className="sheet";
+  const h=document.createElement("b");h.textContent="Choose a collection";sh.append(h);
+  [["All designs","Every design",-1,DESIGNS.length],...COLS.map((n,i)=>[n,CDESC[i],i,DESIGNS.filter(d=>d.c==i).length]),["♥ Favorites","Your saved designs",-2,S.fav.length]].forEach(([n,t,v,c])=>{
+    const b=document.createElement("button");b.className="mi"+(S.f==v?" on":"");
+    const a=document.createElement("b");a.textContent=n+" ("+c+")";const sm=document.createElement("small");sm.textContent=t;b.append(a,sm);
+    b.onclick=()=>{pick(v);p.hidden=true;scrollTo({top:0,behavior:"smooth"})};sh.append(b);
+  });
+  p.append(sh);
+}
+$("mb").onclick=()=>{cmenu();$("mp").hidden=false};
+$("mp").onclick=e=>{if(e.target==$("mp"))$("mp").hidden=true};
+addEventListener("keydown",e=>{if(e.key=="Escape")$("mp").hidden=true});
 const POOL=[];
 $("ph").onchange=e=>{
   [...e.target.files].forEach(f=>{const im=new Image();im.onload=()=>{POOL.push(im);tray();say("Tap a photo to try it on the current design.")};im.src=URL.createObjectURL(f)});
@@ -283,7 +312,7 @@ function fill(){Object.entries(ids).forEach(([i,k])=>{if(k=="ac"&&!CU.ac){$(i).v
 Object.entries(ids).forEach(([i,k])=>{$(i).oninput=e=>{CU[k]=k=="ws"?+e.target.value:e.target.value;sv();draw()}});
 $("cn").onchange=e=>{CU.nl=e.target.checked?1:0;sv();draw()};
 $("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,brand:"KALENDAR BY KASIGN",quote:"",author:""});sv();fill();draw()};
-fill();chips();draw();
+fill();chips();draw();mlabel();
 DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
 (async()=>{
   try{DL=await claude.use("downloads")}catch(e){}
