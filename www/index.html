@@ -26,7 +26,7 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
 #stage{text-align:center;padding:12px 0}
 #cv{max-width:100%;max-height:68vh;border-radius:6px;box-shadow:0 6px 28px rgba(0,0,0,.25)}
 .mn{font-weight:600;min-width:150px;text-align:center}
-#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+#grid{display:block}
 .th{background:var(--sf);border:2px solid var(--bd);border-radius:10px;padding:6px;cursor:pointer;text-align:center}
 .th.sel{border-color:var(--ac)}
 .th canvas{max-width:100%;height:auto;max-height:190px;border-radius:4px}
@@ -43,6 +43,36 @@ label{display:inline-flex;gap:6px;align-items:center}
 .mp .sheet{background:var(--sf);width:min(340px,88vw);height:100%;padding:16px;overflow:auto;padding-top:calc(16px + env(safe-area-inset-top,0px))}
 .mi{display:block;width:100%;text-align:left;border-radius:12px;margin:8px 0 0;padding:12px}
 .mi b{display:block}.mi small{color:var(--mu)}.mi.on small{color:#fff}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start;margin-bottom:16px}
+@media(max-width:780px){.main{grid-template-columns:1fr}}
+.live{border:1px solid var(--bd);border-radius:18px;overflow:hidden;color:var(--li,#1a1a1a);background:#fff;--la:#b5562b;--lb:#fff;padding-bottom:6px}
+.hero{display:block;width:100%;height:150px;object-fit:cover}
+.lh{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:18px 16px 6px}
+.lm{font-size:28px;font-weight:700;line-height:1.1}.ls{font-size:12px;opacity:.7;margin-top:4px}
+.lnav{display:flex;gap:6px;align-items:center}
+.lnav button{background:transparent;color:inherit;border:1px solid color-mix(in srgb,currentColor 25%,transparent);height:38px;min-width:38px;padding:0 12px;border-radius:999px;font-size:18px}
+.lnav button#td{font-size:13px}
+.lq{font-style:italic;opacity:.85;padding:0 18px 6px;font-size:14px}.lq:empty{display:none}
+.lw,.ld{display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px}
+.lw span{text-align:center;font-size:12px;letter-spacing:.06em;color:var(--la);padding:8px 0;font-weight:600}
+.dc{position:relative;min-height:46px;border:0;border-radius:12px;background:transparent;color:inherit;font:inherit;padding:2px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;cursor:pointer}
+.dc b{font-weight:500;font-size:17px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.dc small{font-size:10px;line-height:1;color:var(--la);opacity:.85;margin-top:-4px}
+.dc.out{opacity:.3}.dc.sun b{color:var(--la)}
+.dc.fest b{text-decoration:underline;text-decoration-color:var(--la);text-decoration-thickness:2px;text-underline-offset:4px}
+.dc.today b{background:var(--la);color:var(--lb);font-weight:700}
+.dc.sel b{outline:2px solid var(--la);outline-offset:2px}
+.dc:hover b{background:color-mix(in srgb,var(--la) 14%,transparent)}.dc.today:hover b{background:var(--la)}
+.dc .dot{position:absolute;top:6px;right:calc(50% - 22px);width:6px;height:6px;border-radius:50%;background:var(--la)}
+.lfst{color:inherit;opacity:.8;padding:0 18px;margin:8px 0;font-size:13px}
+.dayp{margin:8px 12px 10px;padding:12px;border-radius:14px;background:color-mix(in srgb,currentColor 7%,transparent)}
+.dayp button{background:var(--bg);color:var(--tx)}.dayp .note{color:inherit;opacity:.75}
+.side .lab{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--mu);margin:14px 0 8px}.side .lab:first-child{margin-top:0}
+.dg{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border-radius:12px;padding:8px;margin:6px 0 0;background:transparent;border:1px solid transparent}
+.dg.sel{border-color:var(--ac);background:var(--bg)}
+.dg .sw{width:38px;height:38px;border-radius:10px;flex:none;border:1px solid var(--bd)}
+.dg small{display:block;color:var(--mu);font-size:11px}
+details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 </style>
 </head>
 <body>
@@ -52,24 +82,26 @@ label{display:inline-flex;gap:6px;align-items:center}
 <h1>Kalendar by Kasign</h1>
 <p class="sub">10 designs · 5 collections · portrait &amp; landscape · PNG &amp; PDF export</p>
 
-<div class="card">
-  <div class="row" style="justify-content:center">
-    <button id="pv">‹</button><span class="mn" id="mn"></span><button id="nx">›</button>
-  </div>
-  <div id="stage"><canvas id="cv"></canvas></div>
-  <div class="row" style="justify-content:center">
-    <button id="lp" class="on">Portrait 9:16</button><button id="ll">Landscape 16:9</button>
-    <button id="qt" class="on">Quote</button>
-    <label class="fb">Add photos<input type="file" id="ph" accept="image/*" multiple></label><button id="cp">Clear photo</button>
-    <button id="fv">♡ Favorite</button>
-  </div>
-  <div class="row" style="justify-content:center;margin-top:10px">
-    <select id="pz"><option value="a4">A4</option><option value="letter">Letter</option></select>
-    <button class="pri" id="xp">Save PNG</button><button class="pri" id="xd">Save PDF</button>
-  </div>
-  <div class="row" id="tray" style="justify-content:center;margin-top:10px"></div>
-  <p class="note" id="msg" style="text-align:center;margin:10px 0 0"></p>
-  <p class="note" id="fl" style="text-align:center;margin:6px 0 0"></p>
+<div class="main">
+<div class="live" id="live">
+  <canvas id="hero" class="hero"></canvas>
+  <div class="lh"><div><div class="lm" id="mn"></div><div class="ls" id="bsl"></div></div>
+    <div class="lnav"><button id="td">Today</button><button id="pv" aria-label="Previous month">‹</button><button id="nx" aria-label="Next month">›</button></div></div>
+  <div class="lq" id="lq"></div>
+  <div class="lw" id="lw"></div><div class="ld" id="ld"></div>
+  <p class="lfst" id="fl"></p>
+  <div class="dayp" id="dayp"></div>
+</div>
+<div class="card side">
+  <div class="lab">Designs</div><div class="row" id="chips"></div><div id="grid"></div>
+  <div class="lab">Export</div>
+  <div class="row"><button id="lp" class="on">Portrait 9:16</button><button id="ll">Landscape 16:9</button></div>
+  <div class="row" style="margin-top:8px"><button id="qt" class="on">Quote</button><label class="fb">Add photos<input type="file" id="ph" accept="image/*" multiple></label><button id="cp">Clear photo</button><button id="fv">♡ Favorite</button></div>
+  <div class="row" style="margin-top:8px"><select id="pz"><option value="a4">A4</option><option value="letter">Letter</option></select><button class="pri" id="xp">Save PNG</button><button class="pri" id="xd">Save PDF</button></div>
+  <div class="row" id="tray" style="margin-top:8px"></div>
+  <p class="note" id="msg" style="margin:8px 0 0"></p>
+  <details id="pvd"><summary>Preview export image</summary><canvas id="cv"></canvas></details>
+</div>
 </div>
 
 <div class="card"><b>My Calendar</b>
@@ -83,8 +115,6 @@ label{display:inline-flex;gap:6px;align-items:center}
 <select id="cm"><option value="auto">Dates: auto</option><option value="ad">AD only</option><option value="both">AD + BS</option><option value="bs">BS emphasis</option></select>
 <label><input type="checkbox" id="cn"> Nepali weekdays</label></div>
 <div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
-<div class="row" id="chips" style="margin-bottom:12px"></div>
-<div id="grid"></div>
 <p class="note" style="margin-top:16px">Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates (a short list for 2026) are editable in the FEST list. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.</p>
 </div>
 
@@ -225,7 +255,8 @@ function render(cv,d0,Y,M,lay,ph,q,pw){
 
 const $=id=>document.getElementById(id),cv=$("cv");
 function draw(){
-  render(cv,S.d,S.y,S.m,S.l,S.ph[S.d.id],S.q,S.l=="p"?540:960);
+  if($("pvd").open)render(cv,S.d,S.y,S.m,S.l,S.ph[S.d.id],S.q,S.l=="p"?540:960);
+  live();
   $("mn").textContent=MN[S.m]+" "+S.y;
   $("qt").style.display=(S.d.q||CU.quote)?"":"none";$("qt").classList.toggle("on",!!S.q);
   $("lp").classList.toggle("on",S.l=="p");$("ll").classList.toggle("on",S.l=="l");
@@ -234,11 +265,13 @@ function draw(){
 }
 function thumbs(){
   const g=$("grid");g.innerHTML="";
-  DESIGNS.filter(d=>S.f==-1||(S.f==-2?S.fav.includes(d.id):d.c==S.f)).forEach(d=>{
-    const e=document.createElement("div");e.className="th"+(d===S.d?" sel":"");
-    const c=document.createElement("canvas");render(c,d,S.y,S.m,S.l,S.ph[d.id],1,S.l=="p"?160:240);
-    const b=document.createElement("b");b.textContent=d.n;const i=document.createElement("i");i.textContent=COLS[d.c];
-    e.append(c,b,i);e.onclick=()=>{S.d=d;draw();scrollTo({top:0,behavior:"smooth"})};g.append(e);
+  const L=DESIGNS.filter(d=>S.f==-1||(S.f==-2?S.fav.includes(d.id):d.c==S.f));
+  if(!L.length){const n=document.createElement("p");n.className="note";n.textContent="Nothing here yet. Tap ♡ Favorite on a design to save it.";g.append(n)}
+  L.forEach(d=>{
+    const e=document.createElement("button");e.type="button";e.className="dg"+(d===S.d?" sel":"");
+    const sw=document.createElement("span");sw.className="sw";sw.style.background="linear-gradient(180deg,"+(d.art?d.sky[0]+","+d.sky[1]:d.bg[0]+","+d.bg[1])+")";
+    const lb=document.createElement("span"),nm=document.createElement("span"),sm=document.createElement("small");nm.textContent=d.n;sm.textContent=COLS[d.c];lb.append(nm,sm);
+    e.append(sw,lb);e.onclick=()=>{S.d=d;draw()};g.append(e);
   });
 }
 function chips(){
@@ -248,7 +281,7 @@ function chips(){
     b.onclick=()=>pick(v);c.append(b);
   });
 }
-function mv(k){S.m+=k;if(S.m<0){S.m=11;S.y--}if(S.m>11){S.m=0;S.y++}draw()}
+function mv(k){S.m+=k;if(S.m<0){S.m=11;S.y--}if(S.m>11){S.m=0;S.y++}if(S.sel&&S.sel.slice(0,7)!=evk(S.y,S.m,1).slice(0,7))S.sel=null;draw()}
 $("pv").onclick=()=>mv(-1);$("nx").onclick=()=>mv(1);
 $("lp").onclick=()=>{S.l="p";draw()};$("ll").onclick=()=>{S.l="l";draw()};
 $("qt").onclick=()=>{S.q=S.q?0:1;draw()};
@@ -272,6 +305,53 @@ function cmenu(){
 $("mb").onclick=()=>{cmenu();$("mp").hidden=false};
 $("mp").onclick=e=>{if(e.target==$("mp"))$("mp").hidden=true};
 addEventListener("keydown",e=>{if(e.key=="Escape")$("mp").hidden=true});
+const TK=evk(T.getFullYear(),T.getMonth(),T.getDate());S.sel=TK;
+function live(){
+  const d=custom(S.d),md=CU.mode=="auto"?(d.np?"both":"ad"):CU.mode,L=$("live"),Y=S.y,M=S.m;
+  L.style.setProperty("--lb",d.art?d.panel:d.bg[0]);L.style.setProperty("--li",d.ink);L.style.setProperty("--la",d.ac);
+  L.style.background=d.art?d.panel:"linear-gradient(135deg,"+d.bg[0]+","+d.bg[1]+")";L.style.fontFamily=d.f;
+  const h=$("hero");
+  if(d.art){h.style.display="block";h.width=900;h.height=300;art(h.getContext("2d"),d,[0,0,900,300],S.ph[S.d.id])}else h.style.display="none";
+  $("mn").textContent=MN[M]+" "+Y;
+  let bl="";
+  if(md!="ad"){const a=ad2bs(Y,M,1),b=ad2bs(Y,M,new Date(Y,M+1,0).getDate());bl=a&&b?BSN[a.m]+(a.m!=b.m?" – "+BSN[b.m]:"")+" "+toNp(b.y)+" · "+BSM[a.m]+(a.m!=b.m?" – "+BSM[b.m]:"")+" "+b.y+" BS":"BS data covers 2082–2088 BS only"}
+  $("bsl").textContent=bl;
+  $("lq").textContent=(S.q&&d.q)?"“"+d.q[0]+"”"+(d.q[1]?" — "+d.q[1]:""):"";
+  const w=$("lw");w.innerHTML="";const np=d.np||CU.nl,wl=np?WN:WE;
+  for(let i=0;i<7;i++){const s=document.createElement("span"),n=wl[(i+CU.ws)%7];s.textContent=np?n:n[0];w.append(s)}
+  const g=$("ld");g.innerHTML="";const f0=(new Date(Y,M,1).getDay()-CU.ws+7)%7;
+  for(let i=0;i<42;i++){
+    const dt=new Date(Y,M,1-f0+i),yy=dt.getFullYear(),mm=dt.getMonth(),dd=dt.getDate(),k=evk(yy,mm,dd);
+    const b=document.createElement("button");b.type="button";
+    b.className="dc"+(mm!=M?" out":"")+(k==TK?" today":"")+(k==S.sel?" sel":"")+(FEST.some(f=>f[0]<=k&&f[1]>=k)?" fest":"")+(((i%7)+CU.ws)%7==0?" sun":"");
+    const bs=md!="ad"?ad2bs(yy,mm,dd):null,big=md=="bs"&&bs;
+    const n=document.createElement("b");n.textContent=big?toNp(bs.d):dd;b.append(n);
+    if(bs){const sm=document.createElement("small");sm.textContent=big?dd:toNp(bs.d);b.append(sm)}
+    if(EV[k]){const o=document.createElement("i");o.className="dot";b.append(o)}
+    b.setAttribute("aria-label",dd+" "+MN[mm]+" "+yy);
+    b.onclick=()=>{S.sel=k;if(mm!=M){S.y=yy;S.m=mm}draw()};
+    g.append(b);
+  }
+  dayp(md);
+}
+function dayp(md){
+  const p=$("dayp");p.innerHTML="";const k=S.sel;
+  if(!k){p.className="dayp note";p.textContent="Tap a date to see festivals or add a note.";return}
+  p.className="dayp";const q=k.split("-").map(Number),dt=new Date(q[0],q[1]-1,q[2]);
+  const t=document.createElement("b");t.textContent=dt.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"});p.append(t);
+  const bs=md!="ad"?ad2bs(q[0],q[1]-1,q[2]):null;
+  if(bs){const s=document.createElement("div");s.className="note";s.textContent=toNp(bs.d)+" "+BSN[bs.m]+" "+toNp(bs.y)+" · "+bs.d+" "+BSM[bs.m]+" "+bs.y+" BS";p.append(s)}
+  FEST.filter(f=>f[0]<=k&&f[1]>=k).forEach(f=>{const s=document.createElement("div");s.textContent="★ "+f[2];s.style.color="var(--la)";p.append(s)});
+  (EV[k]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent=x;const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};r.append(s,b);p.append(r)});
+  const r=document.createElement("div");r.className="row";r.style.marginTop="8px";
+  const inp=document.createElement("input");inp.className="t";inp.placeholder="Add a note or event";inp.id="dn";
+  const ad=document.createElement("button");ad.className="pri";ad.textContent="Add";
+  const go=()=>{const v=inp.value.trim();if(!v)return;(EV[k]=EV[k]||[]).push(v);sev();draw();$("dn").focus()};
+  ad.onclick=go;inp.onkeydown=e=>{if(e.key=="Enter")go()};r.append(inp,ad);p.append(r);
+}
+$("td").onclick=()=>{S.y=T.getFullYear();S.m=T.getMonth();S.sel=TK;draw()};
+$("pvd").ontoggle=draw;
+{let x0=null;const L=$("live");L.addEventListener("touchstart",e=>{x0=e.touches[0].clientX},{passive:true});L.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>70&&!e.target.closest("input,button#dn"))mv(dx<0?1:-1)},{passive:true})}
 const POOL=[];
 $("ph").onchange=e=>{
   [...e.target.files].forEach(f=>{const im=new Image();im.onload=()=>{POOL.push(im);tray();say("Tap a photo to try it on the current design.")};im.src=URL.createObjectURL(f)});
