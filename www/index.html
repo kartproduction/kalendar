@@ -432,6 +432,6 @@ DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]
   }
 })();
 </script>
-<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")==0)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")==0&&!isNative)navigator.serviceWorker.register("sw.js").catch(function(){});if(isNative&&"serviceWorker" in navigator)navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}).catch(function(){});</script>
 </body>
 </html>
