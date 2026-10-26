@@ -57,8 +57,8 @@ label{display:inline-flex;gap:6px;align-items:center}
 .lw span{text-align:center;font-size:12px;letter-spacing:.06em;color:var(--la);padding:8px 0;font-weight:600}
 .dc{position:relative;min-height:46px;border:0;border-radius:12px;background:transparent;color:inherit;font:inherit;padding:2px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;cursor:pointer}
 .dc b{font-weight:500;font-size:17px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%}
-.dc small{font-size:10px;line-height:1;color:var(--la);opacity:.85;margin-top:-4px}
-.dc.bsd{min-height:52px}.dc.bsd b{width:30px;height:30px;font-size:16px}.dc.bsd small{margin-top:7px}.dc.out{opacity:.3}.dc.sun b{color:var(--la)}
+.dc small{font-size:11px;line-height:1;color:var(--la);opacity:.85;margin-top:-4px}
+.dw{display:flex;flex-direction:column;align-items:center;justify-content:center;width:44px;height:50px;border-radius:999px;gap:0}.dc.bsd{min-height:56px}.dc.bsd b{width:auto;height:auto;border-radius:0;background:transparent;font-size:17px;line-height:1.15}.dc.bsd small{margin-top:0;line-height:1.1}.dc.bsd:hover b{background:transparent}.dc.bsd:hover .dw{background:color-mix(in srgb,var(--la) 14%,transparent)}.dc.bsd.today b{background:transparent;color:var(--lb)}.dc.bsd.today small{color:var(--lb);opacity:.9}.dc.bsd.today .dw,.dc.bsd.today:hover .dw{background:var(--la)}.dc.bsd.sel b{outline:0}.dc.bsd.sel .dw{outline:2px solid var(--la);outline-offset:2px}.dc.out{opacity:.3}.dc.sun b{color:var(--la)}
 .dc.fest b{text-decoration:underline;text-decoration-color:var(--la);text-decoration-thickness:2px;text-underline-offset:4px}
 .dc.today b{background:var(--la);color:var(--lb);font-weight:700}
 .dc.sel b{outline:2px solid var(--la);outline-offset:2px}
@@ -112,7 +112,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <label>Accent <input type="color" id="ca" value="#b5562b"></label>
 <select id="cf"><option value="">Design font</option><option value="s">Serif</option><option value="n">Sans</option></select>
 <select id="cw"><option value="0">Week starts Sunday</option><option value="1">Week starts Monday</option></select>
-<select id="cm"><option value="auto">Dates: auto</option><option value="ad">AD only</option><option value="both">AD + BS</option><option value="bs">BS emphasis</option></select>
+<select id="cm"><option value="auto">Dates: auto (Nepali designs show AD + BS)</option><option value="ad">AD only</option><option value="both">AD + BS</option><option value="bs">BS emphasis</option></select>
 <label><input type="checkbox" id="cn"> Nepali weekdays</label></div>
 <div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
 <p class="note" style="margin-top:16px">Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates (a short list for 2026) are editable in the FEST list. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.</p>
@@ -325,8 +325,8 @@ function live(){
     const b=document.createElement("button");b.type="button";
     b.className="dc"+(mm!=M?" out":"")+(k==TK?" today":"")+(k==S.sel?" sel":"")+(FEST.some(f=>f[0]<=k&&f[1]>=k)?" fest":"")+(((i%7)+CU.ws)%7==0?" sun":"");
     const bs=md!="ad"?ad2bs(yy,mm,dd):null,big=md=="bs"&&bs;if(bs)b.className+=" bsd";
-    const n=document.createElement("b");n.textContent=big?toNp(bs.d):dd;b.append(n);
-    if(bs){const sm=document.createElement("small");sm.textContent=big?dd:toNp(bs.d);b.append(sm)}
+    const n=document.createElement("b");n.textContent=big?toNp(bs.d):dd;
+    if(bs){const w=document.createElement("span");w.className="dw";const sm=document.createElement("small");sm.textContent=big?dd:toNp(bs.d);w.append(n,sm);b.append(w)}else b.append(n);
     if(EV[k]){const o=document.createElement("i");o.className="dot";b.append(o)}
     b.setAttribute("aria-label",dd+" "+MN[mm]+" "+yy);
     b.onclick=()=>{S.sel=k;if(mm!=M){S.y=yy;S.m=mm}draw()};
