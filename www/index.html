@@ -173,6 +173,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
 <p class="note" style="margin-top:16px"><b>Nepali (BS) dates, 2082–2088.</b> Checked against published calendars: 2083. Not yet checked (from public converter tables): the other years. Festivals shown are a short list for 2026. Photos you add stay on your device for this session only.</p>
 <p class="made">Made with care by <b>Kasign</b> · Kart Production</p>
+<p class="note" id="bld" style="text-align:center;font-size:11px;opacity:.6;margin:0 0 6px">__BUILD__</p>
 </div>
 
 <script>
@@ -565,6 +566,7 @@ Object.entries(ids).forEach(([i,k])=>{$(i).oninput=e=>{CU[k]=k=="ws"?+e.target.v
 $("cn").onchange=e=>{CU.nl=e.target.checked?1:0;sv();draw()};
 $("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""});sv();fill();draw()};
 fill();chips();draw();mlabel();
+{const bl=$("bld");if(bl&&bl.textContent.trim().indexOf("__")==0)bl.style.display="none"}
 document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>{CU.mode=b.dataset.m;sv();fill();draw()});
 if(document.fonts&&document.fonts.load){Promise.all(["600 20px Fraunces","700 20px Fraunces","italic 400 20px Fraunces","400 20px 'Playfair Display'","800 20px 'Bodoni Moda'","700 20px Archivo","400 20px 'Tiro Devanagari Hindi'"].map(f=>document.fonts.load(f).catch(()=>{}))).then(draw)}
 DESIGNS.forEach(d=>{if(d.art||d.hp){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
