@@ -74,6 +74,7 @@ label{display:inline-flex;gap:6px;align-items:center}
 .dg small{display:block;color:var(--mu);font-size:11px}
 details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 .live.pl{color:#111;padding-bottom:14px}
+.pl .hero{width:calc(100% - 28px);margin:14px 14px 0;height:170px;border:2px solid var(--pl)}.pl.pb .hero{border-radius:18px}
 .live.pl .lh{flex-wrap:wrap;align-items:flex-end;padding:16px 14px 6px}
 .pl .lm{font-size:clamp(28px,9.5vw,54px);font-weight:400;line-height:1}.pl .ly{font-size:clamp(28px,9.5vw,54px);line-height:1;margin-left:8px}
 .pl.pb .lm,.pl.pb .ly{font-weight:800}.pl.pa .lm,.pl.pa .ly{font-weight:400}
@@ -162,8 +163,8 @@ const DESIGNS=[
 {id:"06",n:"Life in Perspective",c:2,art:"hills",sky:["#f4c9b6","#fbeee4"],rd:["#d99a85","#b8715f","#8a4b42"],sun:1,panel:"#fdf6ee",ink:"#5a2f2a",ac:"#b8503f",f:SER,q:["Every horizon is only the beginning of a wider view.","Kasign"]},
 {id:"07",n:"Nepali Heritage",c:3,art:"mandala",sky:["#f6ead2","#efd9ae"],rd:["#a3162a","#d9a441","#7a0f1f","#e8c36a"],panel:"#fbf3e2",ink:"#6b1020",ac:"#a3162a",f:SER,np:1},
 {id:"08",n:"Nepal Panorama",c:3,art:"range",sky:["#ffd9a0","#e98a5b"],rd:["#f3efe8","#8c6b8a","#3b2f4d"],sun:1,panel:"#fff7ea",ink:"#4a2a1f",ac:"#d9532b",f:SAN,np:1},
-{id:"09",n:"Botanical Grace",c:4,pl:"a",bg:["#faeff4","#faeff4"],pc:{bg:"#faeff4",head:"#fde7f1",line:"#111111",today:"#f3b9d4"},ink:"#111111",ac:"#111111",f:"'Bodoni Moda','Didot','Bodoni MT','Playfair Display',Georgia,serif",box:1},
-{id:"10",n:"Blooming Seasons",c:4,pl:"b",bg:["#f2eafa","#f2eafa"],pc:{bg:"#f2eafa",head:"#ffffff",line:"#333333",today:"#cdb7ee"},ink:"#222222",ac:"#222222",f:"'Archivo','Poppins',system-ui,-apple-system,'Segoe UI',sans-serif",box:1}
+{id:"09",n:"Botanical Grace",c:4,pl:"a",hp:1,sky:["#fbe3ee","#f4c6da"],rd:["#6f9a5e"],petal:"#ffffff",core:"#e8b84a",bg:["#faeff4","#faeff4"],pc:{bg:"#faeff4",head:"#fde7f1",line:"#111111",today:"#f3b9d4"},ink:"#111111",ac:"#111111",f:"'Bodoni Moda','Didot','Bodoni MT','Playfair Display',Georgia,serif",box:1},
+{id:"10",n:"Blooming Seasons",c:4,pl:"b",hp:1,sky:["#e6d9f7","#cdb7ee"],rd:["#7fa56a"],petal:"#f06f8f",core:"#ffd36b",bg:["#f2eafa","#f2eafa"],pc:{bg:"#f2eafa",head:"#ffffff",line:"#333333",today:"#cdb7ee"},ink:"#222222",ac:"#222222",f:"'Archivo','Poppins',system-ui,-apple-system,'Segoe UI',sans-serif",box:1}
 ];
 const T=new Date();
 const S={d:DESIGNS[0],y:T.getFullYear(),m:T.getMonth(),l:"p",q:1,f:-1,ph:{},fav:[]};
@@ -234,9 +235,17 @@ function monthItems(Y,M){
   return o.sort((p,q)=>p[0]-q[0]).map(z=>z[1]);
 }
 const wrapLines=(x,t,w)=>String(t).split("\n").flatMap(l=>wrap(x,l||" ",w));
-function plan(x,d,Y,M,lay,W,H,md,pw){
+function plan(x,d,Y,M,lay,W,H,md,pw,ph){
   const A=d.pl=="a",P=lay=="p",pc=d.pc,ws=1,dm=new Date(Y,M+1,0).getDate(),f0=(new Date(Y,M,1).getDay()-ws+7)%7,nr=Math.ceil((f0+dm)/7),pn=pnget(Y,M),nf=A?SAN:d.f;
   x.fillStyle=pc.bg;x.fillRect(0,0,W,H);x.textBaseline="alphabetic";
+  // photo band at the top (your photo, or a placeholder until you add one)
+  const hp=!!d.hp,bh=hp?(P?300:190):0,top=hp?bh+60:0,sc=hp?(H-top-10)/H:1;
+  if(hp){
+    const bx=40,by=40,bw=W-80,r=A?0:26,bp=()=>{x.beginPath();x.moveTo(bx+r,by);x.arcTo(bx+bw,by,bx+bw,by+bh,r);x.arcTo(bx+bw,by+bh,bx,by+bh,r);x.arcTo(bx,by+bh,bx,by,r);x.arcTo(bx,by,bx+bw,by,r);x.closePath()};
+    x.save();bp();x.clip();art(x,Object.assign({},d,{art:"flora"}),[bx,by,bw,bh],ph);x.restore();
+    bp();x.lineWidth=A?2:2.5;x.strokeStyle=pc.line;x.stroke();
+    x.save();x.translate((W-W*sc)/2,top);x.scale(sc,sc);
+  }
   let gx,gy,gw,gh,hh,ty,ts,rx,boxes;
   if(A&&!P){gx=108;gy=250;gw=1329;gh=737;hh=68;ty=190;ts=150;rx=1811;boxes=[{k:"n",l:"NOTES",x:1478,y:250,w:333,h:737}]}
   else if(A){gx=70;gy=320;gw=940;hh=66;ty=240;ts=140;rx=1010;gh=1430-40-gy;boxes=[{k:"n",l:"NOTES",x:70,y:1430,w:940,h:420}]}
@@ -302,13 +311,14 @@ function plan(x,d,Y,M,lay,W,H,md,pw){
   });
   x.fillStyle=d.ink;x.globalAlpha=.55;x.font="400 22px "+SAN;x.textAlign="center";
   x.fillText(BRAND+(md!="ad"?"  ·  AD + BS":""),W/2,H-(A&&!P?38:P?42:32));x.globalAlpha=1;
+  if(hp)x.restore();
 }
 function render(cv,d0,Y,M,lay,ph,q,pw){
   const d=custom(d0),md=CU.mode=="auto"?(d.np?"both":"ad"):CU.mode;
   const W=lay=="p"?1080:1920,H=lay=="p"?1920:1080;
   cv.width=pw;cv.height=Math.round(pw*H/W);
   const x=cv.getContext("2d");x.setTransform(pw/W,0,0,pw/W,0,0);
-  if(d.pl){plan(x,d,Y,M,lay,W,H,md,pw);return}
+  if(d.pl){plan(x,d,Y,M,lay,W,H,md,pw,ph);return}
   const bg=x.createLinearGradient(0,0,W,H);bg.addColorStop(0,d.bg?d.bg[0]:d.panel);bg.addColorStop(1,d.bg?d.bg[1]:d.panel);
   x.fillStyle=bg;x.fillRect(0,0,W,H);
   let px=0,py=0,pwid=W,ph2=H;
@@ -420,7 +430,7 @@ function live(){
   L.style.setProperty("--lb",d.art?d.panel:d.bg[0]);L.style.setProperty("--li",d.ink);L.style.setProperty("--la",d.ac);
   L.style.background=d.art?d.panel:"linear-gradient(135deg,"+d.bg[0]+","+d.bg[1]+")";L.style.fontFamily=d.f;
   const h=$("hero");
-  if(d.art){h.style.display="block";h.width=900;h.height=300;art(h.getContext("2d"),d,[0,0,900,300],S.ph[S.d.id])}else h.style.display="none";
+  if(d.art||d.hp){h.style.display="block";h.width=900;h.height=d.hp?340:300;art(h.getContext("2d"),d.hp?Object.assign({},d,{art:"flora"}):d,[0,0,900,h.height],S.ph[S.d.id])}else h.style.display="none";
   const pl=!!d.pl;L.classList.toggle("pl",pl);L.classList.toggle("pa",d.pl=="a");L.classList.toggle("pb",d.pl=="b");
   if(pl){L.style.setProperty("--pl",d.pc.line);L.style.setProperty("--ph",d.pc.head);L.style.setProperty("--pt",d.pc.today);L.style.background=d.pc.bg}
   $("mn").textContent=pl?(d.pl=="a"?MN[M].toUpperCase():MN[M]):MN[M]+" "+Y;$("yr").textContent=pl?Y:"";
@@ -487,7 +497,7 @@ $("ph").onchange=e=>{
   [...e.target.files].forEach(f=>{const im=new Image();im.onload=()=>{POOL.push(im);tray();say("Tap a photo to try it on the current design.")};im.src=URL.createObjectURL(f)});
   e.target.value="";
 };
-function tray(){const t=$("tray");t.innerHTML="";POOL.forEach(im=>{const b=document.createElement("img");b.src=im.src;b.style.cssText="height:56px;border-radius:6px;cursor:pointer;border:2px solid "+(S.ph[S.d.id]===im?"var(--ac)":"var(--bd)");b.onclick=()=>{if(!S.d.art){say("This design is text-only; choose a photo design.");return}S.ph[S.d.id]=im;say("Photo applied to "+S.d.n+".");draw()};t.append(b)})}
+function tray(){const t=$("tray");t.innerHTML="";POOL.forEach(im=>{const b=document.createElement("img");b.src=im.src;b.style.cssText="height:56px;border-radius:6px;cursor:pointer;border:2px solid "+(S.ph[S.d.id]===im?"var(--ac)":"var(--bd)");b.onclick=()=>{if(!(S.d.art||S.d.hp)){say("This design is text-only; choose a photo design.");return}S.ph[S.d.id]=im;say("Photo applied to "+S.d.n+".");draw()};t.append(b)})}
 $("cp").onclick=()=>{delete S.ph[S.d.id];draw()};
 function say(t){$("msg").textContent=t}
 let DL=null;
@@ -524,7 +534,7 @@ Object.entries(ids).forEach(([i,k])=>{$(i).oninput=e=>{CU[k]=k=="ws"?+e.target.v
 $("cn").onchange=e=>{CU.nl=e.target.checked?1:0;sv();draw()};
 $("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""});sv();fill();draw()};
 fill();chips();draw();mlabel();
-DESIGNS.forEach(d=>{if(d.art){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
+DESIGNS.forEach(d=>{if(d.art||d.hp){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
 (async()=>{
   try{DL=await claude.use("downloads")}catch(e){}
   if(!DL){
