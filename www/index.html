@@ -146,6 +146,8 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <label><input type="checkbox" id="cn"> Nepali weekdays</label></div>
 <div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
 <p class="note" style="margin-top:16px">Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates (a short list for 2026) are editable in the FEST list. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.</p>
+<p class="note">App build: <span id="bd">__BUILD__</span></p>
+<script>var bd=document.getElementById("bd");if(bd&&bd.textContent.indexOf("__")==0)bd.textContent="web";</script>
 </div>
 
 <script>
@@ -572,6 +574,6 @@ DESIGNS.forEach(d=>{if(d.art||d.hp){const im=new Image();im.onload=()=>{if(!S.ph
   }
 })();
 </script>
-<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")==0)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+<script>(function(){var nat=window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform();if(!("serviceWorker" in navigator))return;if(nat){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(g){g.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})})}else if(location.protocol.indexOf("http")==0)navigator.serviceWorker.register("sw.js").catch(function(){})})();</script>
 </body>
 </html>
