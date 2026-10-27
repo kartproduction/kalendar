@@ -25,6 +25,12 @@ jobs:
           npm install -D --no-audit --no-fund @capacitor/cli
           mkdir -p www/js
           cp node_modules/jspdf/dist/jspdf.umd.min.js www/js/jspdf.umd.min.js
+      - name: Stamp the page with the build number
+        run: |
+          B="build-${{ github.run_number }}-${GITHUB_SHA::7}"
+          echo "BUILD=$B" >> "$GITHUB_ENV"
+          sed -i "s/__BUILD__/$B/g" www/index.html
+          grep -q "$B" www/index.html || { echo "ERROR: www/index.html is not the latest page (no build stamp)"; exit 1; }
       - name: Add Android project
         run: |
           npx cap add android
@@ -109,16 +115,20 @@ jobs:
           echo "$KEYSTORE_BASE64" | base64 -d > release.jks
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
           "$BT/zipalign" -p 4 android/app/build/outputs/apk/release/app-release-unsigned.apk aligned.apk
-          "$BT/apksigner" sign --ks release.jks --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEYSTORE_PASSWORD --key-pass env:KEY_PASSWORD --out Kalendar.apk aligned.apk
-          "$BT/apksigner" verify --print-certs Kalendar.apk
+          "$BT/apksigner" sign --ks release.jks --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEYSTORE_PASSWORD --key-pass env:KEY_PASSWORD --out Kalendar-v1.0.${{ github.run_number }}.apk aligned.apk
+          "$BT/apksigner" verify --print-certs Kalendar-v1.0.${{ github.run_number }}.apk
           rm -f release.jks aligned.apk
+      - name: Verify the APK contains this build
+        run: |
+          unzip -p Kalendar-v1.0.${{ github.run_number }}.apk assets/public/index.html | grep -q "$BUILD" || { echo "ERROR: the APK does not contain this build"; exit 1; }
+          echo "APK verified: $BUILD"
       - uses: actions/upload-artifact@v4
         with:
           name: Kalendar-APK
-          path: Kalendar.apk
+          path: Kalendar-v1.0.${{ github.run_number }}.apk
       - name: Publish to Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: Kalendar v1.0.${{ github.run_number }}
-          files: Kalendar.apk
+          files: Kalendar-v1.0.${{ github.run_number }}.apk
