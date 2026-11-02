@@ -21,10 +21,28 @@ jobs:
           echo '{"appId":"com.kasign.kalendar","appName":"Kalendar by Kasign","webDir":"www"}' > capacitor.config.json
       - name: Install Capacitor and PDF library
         run: |
-          npm install --no-audit --no-fund @capacitor/core @capacitor/android @capacitor/filesystem @capacitor/share jspdf
-          npm install -D --no-audit --no-fund @capacitor/cli
+          npm install --no-audit --no-fund @capacitor/core jspdf
+          V=$(node -p "require('./node_modules/@capacitor/core/package.json').version.split('.')[0]")
+          echo "Using Capacitor major version $V for every Capacitor package"
+          npm install --no-audit --no-fund "@capacitor/android@$V"
+          npm install -D --no-audit --no-fund "@capacitor/cli@$V"
+          for P in filesystem share local-notifications; do
+            npm install --no-audit --no-fund "@capacitor/$P@$V" || npm install --no-audit --no-fund "@capacitor/$P"
+          done
+          npm ls --depth=0 | grep -i capacitor || true
           mkdir -p www/js
           cp node_modules/jspdf/dist/jspdf.umd.min.js www/js/jspdf.umd.min.js
+      - name: Stamp the page with the build number
+        run: |
+          B="build-${{ github.run_number }}-${GITHUB_SHA::7}"
+          echo "BUILD=$B" >> "$GITHUB_ENV"
+          if grep -q "__BUILD__" www/index.html; then
+            sed -i "s/__BUILD__/$B/g" www/index.html
+            echo "STAMPED=yes" >> "$GITHUB_ENV"
+          else
+            echo "No build stamp line in www/index.html (older page), skipping the stamp and the stamp check."
+            echo "STAMPED=no" >> "$GITHUB_ENV"
+          fi
       - name: Add Android project
         run: |
           npx cap add android
@@ -92,6 +110,11 @@ jobs:
             }
           }
           EOF
+      - name: Allow notifications (reminders)
+        run: |
+          M=android/app/src/main/AndroidManifest.xml
+          grep -q POST_NOTIFICATIONS "$M" || sed -i 's#</manifest>#    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n</manifest>#' "$M"
+          grep -n "POST_NOTIFICATIONS" "$M"
       - name: Set version number
         run: |
           sed -i -E "s/versionCode [0-9]+/versionCode ${{ github.run_number }}/; s/versionName \"[^\"]*\"/versionName \"1.0.${{ github.run_number }}\"/" android/app/build.gradle
@@ -109,16 +132,24 @@ jobs:
           echo "$KEYSTORE_BASE64" | base64 -d > release.jks
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
           "$BT/zipalign" -p 4 android/app/build/outputs/apk/release/app-release-unsigned.apk aligned.apk
-          "$BT/apksigner" sign --ks release.jks --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEYSTORE_PASSWORD --key-pass env:KEY_PASSWORD --out Kalendar.apk aligned.apk
-          "$BT/apksigner" verify --print-certs Kalendar.apk
+          "$BT/apksigner" sign --ks release.jks --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEYSTORE_PASSWORD --key-pass env:KEY_PASSWORD --out Kalendar-v1.0.${{ github.run_number }}.apk aligned.apk
+          "$BT/apksigner" verify --print-certs Kalendar-v1.0.${{ github.run_number }}.apk
           rm -f release.jks aligned.apk
+      - name: Verify the APK contains this build
+        run: |
+          if [ "$STAMPED" = "yes" ]; then
+            unzip -p Kalendar-v1.0.${{ github.run_number }}.apk assets/public/index.html | grep -q "$BUILD" || { echo "ERROR: the APK does not contain this build"; exit 1; }
+            echo "APK verified: $BUILD"
+          else
+            echo "Skipped the build check (older page without a stamp)."
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: Kalendar-APK
-          path: Kalendar.apk
+          path: Kalendar-v1.0.${{ github.run_number }}.apk
       - name: Publish to Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: Kalendar v1.0.${{ github.run_number }}
-          files: Kalendar.apk
+          files: Kalendar-v1.0.${{ github.run_number }}.apk
