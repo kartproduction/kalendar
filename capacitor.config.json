@@ -1,5 +1,10 @@
 {
   "appId": "com.kasign.kalendar",
   "appName": "Kalendar by Kasign",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#B5562B"
+    }
+  }
 }
