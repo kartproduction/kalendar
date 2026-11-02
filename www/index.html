@@ -124,6 +124,8 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 .pl.pa .pbx textarea{min-height:200px;background-image:repeating-linear-gradient(transparent 0,transparent 25px,rgba(0,0,0,.4) 25px,rgba(0,0,0,.4) 26px)}
 .pl.pa .lw,.pl.pa .ld,.pl.pa .plx,.pl.pa .lnav,.pl.pa .dayp,.pl.pa .lfst{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
 .pbx ul{margin:0;padding:0;list-style:none;font-size:13px;line-height:1.7;min-height:80px}
+.dc .mo{position:absolute;top:3px;left:calc(50% - 24px);font-size:9px;font-style:normal;line-height:1}.pl .dc .mo{left:4px;top:4px}
+.dc .dot.ic{width:auto;height:auto;background:none;border-radius:0;font-size:10px;line-height:1;top:3px}
 </style>
 </head>
 <body>
@@ -153,7 +155,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
   <div class="lab">Export</div>
   <div class="row"><button id="lp" class="on">Portrait 9:16</button><button id="ll">Landscape 16:9</button></div>
   <div class="row" style="margin-top:8px"><button id="qt" class="on">Quote</button><label class="fb">Add photos<input type="file" id="ph" accept="image/*" multiple></label><button id="cp">Clear photo</button><button id="fv">♡ Favorite</button></div>
-  <div class="row" style="margin-top:8px"><select id="pz"><option value="a4">A4</option><option value="letter">Letter</option></select><button class="pri" id="xp">Save PNG</button><button class="pri" id="xd">Save PDF</button></div>
+  <div class="row" style="margin-top:8px"><select id="pz"><option value="a4">A4</option><option value="letter">Letter</option></select><button class="pri" id="xp">Save PNG</button><button class="pri" id="xd">Save PDF</button><button class="pri" id="xy">Full-year PDF</button><button id="sh">Share image</button></div>
   <div class="row" id="tray" style="margin-top:8px"></div>
   <p class="note" id="msg" style="margin:8px 0 0"></p>
   <details id="pvd"><summary>Preview export image</summary><canvas id="cv"></canvas></details>
@@ -162,9 +164,10 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 
 <div class="card"><b>My Calendar</b>
 <div id="up" style="margin-top:10px"></div>
-<div class="row" style="margin-top:10px"><input type="date" id="ed" class="t"><input class="t" id="et" placeholder="Event or note"><label><input type="checkbox" id="er"> Every year</label><button class="pri" id="ea">Add</button></div>
+<div class="row" style="margin-top:10px"><input type="date" id="ed" class="t"><span id="ecw"></span><input class="t" id="et" placeholder="Event or note"><label><input type="checkbox" id="er"> Every year</label><button class="pri" id="ea">Add</button></div>
+<input class="t" id="es" placeholder="Search all events and festivals" style="margin-top:10px;width:100%"><div id="esr"></div>
 <div id="el" style="margin-top:10px"></div>
-<div class="row" style="margin-top:12px"><button id="bx">Export backup</button><label class="fb">Import backup<input type="file" id="bi" accept=".json,application/json"></label></div></div>
+<div class="row" style="margin-top:12px"><button id="bx">Export backup</button><button id="ics">Add to phone calendar (.ics)</button><label class="fb">Import backup<input type="file" id="bi" accept=".json,application/json"></label></div></div>
 <div class="card"><b>Date converter (AD ↔ BS)</b>
 <div class="row" style="margin-top:10px"><label>AD <input type="date" id="c1" class="t"></label><span id="r1" class="note"></span></div>
 <div class="row" style="margin-top:10px"><label>BS <select id="c2y"></select><select id="c2m"></select><input type="number" id="c2d" min="1" max="32" class="t" style="max-width:90px"></label><span id="r2" class="note"></span></div></div>
@@ -174,8 +177,8 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <select id="cf"><option value="">Design font: default</option><option value="fr">Fraunces (soft serif)</option><option value="pf">Playfair (editorial)</option><option value="s">Georgia (classic)</option><option value="ar">Archivo (modern sans)</option><option value="n">System sans</option></select>
 <select id="cw"><option value="0">Week starts Sunday</option><option value="1">Week starts Monday</option></select>
 <select id="cm"><option value="auto">Dates: auto (Nepali designs show AD + BS)</option><option value="ad">AD only</option><option value="both">AD + BS</option><option value="bs">BS emphasis</option></select>
-<label><input type="checkbox" id="cn"> Nepali weekdays</label></div>
-<div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button></div></div>
+<label><input type="checkbox" id="cn"> Nepali weekdays</label> <label><input type="checkbox" id="cnn"> Nepali digits</label></div>
+<div class="row" style="margin-top:10px"><input class="t" id="cq" placeholder="Your own quote (works on any design)"><input class="t" id="cu" placeholder="Author (optional)"><button id="cr">Reset</button><button id="ps">Save my design</button><button id="pu">Use my design</button></div></div>
 <p class="note" style="margin-top:16px">Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates (a short list for 2026) are editable in the FEST list. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.</p>
 <p class="made">Made with care by <b>Kasign</b> · Kart Production</p>
 <p class="note">App build: <span id="bd">__BUILD__</span></p>
@@ -218,7 +221,7 @@ function ad2bs(y,m,d){
   let bm=0;while(n>=BSD[by][bm]){n-=BSD[by][bm];bm++}
   return{y:by,m:bm,d:n+1};
 }
-const CU={ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""};
+const CU={ac:"",f:"",ws:0,mode:"auto",nl:0,nn:0,quote:"",author:""};
 try{Object.assign(CU,JSON.parse(localStorage.getItem("kk-cu")||"{}"))}catch(e){}
 let EV={};try{EV=JSON.parse(localStorage.getItem("kk-ev")||"{}")}catch(e){}
 const sev=()=>{try{localStorage.setItem("kk-ev",JSON.stringify(EV))}catch(e){}},evk=(y,m,d)=>y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
@@ -231,7 +234,12 @@ function bs2ad(by,bm,bd){
   return new Date(Date.UTC(2026,3,14+n+bd-1));
 }
 const FEST=[["2026-04-14","2026-04-14","Nepali New Year"],["2026-10-11","2026-10-11","Ghatasthapana"],["2026-10-17","2026-10-23","Dashain holidays"],["2026-11-08","2026-11-12","Tihar holidays"]];
-function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);$("fl").textContent=o.length?"Festivals: "+o.join(" · "):""}
+const IC=/^(\p{Extended_Pictographic}\uFE0F?)/u,nd=x=>CU.nn?toNp(x):x;
+const tithi=(y,m,d)=>{const t=(Date.UTC(y,m,d,0,15)-Date.UTC(2000,0,1,12))/864e5,r=Math.PI/180,e=((218.316+13.176396*t+6.289*Math.sin((134.963+13.064993*t)*r))-(280.46+0.9856474*t+1.915*Math.sin((357.529+0.98560028*t)*r)))%360;return Math.floor(((e+360)%360)/12)+1};
+const CATS=[["","• Note"],["🎂","🎂 Birthday"],["💍","💍 Anniversary"],["📝","📝 Exam"],["🎉","🎉 Party"],["💼","💼 Work"],["✈️","✈️ Trip"]];
+const catSel=id=>{const s=document.createElement("select");if(id)s.id=id;CATS.forEach(c=>{const o=document.createElement("option");o.value=c[0];o.textContent=c[1];s.append(o)});return s};
+const disp=(t,y)=>{const m=/^(🎂|💍)/.test(t)&&t.match(/\b(19|20)\d{2}\b/);return m&&y>+m[0]?t.replace(m[0],"").replace(/\s+/g," ").trim()+" · "+(y-m[0])+(t[0]=="🎂"?" yrs":" yrs together"):t};
+function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);const mo=[];for(let d=1;d<=new Date(S.y,S.m+1,0).getDate();d++){const t=tithi(S.y,S.m,d);if(t==15)mo.push("🌕 Purnima "+d);if(t==30)mo.push("🌑 Aunsi "+d);if(t==11||t==26)mo.push("Ekadashi "+d)}const a2=[];if(o.length)a2.push("Festivals: "+o.join(" · "));if(mo.length)a2.push(mo.join(" · ")+" (approx.)");$("fl").textContent=a2.join("  |  ")}
 function custom(d){const o=Object.assign({},d);if(CU.ac)o.ac=CU.ac;if(CU.f&&!d.pl)o.f=FM[CU.f]||SAN;if(CU.quote)o.q=[CU.quote,CU.author];return o}
 function ridge(x,ax,aw,base,amp,seed,bot,col,smooth){
   x.beginPath();x.moveTo(ax,bot);
@@ -494,7 +502,7 @@ function live(){
     b.className="dc"+(mm!=M?" out":"")+(k==TK?" today":"")+(k==S.sel?" sel":"")+(FEST.some(f=>f[0]<=k&&f[1]>=k)?" fest":"")+(((i%7)+ws)%7==0?" sun":"");
     if(pl&&mm!=M){b.className="dc blank";b.disabled=true;g.append(b);continue}
     const bs=md!="ad"?ad2bs(yy,mm,dd):null,big=md=="bs"&&bs;if(bs&&!pl)b.className+=" bsd";
-    const n=document.createElement("b");n.textContent=big?toNp(bs.d):dd;
+    const n=document.createElement("b");n.textContent=big?toNp(bs.d):nd(dd);
     if(bs&&!pl){const w=document.createElement("span");w.className="dw";const sm=document.createElement("small");sm.textContent=big?dd:toNp(bs.d);w.append(n,sm);b.append(w)}else b.append(n);
     if(pl){
       if(bs){const sm=document.createElement("small");sm.className="bsn";sm.textContent=toNp(bs.d);b.append(sm)}
@@ -502,7 +510,8 @@ function live(){
       if(fn.length){const sm=document.createElement("small");sm.className="ft";sm.textContent=fn[0];b.append(sm)}
       evOn(k).slice(0,2).forEach(t=>{const sm=document.createElement("small");sm.className="ft";sm.textContent=t;b.append(sm)});
     }
-    if(evOn(k).length){const o=document.createElement("i");o.className="dot";b.append(o)}
+    const ev=evOn(k);if(ev.length){const o=document.createElement("i"),m=ev.map(t=>(t.match(IC)||[])[1]).find(Boolean);o.className="dot"+(m?" ic":"");if(m)o.textContent=m;b.append(o)}
+    const tt=tithi(yy,mm,dd);if(tt==15||tt==30){const e2=document.createElement("em");e2.className="mo";e2.textContent=tt==15?"🌕":"🌑";b.append(e2)}
     b.setAttribute("aria-label",dd+" "+MN[mm]+" "+yy);
     b.onclick=()=>{S.sel=k;if(mm!=M){S.y=yy;S.m=mm}draw()};
     g.append(b);
@@ -528,13 +537,14 @@ function dayp(md){
   const bs=md!="ad"?ad2bs(q[0],q[1]-1,q[2]):null;
   if(bs){const s=document.createElement("div");s.className="note";s.textContent=toNp(bs.d)+" "+BSN[bs.m]+" "+toNp(bs.y)+" · "+bs.d+" "+BSM[bs.m]+" "+bs.y+" BS";p.append(s)}
   FEST.filter(f=>f[0]<=k&&f[1]>=k).forEach(f=>{const s=document.createElement("div");s.textContent="★ "+f[2];s.style.color="var(--la)";p.append(s)});
-  (EV[k]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent=x;const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};r.append(s,b);p.append(r)});
-  (EVR[k.slice(5)]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent="↻ "+x+" (every year)";const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{const a=EVR[k.slice(5)];a.splice(i,1);if(!a.length)delete EVR[k.slice(5)];sevr();draw()};r.append(s,b);p.append(r)});
+  {const tt=tithi(q[0],q[1]-1,q[2]),s=document.createElement("div");s.className="note";s.textContent=(tt==15?"🌕 Purnima":tt==30?"🌑 Aunsi":(tt==11||tt==26)?"Ekadashi":"Tithi")+" · "+(tt<=15?"Shukla ":"Krishna ")+(tt<=15?tt:tt-15)+" (approx.)";p.append(s)}
+  (EV[k]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent=disp(x,q[0]);const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};r.append(s,b);p.append(r)});
+  (EVR[k.slice(5)]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent="↻ "+disp(x,q[0])+" (every year)";const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{const a=EVR[k.slice(5)];a.splice(i,1);if(!a.length)delete EVR[k.slice(5)];sevr();draw()};r.append(s,b);p.append(r)});
   const r=document.createElement("div");r.className="row";r.style.marginTop="8px";
-  const inp=document.createElement("input");inp.className="t";inp.placeholder="Add a note or event";inp.id="dn";
+  const inp=document.createElement("input");inp.className="t";inp.placeholder="Add a note or event";inp.id="dn";const cs=catSel();
   const ad=document.createElement("button");ad.className="pri";ad.textContent="Add";
-  const rp=document.createElement("label"),cb=document.createElement("input");cb.type="checkbox";rp.append(cb," Every year");const go=()=>{const v=inp.value.trim();if(!v)return;if(cb.checked){const mk=k.slice(5);(EVR[mk]=EVR[mk]||[]).push(v);sevr()}else{(EV[k]=EV[k]||[]).push(v);sev()}draw();$("dn").focus()};
-  ad.onclick=go;inp.onkeydown=e=>{if(e.key=="Enter")go()};r.append(inp,rp,ad);p.append(r);
+  const rp=document.createElement("label"),cb=document.createElement("input");cb.type="checkbox";rp.append(cb," Every year");const go=()=>{const v0=inp.value.trim();if(!v0)return;const v=(cs.value?cs.value+" ":"")+v0;if(cb.checked){const mk=k.slice(5);(EVR[mk]=EVR[mk]||[]).push(v);sevr()}else{(EV[k]=EV[k]||[]).push(v);sev()}draw();$("dn").focus()};
+  ad.onclick=go;inp.onkeydown=e=>{if(e.key=="Enter")go()};r.append(cs,inp,rp,ad);p.append(r);
 }
 $("td").onclick=()=>{S.y=T.getFullYear();S.m=T.getMonth();S.sel=TK;draw()};
 $("pvd").ontoggle=draw;
@@ -567,7 +577,7 @@ function upc(){
   for(let i=0;i<60&&o.length<6;i++){
     const d=new Date(T.getFullYear(),T.getMonth(),T.getDate()+i),k=evk(d.getFullYear(),d.getMonth(),d.getDate()),lab=[];
     FEST.forEach(f=>{if(f[0]<=k&&f[1]>=k&&(i==0||f[0]==k))lab.push("★ "+f[2])});
-    evOn(k).forEach(t=>lab.push(t));
+    evOn(k).forEach(t=>lab.push(disp(t,d.getFullYear())));
     lab.forEach(t=>{if(o.length<6)o.push([i,d,t])});
   }
   if(!o.length)return;
@@ -590,7 +600,7 @@ function evl(){
   }));
   if(!n){l.textContent="No events in "+MN[S.m]+" "+S.y+".";l.className="note"}else l.className="";
 }
-$("ea").onclick=()=>{const v=$("ed").value,t=$("et").value.trim();if(!v||!t){say("Pick a date and write a note.");return}if($("er").checked){const mk=v.slice(5);(EVR[mk]=EVR[mk]||[]).push(t);sevr()}else{(EV[v]=EV[v]||[]).push(t);sev()}$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
+$("ea").onclick=()=>{const v=$("ed").value,t0=$("et").value.trim(),t=t0&&$("ec").value?$("ec").value+" "+t0:t0;if(!v||!t){say("Pick a date and write a note.");return}if($("er").checked){const mk=v.slice(5);(EVR[mk]=EVR[mk]||[]).push(t);sevr()}else{(EV[v]=EV[v]||[]).push(t);sev()}$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
 $("ed").value=evk(T.getFullYear(),T.getMonth(),T.getDate());
 $("bx").onclick=()=>{const b=new Blob([JSON.stringify({app:"kalendar",v:1,events:EV,yearly:EVR},null,1)],{type:"application/json"});save("kalendar-backup-"+evk(T.getFullYear(),T.getMonth(),T.getDate())+".json",b)};
 $("bi").onchange=e=>{
@@ -616,8 +626,30 @@ function sv(){try{localStorage.setItem("kk-cu",JSON.stringify(CU))}catch(e){}}
 function fill(){Object.entries(ids).forEach(([i,k])=>{if(k=="ac"&&!CU.ac){$(i).value="#b5562b";return}$(i).value=CU[k]});$("cn").checked=!!CU.nl}
 Object.entries(ids).forEach(([i,k])=>{$(i).oninput=e=>{CU[k]=k=="ws"?+e.target.value:e.target.value;sv();draw()}});
 $("cn").onchange=e=>{CU.nl=e.target.checked?1:0;sv();draw()};
-$("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,quote:"",author:""});sv();fill();draw()};
+$("cr").onclick=()=>{Object.assign(CU,{ac:"",f:"",ws:0,mode:"auto",nl:0,nn:0,quote:"",author:""});sv();fill();draw()};
 fill();chips();draw();mlabel();
+$("ecw").replaceWith(catSel("ec"));$("cnn").checked=!!CU.nn;$("cnn").onchange=e=>{CU.nn=e.target.checked?1:0;sv();draw()};
+{const rt=document.documentElement;try{const s=localStorage.getItem("kk-th");if(s)rt.dataset.theme=s}catch(e){}
+const dk=()=>rt.dataset.theme=="dark"||(!rt.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches),tb=document.createElement("button");tb.className="bk";tb.setAttribute("aria-label","Dark mode");tb.textContent=dk()?"☀️":"🌙";
+tb.onclick=()=>{const n=dk()?"light":"dark";rt.dataset.theme=n;try{localStorage.setItem("kk-th",n)}catch(e){}tb.textContent=n=="dark"?"☀️":"🌙"};document.querySelector(".bar").append(tb)}
+$("ics").onclick=()=>{const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Kalendar by Kasign//EN","CALSCALE:GREGORIAN"],esc=s=>String(s).replace(/[\\;,]/g,m=>"\\"+m).replace(/\n/g," "),cd=s=>s.replace(/-/g,""),
+nx=s=>{const q=s.split("-").map(Number);return new Date(Date.UTC(q[0],q[1]-1,q[2]+1)).toISOString().slice(0,10).replace(/-/g,"")},ds=()=>new Date().toISOString().replace(/[-:]|\.\d+/g,"");let n=0;
+const ev=(k,t,rr)=>{n++;L.push("BEGIN:VEVENT","UID:kk"+n+"-"+cd(k)+"@kalendar","DTSTAMP:"+ds(),"DTSTART;VALUE=DATE:"+cd(k),"DTEND;VALUE=DATE:"+nx(k),"SUMMARY:"+esc(t));if(rr)L.push("RRULE:FREQ=YEARLY");L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+esc(t),"TRIGGER:-PT15H","END:VALARM","END:VEVENT")};
+Object.keys(EV).forEach(k=>EV[k].forEach(t=>ev(k,t,0)));Object.keys(EVR).forEach(k=>EVR[k].forEach(t=>ev(T.getFullYear()+"-"+k,t,1)));
+FEST.forEach(f=>{n++;L.push("BEGIN:VEVENT","UID:kkf"+n+"@kalendar","DTSTAMP:"+ds(),"DTSTART;VALUE=DATE:"+cd(f[0]),"DTEND;VALUE=DATE:"+nx(f[1]),"SUMMARY:"+esc("★ "+f[2]),"END:VEVENT")});
+L.push("END:VCALENDAR");save("kalendar-events.ics",new Blob([L.join("\r\n")],{type:"text/calendar"}))};
+$("xy").onclick=async()=>{if(!window.jspdf){say("PDF library did not load; check your connection once.");return}
+say("Building the year PDF…");await new Promise(r=>setTimeout(r,30));
+const o=S.l=="p"?"portrait":"landscape",doc=new window.jspdf.jsPDF({orientation:o,unit:"mm",format:$("pz").value}),pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),d=custom(S.d);
+doc.setFillColor(d.bg[0]);doc.rect(0,0,pw,ph,"F");doc.setTextColor(d.ink||"#111111");doc.setFont("times","bold");doc.setFontSize(80);doc.text(String(S.y),pw/2,ph/2,{align:"center"});doc.setFont("times","normal");doc.setFontSize(18);doc.text(BRAND,pw/2,ph/2+16,{align:"center"});
+for(let m=0;m<12;m++){const c=document.createElement("canvas");render(c,S.d,S.y,m,S.l,S.ph[S.d.id],S.q,S.l=="p"?900:1400);doc.addPage();const g=8,s=Math.min((pw-2*g)/c.width,(ph-2*g)/c.height),w=c.width*s,h=c.height*s;doc.addImage(c.toDataURL("image/jpeg",.88),"JPEG",(pw-w)/2,(ph-h)/2,w,h);await new Promise(r=>setTimeout(r,0))}
+save("kalendar-"+S.y+"-full-year.pdf",doc.output("blob"))};
+$("sh").onclick=()=>full().toBlob(async b=>{const f=new File([b],fname("png"),{type:"image/png"});try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:BRAND});else say("Sharing is not supported here; use Save PNG.")}catch(e){}},"image/png");
+$("es").oninput=()=>{const q=$("es").value.trim().toLowerCase(),o=$("esr");o.innerHTML="";if(q.length<2)return;const h=[];
+Object.keys(EV).sort().forEach(k=>EV[k].forEach(t=>t.toLowerCase().includes(q)&&h.push([k,t])));Object.keys(EVR).sort().forEach(k=>EVR[k].forEach(t=>t.toLowerCase().includes(q)&&h.push([S.y+"-"+k,t+" ↻"])));FEST.forEach(f=>f[2].toLowerCase().includes(q)&&h.push([f[0],"★ "+f[2]]));
+h.slice(0,12).forEach(([k,t])=>{const b=document.createElement("button");b.style.cssText="display:block;width:100%;text-align:left;margin:2px 0";b.textContent=k+" — "+t;b.onclick=()=>{const p=k.split("-").map(Number);S.y=p[0];S.m=p[1]-1;S.sel=k;draw();scrollTo({top:0,behavior:"smooth"})};o.append(b)});if(!h.length)o.textContent="No matches."};
+$("ps").onclick=()=>{try{localStorage.setItem("kk-preset",JSON.stringify({d:S.d.id,l:S.l,cu:CU}));say("Your design is saved (photos are not included).")}catch(e){say("Could not save.")}};
+$("pu").onclick=()=>{try{const p=JSON.parse(localStorage.getItem("kk-preset")||"null");if(!p){say("No saved design yet.");return}const d=DESIGNS.find(x=>x.id==p.d);if(d)S.d=d;S.l=p.l;Object.assign(CU,p.cu);sv();fill();$("cnn").checked=!!CU.nn;$("lp").classList.toggle("on",S.l=="p");$("ll").classList.toggle("on",S.l!="p");draw();say("Applied your saved design.")}catch(e){}};
 document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>{CU.mode=b.dataset.m;sv();fill();draw()});
 if(document.fonts&&document.fonts.load){Promise.all(["600 20px Fraunces","700 20px Fraunces","italic 400 20px Fraunces","400 20px 'Playfair Display'","800 20px 'Bodoni Moda'","700 20px Archivo","400 20px 'Tiro Devanagari Hindi'"].map(f=>document.fonts.load(f).catch(()=>{}))).then(draw)}
 DESIGNS.forEach(d=>{if(d.art||d.hp){const im=new Image();im.onload=()=>{if(!S.ph[d.id]){S.ph[d.id]=im;draw()}};im.src="assets/images/"+d.id+".jpg"}});
