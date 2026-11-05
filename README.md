@@ -18,6 +18,7 @@ Beautiful calendars with Nepali dates. Pick a design, add your own photo or quot
 - **Export:** save a calendar page as a PNG or as a PDF (A4 or Letter), in portrait (9:16) or landscape (16:9). A **full-year PDF** makes a cover page plus all 12 months in one file, and **Share image** sends the picture straight to WhatsApp, Viber or any other app.
 - **Make it yours:** add your own photos, a custom quote and author, an accent color, one of five fonts, and choose whether the week starts on Sunday or Monday. **Save my design** keeps your choices so next month takes one tap (photos are not saved).
 - **My Calendar:** add your own events and notes by date, with an icon for birthday, anniversary, exam, party, work or trip. Birthdays and anniversaries can show the age or years together if you type the year (for example, "Ram 1996"). Search finds any event or festival across all months.
+- **Home-screen widget (Android):** shows today's Nepali and English date and the next festival, and opens the app when tapped.
 - **Phone reminders and calendar export:** export events and festivals as an `.ics` file for Google or Apple Calendar ("Every year" events repeat yearly). In the Android app, your events also set an 8:00 am reminder on the day.
 - **Festivals and holidays:** the list for 2083 BS (April 2026 to April 2027) appears under the month and on the dates, including Dashain, the five days of Tihar, Teej, Janai Purnima, Maha Shivaratri, Holi, Ghode Jatra and the Lhosar festivals.
 - **Moon and tithi:** Purnima and Aunsi are marked on the grid, Ekadashi is listed under the month, and tapping a date shows its tithi. These are calculated, so they are approximate and can differ by a day from a printed patro.
@@ -32,7 +33,8 @@ Events, favorites, saved designs, and customization are saved on your own device
 | Part | What it uses |
 | --- | --- |
 | App | One HTML file with its own CSS and JavaScript (`www/index.html`), drawn on an HTML canvas |
-| Reminders | [@capacitor/local-notifications](https://capacitorjs.com/docs/apis/local-notifications) in the Android app; the web page skips this step |
+| Reminders and sharing | [@capacitor/local-notifications](https://capacitorjs.com/docs/apis/local-notifications), [@capacitor/share](https://capacitorjs.com/docs/apis/share) and [@capacitor/filesystem](https://capacitorjs.com/docs/apis/filesystem) in the Android app; the web page uses the browser's own sharing |
+| Home-screen widget | Native Android widget (`widget/`) showing today's BS and AD date and the next festival |
 | PDF export | [jsPDF](https://github.com/parallax/jsPDF) |
 | Offline and install | A service worker (`www/sw.js`) and a web app manifest |
 | Android app | [Capacitor](https://capacitorjs.com/), plus a small custom Java bridge that saves exports to the phone's Pictures and Downloads folders (Android 10 and newer) |
@@ -53,7 +55,8 @@ kalendar/
 │   └── assets/images/        # photos for the designs
 ├── scripts/                  # build helper scripts
 ├── .github/workflows/        # web deploy, APK build, release
-├── capacitor.config.json     # Android app settings (includes the notification plugin)
+├── widget/                   # Android home-screen widget (Java, layout, colors)
+├── capacitor.config.json     # Android app settings
 ├── package.json
 └── LICENSE
 ```
@@ -70,7 +73,7 @@ Month lengths for each BS year live in a lookup table. The app counts the days b
 
 These notes are for the maintainer.
 
-- **Reminders (one-time setup):** run `npm install @capacitor/local-notifications` using the same Capacitor major version as the rest of the app, commit the updated `package.json` and `package-lock.json`, then run `npm run sync`. Check that the Android manifest allows notifications on Android 13 and newer (`POST_NOTIFICATIONS`).
+- **Reminders, sharing and the widget:** the build installs `@capacitor/local-notifications`, `@capacitor/share` and `@capacitor/filesystem`, and `scripts/add-widget.sh` adds the widget to the Android project. `scripts/gen-widget-data.js` copies the BS month lengths and festival list from `www/index.html` into the widget, so the app and widget always agree. After the first install, check that notifications are allowed on Android 13 and newer.
 - **Fonts and offline:** keep the files in `www/fonts/` listed in `www/sw.js` so the Fraunces, Playfair, Archivo and Tiro Devanagari fonts work offline.
 
 - **Web app:** every push to `main` runs the *Deploy web app* workflow and publishes the `www/` folder to GitHub Pages.
