@@ -126,6 +126,8 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 .pbx ul{margin:0;padding:0;list-style:none;font-size:13px;line-height:1.7;min-height:80px}
 .dc .mo{position:absolute;top:3px;left:calc(50% - 24px);font-size:9px;font-style:normal;line-height:1}.pl .dc .mo{left:4px;top:4px}
 .dc .dot.ic{width:auto;height:auto;background:none;border-radius:0;font-size:10px;line-height:1;top:3px}
+.nxt{display:inline-block;margin:12px 0 0;padding:7px 14px;border:0;border-radius:999px;background:var(--ac,#b5562b);color:#fff;font:600 14px/1.2 inherit;cursor:pointer}
+.nxt:focus-visible{outline:3px solid var(--tx);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -137,6 +139,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <h1>Beautiful calendars with Nepali dates.</h1>
 <p class="sub">Pick a design, add your photo or quote, and make one in a minute. Free, works offline, no account.</p>
 <p class="specs">10 designs · 5 collections · portrait &amp; landscape · PNG &amp; PDF export</p>
+<button type="button" class="nxt" id="nxt" style="display:none"></button>
 <svg class="sky" viewBox="0 0 900 64" preserveAspectRatio="none" aria-hidden="true"><path d="M0 64V34l60-22 50 18 70-26 60 30 80-24 70 22 90-30 70 26 80-18 70 20 100-22 100 20v26z"/><path d="M0 64V46l80-18 70 16 90-22 70 20 100-14 90 18 100-16 80 14 120-12 100 14v18z"/><path d="M0 64V54l90-10 90 8 110-12 100 10 120-8 110 8 120-6 150 8v14z"/></svg>
 </header>
 
@@ -233,6 +236,7 @@ function bs2ad(by,bm,bd){
   for(let i=0;i<bm;i++)n+=BSD[by][i];
   return new Date(Date.UTC(2026,3,14+n+bd-1));
 }
+const FN={"Nepali New Year 2083":"नयाँ वर्ष २०८३","Buddha Jayanti · Labour Day":"बुद्ध जयन्ती · श्रमिक दिवस","Republic Day":"गणतन्त्र दिवस","Janai Purnima":"जनै पूर्णिमा","Gai Jatra":"गाईजात्रा","Krishna Janmashtami":"कृष्ण जन्माष्टमी","Haritalika Teej":"हरितालिका तीज","Constitution Day":"संविधान दिवस","Indra Jatra":"इन्द्रजात्रा","Jitiya":"जितिया","Ghatasthapana":"घटस्थापना","Dashain holidays":"दशैं बिदा","Vijaya Dashami":"विजया दशमी","Kaag Tihar":"काग तिहार","Laxmi Puja · Kukur Tihar":"लक्ष्मी पूजा · कुकुर तिहार","Gai Tihar":"गाई तिहार","Mha Puja":"म्ह पूजा","Bhai Tika":"भाइटीका","Yomari Punhi":"योमरी पुन्ही","Christmas":"क्रिसमस","Tamu Lhosar":"तमु ल्होसार","Prithvi Jayanti":"पृथ्वी जयन्ती","Maghe Sankranti":"माघे सङ्क्रान्ति","Martyrs' Day":"शहीद दिवस","Sonam Lhosar":"सोनाम ल्होसार","Basanta Panchami":"बसन्त पञ्चमी","Democracy Day":"प्रजातन्त्र दिवस","Maha Shivaratri":"महाशिवरात्रि","Women's Day":"महिला दिवस","Gyalpo Lhosar":"ग्याल्पो ल्होसार","Fagu Purnima (Holi, hills)":"फागु पूर्णिमा (होली, पहाड)","Holi (Terai)":"होली (तराई)","Ghode Jatra":"घोडेजात्रा","Nepali New Year 2084":"नयाँ वर्ष २०८४"};
 const FEST=[["2026-04-14","2026-04-14","Nepali New Year 2083"],["2026-05-01","2026-05-01","Buddha Jayanti · Labour Day"],["2026-05-29","2026-05-29","Republic Day"],["2026-08-28","2026-08-28","Janai Purnima"],["2026-08-29","2026-08-29","Gai Jatra"],["2026-09-04","2026-09-04","Krishna Janmashtami"],["2026-09-14","2026-09-14","Haritalika Teej"],["2026-09-19","2026-09-19","Constitution Day"],["2026-09-25","2026-09-25","Indra Jatra"],["2026-10-04","2026-10-04","Jitiya"],["2026-10-11","2026-10-11","Ghatasthapana"],["2026-10-17","2026-10-23","Dashain holidays"],["2026-10-21","2026-10-21","Vijaya Dashami"],["2026-11-07","2026-11-07","Kaag Tihar"],["2026-11-08","2026-11-08","Laxmi Puja · Kukur Tihar"],["2026-11-09","2026-11-09","Gai Tihar"],["2026-11-10","2026-11-10","Mha Puja"],["2026-11-11","2026-11-11","Bhai Tika"],["2026-12-24","2026-12-24","Yomari Punhi"],["2026-12-25","2026-12-25","Christmas"],["2026-12-30","2026-12-30","Tamu Lhosar"],["2027-01-11","2027-01-11","Prithvi Jayanti"],["2027-01-15","2027-01-15","Maghe Sankranti"],["2027-01-30","2027-01-30","Martyrs' Day"],["2027-02-07","2027-02-07","Sonam Lhosar"],["2027-02-11","2027-02-11","Basanta Panchami"],["2027-02-19","2027-02-19","Democracy Day"],["2027-03-06","2027-03-06","Maha Shivaratri"],["2027-03-08","2027-03-08","Women's Day"],["2027-03-09","2027-03-09","Gyalpo Lhosar"],["2027-03-21","2027-03-21","Fagu Purnima (Holi, hills)"],["2027-03-22","2027-03-22","Holi (Terai)"],["2027-04-06","2027-04-06","Ghode Jatra"],["2027-04-14","2027-04-14","Nepali New Year 2084"]];
 const IC=/^(\p{Extended_Pictographic}\uFE0F?)/u,nd=x=>CU.nn?toNp(x):x;
 const tithi=(y,m,d)=>{const t=(Date.UTC(y,m,d,0,15)-Date.UTC(2000,0,1,12))/864e5,r=Math.PI/180,e=((218.316+13.176396*t+6.289*Math.sin((134.963+13.064993*t)*r))-(280.46+0.9856474*t+1.915*Math.sin((357.529+0.98560028*t)*r)))%360;return Math.floor(((e+360)%360)/12)+1};
@@ -644,7 +648,12 @@ const o=S.l=="p"?"portrait":"landscape",doc=new window.jspdf.jsPDF({orientation:
 doc.setFillColor(d.bg[0]);doc.rect(0,0,pw,ph,"F");doc.setTextColor(d.ink||"#111111");doc.setFont("times","bold");doc.setFontSize(80);doc.text(String(S.y),pw/2,ph/2,{align:"center"});doc.setFont("times","normal");doc.setFontSize(18);doc.text(BRAND,pw/2,ph/2+16,{align:"center"});
 for(let m=0;m<12;m++){const c=document.createElement("canvas");render(c,S.d,S.y,m,S.l,S.ph[S.d.id],S.q,S.l=="p"?900:1400);doc.addPage();const g=8,s=Math.min((pw-2*g)/c.width,(ph-2*g)/c.height),w=c.width*s,h=c.height*s;doc.addImage(c.toDataURL("image/jpeg",.88),"JPEG",(pw-w)/2,(ph-h)/2,w,h);await new Promise(r=>setTimeout(r,0))}
 save("kalendar-"+S.y+"-full-year.pdf",doc.output("blob"))};
-$("sh").onclick=()=>full().toBlob(async b=>{const f=new File([b],fname("png"),{type:"image/png"});try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:BRAND});else say("Sharing is not supported here; use Save PNG.")}catch(e){}},"image/png");
+$("sh").onclick=()=>full().toBlob(async bl=>{const nm=fname("png"),f=new File([bl],nm,{type:"image/png"}),P=window.Capacitor&&window.Capacitor.Plugins||{};
+try{if(isNative){if(P.Share&&P.Filesystem){const b64=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(",")[1]);r.onerror=no;r.readAsDataURL(bl)});
+await P.Filesystem.writeFile({path:nm,data:b64,directory:"CACHE"});const u=await P.Filesystem.getUri({path:nm,directory:"CACHE"});await P.Share.share({title:BRAND,files:[u.uri]})}
+else say("Sharing needs an app update. For now, use Save PNG and share it from your gallery.")}
+else if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:BRAND});
+else say("Sharing is not supported in this browser; use Save PNG.")}catch(e){if(!e||!/cancel|abort/i.test(e.message||e.name||""))say("Could not share: "+(e&&(e.message||e.code)||"unknown error"))}},"image/png");
 $("es").oninput=()=>{const q=$("es").value.trim().toLowerCase(),o=$("esr");o.innerHTML="";if(q.length<2)return;const h=[];
 Object.keys(EV).sort().forEach(k=>EV[k].forEach(t=>t.toLowerCase().includes(q)&&h.push([k,t])));Object.keys(EVR).sort().forEach(k=>EVR[k].forEach(t=>t.toLowerCase().includes(q)&&h.push([S.y+"-"+k,t+" ↻"])));FEST.forEach(f=>f[2].toLowerCase().includes(q)&&h.push([f[0],"★ "+f[2]]));
 h.slice(0,12).forEach(([k,t])=>{const b=document.createElement("button");b.style.cssText="display:block;width:100%;text-align:left;margin:2px 0";b.textContent=k+" — "+t;b.onclick=()=>{const p=k.split("-").map(Number);S.y=p[0];S.m=p[1]-1;S.sel=k;draw();scrollTo({top:0,behavior:"smooth"})};o.append(b)});if(!h.length)o.textContent="No matches."};
@@ -667,9 +676,16 @@ const PH={"es":"Search all events and festivals"},PHN={"Event or note":"घट�
 function applyLang(){busy=1;document.documentElement.lang=LANG=="ne"?"ne":"en";
 walk(document.body).forEach(n=>{if(LANG=="ne")trT(n);else if(ORG.has(n)){const c=ORG.get(n);if(n.nodeValue===c.t)n.nodeValue=c.o;ORG.delete(n)}});
 document.querySelectorAll("input[placeholder]").forEach(i=>{if(!i.dataset.en)i.dataset.en=i.placeholder;i.placeholder=LANG=="ne"?(PHN[i.dataset.en]||i.dataset.en):i.dataset.en});
-const b=$("lg");if(b)b.textContent=LANG=="ne"?"English":"नेपाली";OBS.takeRecords();busy=0}
+const b=$("lg");if(b)b.textContent=LANG=="ne"?"English":"नेपाली";banner();OBS.takeRecords();busy=0}
 const OBS=new MutationObserver(m=>{if(busy||LANG!="ne")return;busy=1;m.forEach(x=>{if(x.type=="characterData")trT(x.target);x.addedNodes.forEach(n=>{if(n.nodeType==3)trT(n);else if(n.nodeType==1){walk(n).forEach(trT);n.querySelectorAll&&n.querySelectorAll("input[placeholder]").forEach(i=>{if(!i.dataset.en)i.dataset.en=i.placeholder;i.placeholder=PHN[i.dataset.en]||i.dataset.en})}})});OBS.takeRecords();busy=0});OBS.observe(document.body,{childList:true,subtree:true,characterData:true});
 {const b=document.createElement("button");b.className="bk";b.id="lg";b.onclick=()=>{LANG=LANG=="ne"?"en":"ne";try{localStorage.setItem("kk-lang",LANG)}catch(e){}applyLang();draw()};document.querySelector(".bar").append(b)}
+const MNN=["जन","फेब्रु","मार्च","अप्रिल","मे","जुन","जुलाई","अग","सेप्ट","अक्टो","नोभे","डिसे"];
+function banner(){const e=$("nxt");if(!e)return;const n=new Date(),k=evk(n.getFullYear(),n.getMonth(),n.getDate()),f=FEST.find(x=>x[0]>=k);if(!f){e.style.display="none";return}
+const a=f[0].split("-").map(Number),days=Math.round((Date.UTC(a[0],a[1]-1,a[2])-Date.UTC(n.getFullYear(),n.getMonth(),n.getDate()))/864e5),ne=LANG=="ne",
+w=days<=0?(ne?"आज":"Today"):days==1?(ne?"भोलि":"Tomorrow"):(ne?toNp(days)+" दिनमा":"in "+days+" days"),
+dt=ne?toNp(a[2])+" "+MNN[a[1]-1]:a[2]+" "+MN[a[1]-1].slice(0,3);e.style.display="";e.textContent="★ "+(ne?(FN[f[2]]||f[2]):f[2])+" · "+w+" · "+dt;e.dataset.k=f[0]}
+$("nxt").onclick=e=>{const p=e.currentTarget.dataset.k.split("-").map(Number);S.y=p[0];S.m=p[1]-1;S.sel=e.currentTarget.dataset.k;draw();scrollTo({top:0,behavior:"smooth"})};
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)banner()});setInterval(banner,6e4);
 applyLang();
 document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>{CU.mode=b.dataset.m;sv();fill();draw()});
 if(document.fonts&&document.fonts.load){Promise.all(["600 20px Fraunces","700 20px Fraunces","italic 400 20px Fraunces","400 20px 'Playfair Display'","800 20px 'Bodoni Moda'","700 20px Archivo","400 20px 'Tiro Devanagari Hindi'"].map(f=>document.fonts.load(f).catch(()=>{}))).then(draw)}
