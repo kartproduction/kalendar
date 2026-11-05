@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="kw_bg">#24201C</color>
+    <color name="kw_text">#F1ECE6</color>
+    <color name="kw_muted">#A89F95</color>
+    <color name="kw_accent">#E08F63</color>
+</resources>

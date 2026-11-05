@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kw_description">Today\'s Nepali (BS) and English date, with the next festival</string>
+    <color name="kw_bg">#FBF7F2</color>
+    <color name="kw_text">#1F1B16</color>
+    <color name="kw_muted">#6F665C</color>
+    <color name="kw_accent">#B5562B</color>
+</resources>
