@@ -21,7 +21,7 @@ jobs:
           echo '{"appId":"com.kasign.kalendar","appName":"Kalendar by Kasign","webDir":"www"}' > capacitor.config.json
       - name: Install Capacitor and PDF library
         run: |
-          npm install --no-audit --no-fund @capacitor/core @capacitor/android @capacitor/filesystem @capacitor/share jspdf
+          npm install --no-audit --no-fund @capacitor/core @capacitor/android @capacitor/filesystem @capacitor/share @capacitor/local-notifications jspdf
           npm install -D --no-audit --no-fund @capacitor/cli
           mkdir -p www/js
           cp node_modules/jspdf/dist/jspdf.umd.min.js www/js/jspdf.umd.min.js
@@ -98,6 +98,8 @@ jobs:
             }
           }
           EOF
+      - name: Add home-screen widget
+        run: bash scripts/add-widget.sh
       - name: Set version number
         run: |
           sed -i -E "s/versionCode [0-9]+/versionCode ${{ github.run_number }}/; s/versionName \"[^\"]*\"/versionName \"1.0.${{ github.run_number }}\"/" android/app/build.gradle
