@@ -2,7 +2,7 @@
 # Prepares the Android project inside GitHub Actions (no local setup needed).
 set -e
 npm install --no-audit --no-fund
-npm install --no-audit --no-fund @capacitor/core @capacitor/android @capacitor/filesystem @capacitor/share jspdf
+npm install --no-audit --no-fund @capacitor/core @capacitor/android @capacitor/filesystem @capacitor/share @capacitor/local-notifications jspdf
 npm install -D --no-audit --no-fund @capacitor/cli
 [ -d android ] || npx cap add android
 npm run copy:deps
@@ -18,6 +18,7 @@ grep -q '"url"' capacitor.config.json && echo "WARNING: server.url is set, so th
 # Remove any old copy of the web files inside the Android project, then copy fresh ones.
 rm -rf android/app/src/main/assets/public
 npx cap sync android
+bash scripts/add-widget.sh
 
 grep -q 'id="live"' www/index.html || { echo "ERROR: www/index.html is not the new page"; exit 1; }
 grep -q "$BUILD" android/app/src/main/assets/public/index.html || { echo "ERROR: the new page was not copied into the Android project"; exit 1; }
