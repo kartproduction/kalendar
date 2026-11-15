@@ -56,6 +56,7 @@ button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
 input[type=file]{display:none}
 input.t{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:8px 14px;flex:1;min-width:140px}
 label{display:inline-flex;gap:6px;align-items:center}
+.card .row>label{flex-wrap:wrap;max-width:100%;min-width:0}.card .row select,.card .row input{max-width:100%}
 .bar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
 .bk{color:var(--tx);text-decoration:none;border:1px solid var(--bd);border-radius:999px;padding:8px 14px;background:var(--sf)}
 .grow{flex:1}
@@ -128,6 +129,13 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 .dc .dot.ic{width:auto;height:auto;background:none;border-radius:0;font-size:10px;line-height:1;top:3px}
 .nxt{display:inline-block;margin:12px 0 0;padding:7px 14px;border:0;border-radius:999px;background:var(--ac,#b5562b);color:#fff;font:600 14px/1.2 inherit;cursor:pointer}
 .nxt:focus-visible{outline:3px solid var(--tx);outline-offset:2px}
+
+.yv{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px))}.yv[hidden]{display:none}
+.yb{display:flex;gap:8px;align-items:center;max-width:980px;margin:0 auto 14px}.yb b{font:600 22px Georgia,serif}
+.yg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;max-width:980px;margin:0 auto}
+.ym{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;background:var(--sf,#fff);border:1px solid var(--bd);border-radius:14px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:inherit}.ym b{display:block;margin-bottom:4px}
+.g7{display:grid;grid-template-columns:repeat(7,1fr);font-size:11px;text-align:center;gap:1px}.g7 i{font-style:normal;opacity:.5}.g7 span{position:relative;line-height:20px}
+.g7 .tt{background:var(--ac);color:#fff;border-radius:50%}.g7 .ed::after{content:"";position:absolute;left:50%;bottom:0;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--ec,var(--ac))}.g7 .fs{text-decoration:underline;text-decoration-color:var(--ac)}
 </style>
 </head>
 <body>
@@ -147,7 +155,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <div class="live" id="live">
   <canvas id="hero" class="hero"></canvas>
   <div class="lh"><div style="flex:1"><div class="lm" id="mn"></div><div class="ls" id="bsl"></div><div class="seg" id="seg" role="group" aria-label="Date style"><button type="button" data-m="ad">AD</button><button type="button" data-m="both">AD + BS</button><button type="button" data-m="bs">BS</button></div></div><div class="ly" id="yr"></div>
-    <div class="lnav"><button id="td">Today</button><button id="pv" aria-label="Previous month">‹</button><button id="nx" aria-label="Next month">›</button></div></div>
+    <div class="lnav"><button id="yb">Year</button><button id="td">Today</button><button id="pv" aria-label="Previous month">‹</button><button id="nx" aria-label="Next month">›</button></div></div>
   <div class="lq" id="lq"></div>
   <div class="lw" id="lw"></div><div class="ld" id="ld"></div><div class="plx" id="plx"></div>
   <p class="lfst" id="fl"></p>
@@ -165,12 +173,15 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 </div>
 </div>
 
+<div id="yv" class="yv" hidden><div class="yb"><button id="yp" aria-label="Previous year">‹</button><b id="yt"></b><button id="yn" aria-label="Next year">›</button><span style="flex:1"></span><button id="yx">✕ Close</button></div><div id="yg" class="yg"></div></div>
 <div class="card"><b>My Calendar</b>
 <div id="up" style="margin-top:10px"></div>
-<div class="row" style="margin-top:10px"><input type="date" id="ed" class="t"><span id="ecw"></span><input class="t" id="et" placeholder="Event or note"><label><input type="checkbox" id="er"> Every year</label><button class="pri" id="ea">Add</button></div>
+<div class="row" style="margin-top:10px"><input type="date" id="ed" class="t"><span id="ecw"></span><select id="ek" aria-label="Event color"></select><input class="t" id="et" placeholder="Event or note"><label><input type="checkbox" id="er"> Every year</label><button class="pri" id="ea">Add</button></div>
 <input class="t" id="es" placeholder="Search all events and festivals" style="margin-top:10px;width:100%"><div id="esr"></div>
 <div id="el" style="margin-top:10px"></div>
-<div class="row" style="margin-top:12px"><button id="bx">Export backup</button><button id="ics">Add to phone calendar (.ics)</button><label class="fb">Import backup<input type="file" id="bi" accept=".json,application/json"></label></div></div>
+<div class="row" style="margin-top:12px"><button id="bx">Export backup</button><button id="ics">Add to phone calendar (.ics)</button><label class="fb">Import backup<input type="file" id="bi" accept=".json,application/json"></label></div>
+<div class="row" style="margin-top:12px"><label><input type="checkbox" id="rmOn"> Remind me</label><select id="rmB"><option value="0">on the day</option><option value="1">1 day before</option></select><label>at <input type="time" id="rmT" class="t" style="max-width:130px"></label><label><input type="checkbox" id="rmF"> festivals too</label></div>
+<p class="note" id="rmN" style="margin:6px 0 0"></p></div>
 <div class="card"><b>Date converter (AD ↔ BS)</b>
 <div class="row" style="margin-top:10px"><label>AD <input type="date" id="c1" class="t"></label><span id="r1" class="note"></span></div>
 <div class="row" style="margin-top:10px"><label>BS <select id="c2y"></select><select id="c2m"></select><input type="number" id="c2d" min="1" max="32" class="t" style="max-width:90px"></label><span id="r2" class="note"></span></div></div>
@@ -227,6 +238,13 @@ function ad2bs(y,m,d){
 const CU={ac:"",f:"",ws:0,mode:"auto",nl:0,nn:0,quote:"",author:""};
 try{Object.assign(CU,JSON.parse(localStorage.getItem("kk-cu")||"{}"))}catch(e){}
 let EV={};try{EV=JSON.parse(localStorage.getItem("kk-ev")||"{}")}catch(e){}
+const EC=["","#d9534f","#e0883a","#d6a800","#3fa34d","#2f8fd6","#7e57c2","#d6489f"],ECN=["No color","🔴 Red","🟠 Orange","🟡 Yellow","🟢 Green","🔵 Blue","🟣 Purple","🌸 Pink"];
+let RM={on:0,b:0,t:"09:00",f:0};try{Object.assign(RM,JSON.parse(localStorage.getItem("kk-rm")||"{}"))}catch(e){}
+let EVC={};try{EVC=JSON.parse(localStorage.getItem("kk-evc")||"{}")}catch(e){}
+const sevc=()=>{try{localStorage.setItem("kk-evc",JSON.stringify(EVC))}catch(e){}},
+evcol=(k,t)=>{const i=EVC[k+"|"+t]||EVC[k.slice(5)+"|"+t];return i&&EC[i]?EC[i]:null},
+uncol=(k,t)=>{if(EVC[k+"|"+t]){delete EVC[k+"|"+t];sevc()}},
+colorSel=()=>{const s=document.createElement("select");s.setAttribute("aria-label","Event color");ECN.forEach((n,i)=>{const o=document.createElement("option");o.value=i;o.textContent=n;s.append(o)});return s};
 const sev=()=>{try{localStorage.setItem("kk-ev",JSON.stringify(EV))}catch(e){}rm()},evk=(y,m,d)=>y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
 let EVR={};try{EVR=JSON.parse(localStorage.getItem("kk-evr")||"{}")}catch(e){}
 const sevr=()=>{try{localStorage.setItem("kk-evr",JSON.stringify(EVR))}catch(e){}rm()},evOn=k=>(EV[k]||[]).concat(EVR[k.slice(5)]||[]);
@@ -243,7 +261,8 @@ const tithi=(y,m,d)=>{const t=(Date.UTC(y,m,d,0,15)-Date.UTC(2000,0,1,12))/864e5
 const CATS=[["","• Note"],["🎂","🎂 Birthday"],["💍","💍 Anniversary"],["📝","📝 Exam"],["🎉","🎉 Party"],["💼","💼 Work"],["✈️","✈️ Trip"]];
 const catSel=id=>{const s=document.createElement("select");if(id)s.id=id;CATS.forEach(c=>{const o=document.createElement("option");o.value=c[0];o.textContent=c[1];s.append(o)});return s};
 const disp=(t,y)=>{const m=/^(🎂|💍)/.test(t)&&t.match(/\b(19|20)\d{2}\b/);return m&&y>+m[0]?t.replace(m[0],"").replace(/\s+/g," ").trim()+" · "+(y-m[0])+(t[0]=="🎂"?" yrs":" yrs together"):t};
-function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);const mo=[];for(let d=1;d<=new Date(S.y,S.m+1,0).getDate();d++){const t=tithi(S.y,S.m,d);if(t==15)mo.push("🌕 Purnima "+d);if(t==30)mo.push("🌑 Aunsi "+d);if(t==11||t==26)mo.push("Ekadashi "+d)}const a2=[];if(o.length)a2.push("Festivals: "+o.join(" · "));if(mo.length)a2.push(mo.join(" · ")+" (approx.)");$("fl").textContent=a2.join("  |  ")}
+const LFY=Math.max.apply(null,FEST.map(f=>+f[1].slice(0,4)));
+function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);const mo=[];for(let d=1;d<=new Date(S.y,S.m+1,0).getDate();d++){const t=tithi(S.y,S.m,d);if(t==15)mo.push("🌕 Purnima "+d);if(t==30)mo.push("🌑 Aunsi "+d);if(t==11||t==26)mo.push("Ekadashi "+d)}const a2=[];if(o.length)a2.push("Festivals: "+o.join(" · "));if(mo.length)a2.push(mo.join(" · ")+" (approx.)");if(S.y>LFY)a2.push("Festivals: listed through "+LFY+" only");$("fl").textContent=a2.join("  |  ")}
 function custom(d){const o=Object.assign({},d);if(CU.ac)o.ac=CU.ac;if(CU.f&&!d.pl)o.f=FM[CU.f]||SAN;if(CU.quote)o.q=[CU.quote,CU.author];return o}
 function ridge(x,ax,aw,base,amp,seed,bot,col,smooth){
   x.beginPath();x.moveTo(ax,bot);
@@ -422,7 +441,7 @@ function render(cv,d0,Y,M,lay,ph,q,pw){
     if(bs){x.font="400 "+u*.22+"px "+d.f;x.globalAlpha=.85;x.fillStyle=d.ac;x.fillText(big?n+1:toNp(bs.d),d.box?cx+cw*.8:tx+cw*.3,d.box?cy+rh-u*.18:ty+u*.3);x.globalAlpha=1}
     const ks=evk(Y,M,n+1);if(FEST.some(f=>f[0]<=ks&&f[1]>=ks)){x.fillStyle=d.ac;x.fillRect(tx-u*.22,ty+u*.09,u*.44,u*.05)}
     const ev=evOn(ks);
-    if(ev.length){x.fillStyle=d.ac;if(d.box){x.font="400 "+u*.2+"px "+d.f;x.textAlign="left";let s=ev[0];while(x.measureText(s).width>cw*(md!="ad"?.68:.85)&&s.length>1)s=s.slice(0,-1);x.fillStyle=d.ink;x.globalAlpha=.85;x.fillText(s,cx+cw*.08,cy+rh*.68);x.globalAlpha=1;x.textAlign="center"}else{x.beginPath();x.arc(tx,cy+rh-u*.2,u*.07,0,7);x.fill()}}
+    if(ev.length){x.fillStyle=ev.map(t=>evcol(ks,t)).find(Boolean)||d.ac;if(d.box){x.font="400 "+u*.2+"px "+d.f;x.textAlign="left";let s=ev[0];while(x.measureText(s).width>cw*(md!="ad"?.68:.85)&&s.length>1)s=s.slice(0,-1);x.fillStyle=d.ink;x.globalAlpha=.85;x.fillText(s,cx+cw*.08,cy+rh*.68);x.globalAlpha=1;x.textAlign="center"}else{x.beginPath();x.arc(tx,cy+rh-u*.2,u*.07,0,7);x.fill()}}
   }
   if(fl2.length){x.fillStyle=d.ink;x.globalAlpha=.85;x.font="400 "+u*.26+"px "+SAN;x.textAlign="left";fl2.forEach((t,i)=>x.fillText(t,gx,py+ph2-u*1.3-fh+u*.45+i*u*.36));x.globalAlpha=1}
   x.fillStyle=d.ink;x.globalAlpha=.55;x.font="400 "+u*.26+"px "+SAN;x.textAlign="center";
@@ -512,9 +531,9 @@ function live(){
       if(bs){const sm=document.createElement("small");sm.className="bsn";sm.textContent=toNp(bs.d);b.append(sm)}
       const fn=FEST.filter(f=>f[0]<=k&&f[1]>=k).map(f=>f[2]);
       if(fn.length){const sm=document.createElement("small");sm.className="ft";sm.textContent=fn[0];b.append(sm)}
-      evOn(k).slice(0,2).forEach(t=>{const sm=document.createElement("small");sm.className="ft";sm.textContent=t;b.append(sm)});
+      evOn(k).slice(0,2).forEach(t=>{const sm=document.createElement("small");sm.className="ft ue";sm.textContent=t;b.append(sm)});
     }
-    const ev=evOn(k);if(ev.length){const o=document.createElement("i"),m=ev.map(t=>(t.match(IC)||[])[1]).find(Boolean);o.className="dot"+(m?" ic":"");if(m)o.textContent=m;b.append(o)}
+    const ev=evOn(k);if(ev.length){const o=document.createElement("i"),m=ev.map(t=>(t.match(IC)||[])[1]).find(Boolean),cc=ev.map(t=>evcol(k,t)).find(Boolean);o.className="dot"+(m?" ic":"");if(m){o.textContent=m;if(cc)o.style.borderBottom="3px solid "+cc}else if(cc)o.style.background=cc;b.append(o)}
     const tt=tithi(yy,mm,dd);if(tt==15||tt==30){const e2=document.createElement("em");e2.className="mo";e2.textContent=tt==15?"🌕":"🌑";b.append(e2)}
     b.setAttribute("aria-label",dd+" "+MN[mm]+" "+yy);
     b.onclick=()=>{S.sel=k;if(mm!=M){S.y=yy;S.m=mm}draw()};
@@ -542,13 +561,13 @@ function dayp(md){
   if(bs){const s=document.createElement("div");s.className="note";s.textContent=toNp(bs.d)+" "+BSN[bs.m]+" "+toNp(bs.y)+" · "+bs.d+" "+BSM[bs.m]+" "+bs.y+" BS";p.append(s)}
   FEST.filter(f=>f[0]<=k&&f[1]>=k).forEach(f=>{const s=document.createElement("div");s.textContent="★ "+f[2];s.style.color="var(--la)";p.append(s)});
   {const tt=tithi(q[0],q[1]-1,q[2]),s=document.createElement("div");s.className="note";s.textContent=(tt==15?"🌕 Purnima":tt==30?"🌑 Aunsi":(tt==11||tt==26)?"Ekadashi":"Tithi")+" · "+(tt<=15?"Shukla ":"Krishna ")+(tt<=15?tt:tt-15)+" (approx.)";p.append(s)}
-  (EV[k]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent=disp(x,q[0]);const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};r.append(s,b);p.append(r)});
-  (EVR[k.slice(5)]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent="↻ "+disp(x,q[0])+" (every year)";const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{const a=EVR[k.slice(5)];a.splice(i,1);if(!a.length)delete EVR[k.slice(5)];sevr();draw()};r.append(s,b);p.append(r)});
+  (EV[k]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent=disp(x,q[0]);{const c=evcol(k,x);if(c)s.style.cssText="border-left:4px solid "+c+";padding-left:6px"}s.className="ue";const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{uncol(k,x);EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};r.append(s,b);p.append(r)});
+  (EVR[k.slice(5)]||[]).forEach((x,i)=>{const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0";const s=document.createElement("span");s.textContent="↻ "+disp(x,q[0])+" (every year)";{const c=evcol(k,x);if(c)s.style.cssText="border-left:4px solid "+c+";padding-left:6px"}s.className="ue";const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{uncol(k.slice(5),x);const a=EVR[k.slice(5)];a.splice(i,1);if(!a.length)delete EVR[k.slice(5)];sevr();draw()};r.append(s,b);p.append(r)});
   const r=document.createElement("div");r.className="row";r.style.marginTop="8px";
-  const inp=document.createElement("input");inp.className="t";inp.placeholder="Add a note or event";inp.id="dn";const cs=catSel();
+  const inp=document.createElement("input");inp.className="t";inp.placeholder="Add a note or event";inp.id="dn";const cs=catSel(),ck=colorSel();
   const ad=document.createElement("button");ad.className="pri";ad.textContent="Add";
-  const rp=document.createElement("label"),cb=document.createElement("input");cb.type="checkbox";rp.append(cb," Every year");const go=()=>{const v0=inp.value.trim();if(!v0)return;const v=(cs.value?cs.value+" ":"")+v0;if(cb.checked){const mk=k.slice(5);(EVR[mk]=EVR[mk]||[]).push(v);sevr()}else{(EV[k]=EV[k]||[]).push(v);sev()}draw();$("dn").focus()};
-  ad.onclick=go;inp.onkeydown=e=>{if(e.key=="Enter")go()};r.append(cs,inp,rp,ad);p.append(r);
+  const rp=document.createElement("label"),cb=document.createElement("input");cb.type="checkbox";rp.append(cb," Every year");const go=()=>{const v0=inp.value.trim();if(!v0)return;const v=(cs.value?cs.value+" ":"")+v0;if(+ck.value){EVC[(cb.checked?k.slice(5):k)+"|"+v]=+ck.value;sevc()}if(cb.checked){const mk=k.slice(5);(EVR[mk]=EVR[mk]||[]).push(v);sevr()}else{(EV[k]=EV[k]||[]).push(v);sev()}draw();$("dn").focus()};
+  ad.onclick=go;inp.onkeydown=e=>{if(e.key=="Enter")go()};r.append(cs,ck,inp,rp,ad);p.append(r);
 }
 $("td").onclick=()=>{S.y=T.getFullYear();S.m=T.getMonth();S.sel=TK;draw()};
 $("pvd").ontoggle=draw;
@@ -586,33 +605,34 @@ function upc(){
   }
   if(!o.length)return;
   const h=document.createElement("div");h.className="note";h.textContent="Coming up";u.append(h);
-  o.forEach(z=>{const r=document.createElement("div");r.style.cssText="padding:3px 0;font-size:14px";r.textContent=(z[0]==0?"Today":z[0]==1?"Tomorrow":"In "+z[0]+" days")+" · "+z[1].getDate()+" "+MN[z[1].getMonth()].slice(0,3)+" — "+z[2];u.append(r)});
+  o.forEach(z=>{const r=document.createElement("div");r.style.cssText="padding:3px 0;font-size:14px";r.textContent=(z[0]==0?"Today":z[0]==1?"Tomorrow":"In "+z[0]+" days")+" · "+z[1].getDate()+" "+MN[z[1].getMonth()].slice(0,3)+" — ";const ts=document.createElement("span");ts.textContent=z[2];if(z[2].charAt(0)!="★")ts.className="ue";r.append(ts);u.append(r)});
 }
 function evl(){
   const l=$("el");l.innerHTML="";const p=S.y+"-"+String(S.m+1).padStart(2,"0")+"-";let n=0;
   Object.keys(EV).filter(k=>k.startsWith(p)).sort().forEach(k=>EV[k].forEach((t,i)=>{
     n++;const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd)";
-    const s=document.createElement("span");s.textContent=k.slice(8)+" "+MN[S.m].slice(0,3)+" — "+t;
-    const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};
+    const s=document.createElement("span");s.textContent=k.slice(8)+" "+MN[S.m].slice(0,3)+" — "+t;s.className="ue";{const c=evcol(k,t);if(c)s.style.cssText="border-left:4px solid "+c+";padding-left:6px"}
+    const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{uncol(k,t);EV[k].splice(i,1);if(!EV[k].length)delete EV[k];sev();draw()};
     r.append(s,b);l.append(r);
   }));
   Object.keys(EVR).filter(k=>k.slice(0,2)==String(S.m+1).padStart(2,"0")).sort().forEach(k=>EVR[k].forEach((t,i)=>{
     n++;const r=document.createElement("div");r.className="row";r.style.cssText="justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd)";
-    const s=document.createElement("span");s.textContent=k.slice(3)+" "+MN[S.m].slice(0,3)+" ↻ "+t;
-    const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{EVR[k].splice(i,1);if(!EVR[k].length)delete EVR[k];sevr();draw()};
+    const s=document.createElement("span");s.textContent=k.slice(3)+" "+MN[S.m].slice(0,3)+" ↻ "+t;s.className="ue";{const c=evcol(k,t);if(c)s.style.cssText="border-left:4px solid "+c+";padding-left:6px"}
+    const b=document.createElement("button");b.textContent="✕";b.onclick=()=>{uncol(k,t);EVR[k].splice(i,1);if(!EVR[k].length)delete EVR[k];sevr();draw()};
     r.append(s,b);l.append(r);
   }));
   if(!n){l.textContent="No events in "+MN[S.m]+" "+S.y+".";l.className="note"}else l.className="";
 }
-$("ea").onclick=()=>{const v=$("ed").value,t0=$("et").value.trim(),t=t0&&$("ec").value?$("ec").value+" "+t0:t0;if(!v||!t){say("Pick a date and write a note.");return}if($("er").checked){const mk=v.slice(5);(EVR[mk]=EVR[mk]||[]).push(t);sevr()}else{(EV[v]=EV[v]||[]).push(t);sev()}$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
+$("ea").onclick=()=>{const v=$("ed").value,t0=$("et").value.trim(),t=t0&&$("ec").value?$("ec").value+" "+t0:t0;if(!v||!t){say("Pick a date and write a note.");return}if(+$("ek").value){EVC[($("er").checked?v.slice(5):v)+"|"+t]=+$("ek").value;sevc()}if($("er").checked){const mk=v.slice(5);(EVR[mk]=EVR[mk]||[]).push(t);sevr()}else{(EV[v]=EV[v]||[]).push(t);sev()}$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
 $("ed").value=evk(T.getFullYear(),T.getMonth(),T.getDate());
-$("bx").onclick=()=>{const b=new Blob([JSON.stringify({app:"kalendar",v:1,events:EV,yearly:EVR},null,1)],{type:"application/json"});save("kalendar-backup-"+evk(T.getFullYear(),T.getMonth(),T.getDate())+".json",b)};
+ECN.forEach((n,i)=>{const o=document.createElement("option");o.value=i;o.textContent=n;$("ek").append(o)});
+$("bx").onclick=()=>{const b=new Blob([JSON.stringify({app:"kalendar",v:1,events:EV,yearly:EVR,colors:EVC},null,1)],{type:"application/json"});save("kalendar-backup-"+evk(T.getFullYear(),T.getMonth(),T.getDate())+".json",b)};
 $("bi").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
   f.text().then(s=>{
     const j=JSON.parse(s);if(!j||j.app!="kalendar")throw 0;let n=0;
     const add=(M,src,re)=>Object.keys(src||{}).forEach(k=>{if(!re.test(k)||!Array.isArray(src[k]))return;src[k].forEach(t=>{if(typeof t=="string"&&t&&t.length<300&&(M[k]||[]).indexOf(t)<0){(M[k]=M[k]||[]).push(t);n++}})});
-    add(EV,j.events,/^\d{4}-\d{2}-\d{2}$/);add(EVR,j.yearly,/^\d{2}-\d{2}$/);sev();sevr();draw();say("Imported "+n+" new events.");
+    add(EV,j.events,/^\d{4}-\d{2}-\d{2}$/);add(EVR,j.yearly,/^\d{2}-\d{2}$/);Object.keys(j.colors||{}).forEach(k=>{if(/^(\d{4}-)?\d{2}-\d{2}\|/.test(k)&&k.length<320&&+j.colors[k]>=1&&+j.colors[k]<8&&!EVC[k])EVC[k]=+j.colors[k]});sevc();sev();sevr();draw();say("Imported "+n+" new events.");
   }).catch(()=>say("That file is not a Kalendar backup."));
 };
 {
@@ -656,21 +676,81 @@ else if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.shar
 else say("Sharing is not supported in this browser; use Save PNG.")}catch(e){if(!e||!/cancel|abort/i.test(e.message||e.name||""))say("Could not share: "+(e&&(e.message||e.code)||"unknown error"))}},"image/png");
 $("es").oninput=()=>{const q=$("es").value.trim().toLowerCase(),o=$("esr");o.innerHTML="";if(q.length<2)return;const h=[];
 Object.keys(EV).sort().forEach(k=>EV[k].forEach(t=>t.toLowerCase().includes(q)&&h.push([k,t])));Object.keys(EVR).sort().forEach(k=>EVR[k].forEach(t=>t.toLowerCase().includes(q)&&h.push([S.y+"-"+k,t+" ↻"])));FEST.forEach(f=>f[2].toLowerCase().includes(q)&&h.push([f[0],"★ "+f[2]]));
-h.slice(0,12).forEach(([k,t])=>{const b=document.createElement("button");b.style.cssText="display:block;width:100%;text-align:left;margin:2px 0";b.textContent=k+" — "+t;b.onclick=()=>{const p=k.split("-").map(Number);S.y=p[0];S.m=p[1]-1;S.sel=k;draw();scrollTo({top:0,behavior:"smooth"})};o.append(b)});if(!h.length)o.textContent="No matches."};
+h.slice(0,12).forEach(([k,t])=>{const b=document.createElement("button");b.style.cssText="display:block;width:100%;text-align:left;margin:2px 0";b.className="ue";b.textContent=k+" — "+t;b.onclick=()=>{const p=k.split("-").map(Number);S.y=p[0];S.m=p[1]-1;S.sel=k;draw();scrollTo({top:0,behavior:"smooth"})};o.append(b)});if(!h.length)o.textContent="No matches."};
 $("ps").onclick=()=>{try{localStorage.setItem("kk-preset",JSON.stringify({d:S.d.id,l:S.l,cu:CU}));say("Your design is saved (photos are not included).")}catch(e){say("Could not save.")}};
 $("pu").onclick=()=>{try{const p=JSON.parse(localStorage.getItem("kk-preset")||"null");if(!p){say("No saved design yet.");return}const d=DESIGNS.find(x=>x.id==p.d);if(d)S.d=d;S.l=p.l;Object.assign(CU,p.cu);sv();fill();$("cnn").checked=!!CU.nn;$("lp").classList.toggle("on",S.l=="p");$("ll").classList.toggle("on",S.l!="p");draw();say("Applied your saved design.")}catch(e){}};
 const LN=()=>window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications;
-function rm(){clearTimeout(rm.t);rm.t=setTimeout(remind,800)}
-async function remind(){const p=LN();if(!p)return;try{const L=[],now=new Date();let id=1;
-for(let i=0;i<120&&L.length<60;i++){const d=new Date(T.getFullYear(),T.getMonth(),T.getDate()+i,8,0);if(d<now)continue;const k=evk(d.getFullYear(),d.getMonth(),d.getDate());evOn(k).forEach(t=>{if(L.length<60)L.push({id:id++,title:BRAND,body:disp(t,d.getFullYear()),schedule:{at:d,allowWhileIdle:true}})})}
-const pend=await p.getPending();if(pend.notifications.length)await p.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
-if(!L.length)return;let s=await p.checkPermissions();if(s.display!=="granted")s=await p.requestPermissions();if(s.display!=="granted")return;await p.schedule({notifications:L})}catch(e){}}
-if(LN())rm();
+function rm(){clearTimeout(rm.t);rm.t=setTimeout(()=>{if(RM.on)remind(false)},800)}
+async function remind(ask){
+  const n=$("rmN"),p=LN(),note=t=>{if(n)n.textContent=t};
+  if(!RM.on){
+    if(p){try{const q=await p.getPending();if(q.notifications.length)await p.cancel({notifications:q.notifications.map(x=>({id:x.id}))})}catch(e){}}
+    note("");return;
+  }
+  if(!p){note("Reminders work in the Android app. Install it from the download page.");return}
+  try{
+    let st=await p.checkPermissions();
+    if(st.display!=="granted"){
+      if(!ask){note("Allow notifications for Kalendar to get reminders (turn this off and on again).");return}
+      st=await p.requestPermissions();
+      if(st.display!=="granted"){note("Notifications are blocked. Allow them for Kalendar in Android settings.");return}
+    }
+    const L=[],now=new Date(),hm=RM.t.split(":").map(Number);let id=1;
+    for(let i=0;i<=120&&L.length<60;i++){
+      const d=new Date(T.getFullYear(),T.getMonth(),T.getDate()+i),k=evk(d.getFullYear(),d.getMonth(),d.getDate()),items=evOn(k).map(t=>disp(t,d.getFullYear()));
+      if(RM.f)FEST.forEach(f=>{if(f[0]==k)items.push("★ "+f[2])});
+      if(!items.length)continue;
+      const at=new Date(d.getFullYear(),d.getMonth(),d.getDate()-RM.b,hm[0],hm[1],0);
+      if(at<=now)continue;
+      L.push({id:id++,title:BRAND,body:(RM.b?"Tomorrow: ":"Today: ")+items.join(" · "),schedule:{at:at,allowWhileIdle:true}});
+    }
+    const q=await p.getPending();if(q.notifications.length)await p.cancel({notifications:q.notifications.map(x=>({id:x.id}))});
+    if(L.length)await p.schedule({notifications:L});
+    note(L.length?L.length+" reminder"+(L.length>1?"s":"")+" set for the next 4 months.":"No upcoming events to remind you about yet.");
+  }catch(e){note("Could not set reminders: "+(e&&(e.message||e.code)||"unknown error"))}
+}
+{
+  const sv2=()=>{try{localStorage.setItem("kk-rm",JSON.stringify(RM))}catch(e){}};
+  $("rmOn").checked=!!RM.on;$("rmB").value=RM.b;$("rmT").value=RM.t;$("rmF").checked=!!RM.f;
+  $("rmOn").onchange=e=>{RM.on=e.target.checked?1:0;sv2();remind(true)};
+  $("rmB").onchange=e=>{RM.b=+e.target.value;sv2();if(RM.on)remind(true)};
+  $("rmT").onchange=e=>{RM.t=e.target.value||"09:00";sv2();if(RM.on)remind(true)};
+  $("rmF").onchange=e=>{RM.f=e.target.checked?1:0;sv2();if(RM.on)remind(true)};
+  if(RM.on)remind(false);
+}
+// ---- Year view
+let YVY=T.getFullYear();
+function yview(){
+  $("yt").textContent=YVY;const g=$("yg");g.innerHTML="";
+  const wd=["S","M","T","W","T","F","S"];
+  for(let mi=0;mi<12;mi++){
+    const bt=document.createElement("button");bt.type="button";bt.className="ym";
+    const h=document.createElement("b");h.textContent=MN[mi];bt.append(h);
+    const gr=document.createElement("div");gr.className="g7";
+    for(let i=0;i<7;i++){const e=document.createElement("i");e.textContent=wd[(i+CU.ws)%7];gr.append(e)}
+    const f0=(new Date(YVY,mi,1).getDay()-CU.ws+7)%7,dm=new Date(YVY,mi+1,0).getDate();
+    for(let i=0;i<f0;i++)gr.append(document.createElement("span"));
+    for(let n=1;n<=dm;n++){
+      const sp=document.createElement("span"),k=evk(YVY,mi,n),ee=evOn(k);sp.textContent=n;
+      if(YVY==T.getFullYear()&&mi==T.getMonth()&&n==T.getDate())sp.className="tt";
+      if(ee.length){sp.className+=" ed";const c=ee.map(t=>evcol(k,t)).find(Boolean);if(c)sp.style.setProperty("--ec",c)}
+      if(FEST.some(f=>f[0]<=k&&f[1]>=k))sp.className+=" fs";
+      gr.append(sp);
+    }
+    bt.append(gr);bt.onclick=()=>{S.y=YVY;S.m=mi;S.sel=null;$("yv").hidden=true;document.body.style.overflow="";draw();scrollTo({top:0,behavior:"smooth"})};
+    g.append(bt);
+  }
+}
+$("yb").onclick=()=>{YVY=S.y;yview();$("yv").hidden=false;document.body.style.overflow="hidden"};
+$("yp").onclick=()=>{YVY--;yview()};$("yn").onclick=()=>{YVY++;yview()};
+$("yx").onclick=()=>{$("yv").hidden=true;document.body.style.overflow=""};
+document.addEventListener("keydown",e=>{if(e.key=="Escape"&&!$("yv").hidden)$("yx").onclick()});
 const NE={"← Main page":"← मुख्य पृष्ठ","Get the Android app":"एन्ड्रोइड एप लिनुहोस्","Beautiful calendars with Nepali dates.":"नेपाली मितिसहितका सुन्दर क्यालेन्डर।","Pick a design, add your photo or quote, and make one in a minute. Free, works offline, no account.":"डिजाइन रोज्नुहोस्, आफ्नो फोटो वा उक्ति थप्नुहोस्, र एक मिनेटमै बनाउनुहोस्। निःशुल्क, अफलाइन चल्छ, खाता चाहिँदैन।","10 designs · 5 collections · portrait & landscape · PNG & PDF export":"१० डिजाइन · ५ सङ्ग्रह · पोर्ट्रेट र ल्यान्डस्केप · PNG र PDF निर्यात","Today":"आज","Designs":"डिजाइन","Export":"निर्यात","Portrait 9:16":"पोर्ट्रेट ९:१६","Landscape 16:9":"ल्यान्डस्केप १६:९","Quote":"उक्ति","Add photos":"फोटो थप्नुहोस्","Clear photo":"फोटो हटाउनुहोस्","♡ Favorite":"♡ मनपर्ने","Save PNG":"PNG सेभ गर्नुहोस्","Save PDF":"PDF सेभ गर्नुहोस्","Full-year PDF":"पूरा वर्षको PDF","Share image":"तस्बिर सेयर गर्नुहोस्","Preview export image":"निर्यात तस्बिर हेर्नुहोस्","My Calendar":"मेरो क्यालेन्डर","Every year":"हरेक वर्ष","Add":"थप्नुहोस्","Export backup":"ब्याकअप निर्यात","Add to phone calendar (.ics)":"फोन क्यालेन्डरमा थप्नुहोस् (.ics)","Import backup":"ब्याकअप आयात","Date converter (AD ↔ BS)":"मिति परिवर्तक (AD ↔ BS)","Customize":"आफ्नै शैली","Accent":"रङ","Design font: default":"डिजाइन फन्ट: पूर्वनिर्धारित","Week starts Sunday":"हप्ता आइतबारबाट सुरु","Week starts Monday":"हप्ता सोमबारबाट सुरु","Dates: auto (Nepali designs show AD + BS)":"मिति: स्वचालित (नेपाली डिजाइनमा AD + BS)","AD only":"AD मात्र","BS emphasis":"BS मुख्य","Nepali weekdays":"नेपाली बार","Nepali digits":"नेपाली अङ्क","Reset":"रिसेट","Save my design":"मेरो डिजाइन सेभ","Use my design":"मेरो डिजाइन प्रयोग","Made with care by":"माया र लगनले बनाएको:","Coming up":"आगामी","All":"सबै","Paper":"कागज","Himalaya":"हिमालय","Words":"शब्द","Patro":"पात्रो","Bloom":"फूल","♥ Favorites":"♥ मनपर्ने","Favorites":"मनपर्ने","☰ Collections":"☰ सङ्ग्रह","Tomorrow":"भोलि","No matches.":"केही भेटिएन।","Tap a date to see festivals or add a note.":"चाडपर्व हेर्न वा नोट थप्न मिति छान्नुहोस्।","Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates for 2083 BS (April 2026 – April 2027) come from the Government of Nepal holiday notice as reproduced by public sources, plus nepcalendar.com for Tihar; they can be edited in the FEST list. Tithi, Purnima and Aunsi are calculated and approximate. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.":"नेपाली मिति (BS) २०८२–२०८८ का लागि समावेश छन्। २०८३ को मिति प्रकाशित पात्रोसँग मेल खान्छ; पछिका वर्ष सार्वजनिक परिवर्तक तालिकाबाट लिइएका हुन् र स्वतन्त्र रूपमा जाँचिएका छैनन्। चाडपर्वका मिति सार्वजनिक स्रोतबाट लिइएका हुन् र FEST सूचीमा सम्पादन गर्न सकिन्छ। तिथि, औंसी र पूर्णिमा गणनाबाट निकालिएका अनुमानित मिति हुन्। तपाईंले थपेका फोटो तपाईंकै यन्त्रमा रहन्छन् र हालको सत्रमा मात्र प्रयोग हुन्छन्।"};
-const WR=[[/Festivals: /g,"चाडपर्व: "],[/\(approx\.\)/g,"(अनुमानित)"],[/Purnima/g,"पूर्णिमा"],[/Aunsi/g,"औंसी"],[/Ekadashi/g,"एकादशी"],[/Shukla/g,"शुक्ल"],[/Krishna /g,"कृष्ण "],[/Tithi/g,"तिथि"],[/Today/g,"आज"],[/In (\d+) days/g,"$1 दिनमा"],[/\bJanuary\b/g,"जनवरी"],[/\bFebruary\b/g,"फेब्रुअरी"],[/\bMarch\b/g,"मार्च"],[/\bApril\b/g,"अप्रिल"],[/\bMay\b/g,"मे"],[/\bJune\b/g,"जुन"],[/\bJuly\b/g,"जुलाई"],[/\bAugust\b/g,"अगस्ट"],[/\bSeptember\b/g,"सेप्टेम्बर"],[/\bOctober\b/g,"अक्टोबर"],[/\bNovember\b/g,"नोभेम्बर"],[/\bDecember\b/g,"डिसेम्बर"],[/\(every year\)/g,"(हरेक वर्ष)"]];
+Object.assign(NE,{"Year":"वर्ष","✕ Close":"✕ बन्द","Remind me":"मलाई सम्झाउनुहोस्","on the day":"त्यही दिन","1 day before":"१ दिन अघि","at":"समय","festivals too":"चाडपर्व पनि","No color":"रङ छैन","🔴 Red":"🔴 रातो","🟠 Orange":"🟠 सुन्तला","🟡 Yellow":"🟡 पहेंलो","🟢 Green":"🟢 हरियो","🔵 Blue":"🔵 निलो","🟣 Purple":"🟣 बैजनी","🌸 Pink":"🌸 गुलाबी"});
+const WR=[[/Festivals: listed through (\d+) only/g,"चाडपर्व: $1 सम्म मात्र सूचीबद्ध"],[/Festivals: /g,"चाडपर्व: "],[/\(approx\.\)/g,"(अनुमानित)"],[/Purnima/g,"पूर्णिमा"],[/Aunsi/g,"औंसी"],[/Ekadashi/g,"एकादशी"],[/Shukla/g,"शुक्ल"],[/Krishna /g,"कृष्ण "],[/Tithi/g,"तिथि"],[/Today/g,"आज"],[/In (\d+) days/g,"$1 दिनमा"],[/\bJanuary\b/g,"जनवरी"],[/\bFebruary\b/g,"फेब्रुअरी"],[/\bMarch\b/g,"मार्च"],[/\bApril\b/g,"अप्रिल"],[/\bMay\b/g,"मे"],[/\bJune\b/g,"जुन"],[/\bJuly\b/g,"जुलाई"],[/\bAugust\b/g,"अगस्ट"],[/\bSeptember\b/g,"सेप्टेम्बर"],[/\bOctober\b/g,"अक्टोबर"],[/\bNovember\b/g,"नोभेम्बर"],[/\bDecember\b/g,"डिसेम्बर"],[/\(every year\)/g,"(हरेक वर्ष)"]];
 let LANG="en";try{LANG=localStorage.getItem("kk-lang")||"en"}catch(e){}
 const ORG=new WeakMap();let busy=0;
-function trT(n){const t=n.nodeValue,c=ORG.get(n);if(!t.trim()||(c&&t===c.t))return;const o=t,ok=o.trim();let r=NE[ok],v;if(r===undefined){v=o;WR.forEach(w=>{v=v.replace(w[0],w[1])})}else v=o.replace(ok,r);if(v===o){ORG.delete(n);return}ORG.set(n,{o:o,t:v});n.nodeValue=v}
+function trT(n){if(n.parentNode&&n.parentNode.closest&&n.parentNode.closest(".ue"))return;const t=n.nodeValue,c=ORG.get(n);if(!t.trim()||(c&&t===c.t))return;const o=t,ok=o.trim();let r=NE[ok],v;if(r===undefined){v=o;WR.forEach(w=>{v=v.replace(w[0],w[1])})}else v=o.replace(ok,r);if(v===o){ORG.delete(n);return}ORG.set(n,{o:o,t:v});n.nodeValue=v}
 function walk(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:x=>x.parentNode&&/^(SCRIPT|STYLE|CANVAS)$/.test(x.parentNode.nodeName)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}),a=[];while(w.nextNode())a.push(w.currentNode);return a}
 const PH={"es":"Search all events and festivals"},PHN={"Event or note":"घटना वा नोट","Search all events and festivals":"सबै घटना र चाडपर्व खोज्नुहोस्","Your own quote (works on any design)":"आफ्नै उक्ति (कुनै पनि डिजाइनमा चल्छ)","Author (optional)":"लेखक (ऐच्छिक)","Add a note or event":"नोट वा घटना थप्नुहोस्"};
 function applyLang(){busy=1;document.documentElement.lang=LANG=="ne"?"ne":"en";
