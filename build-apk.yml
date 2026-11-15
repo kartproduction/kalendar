@@ -47,6 +47,25 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+      - name: Put the app icon into the Android project
+        run: |
+          set -e
+          for f in assets/icon-only.png assets/icon-foreground.png; do
+            [ -f "$f" ] || { echo "MISSING $f - keeping the default icon. Put the icon files in the top-level assets folder."; exit 0; }
+          done
+          IM=$(command -v magick || command -v convert)
+          R=android/app/src/main/res
+          for spec in mdpi:48:108 hdpi:72:162 xhdpi:96:216 xxhdpi:144:324 xxxhdpi:192:432; do
+            IFS=: read d a b <<< "$spec"
+            mkdir -p "$R/mipmap-$d"
+            "$IM" assets/icon-only.png -resize ${a}x${a} "$R/mipmap-$d/ic_launcher.png"
+            "$IM" assets/icon-only.png -resize ${a}x${a} "$R/mipmap-$d/ic_launcher_round.png"
+            "$IM" assets/icon-foreground.png -resize ${b}x${b} "$R/mipmap-$d/ic_launcher_foreground.png"
+          done
+          mkdir -p "$R/values"
+          printf '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#B5562B</color>\n</resources>\n' > "$R/values/ic_launcher_background.xml"
+          echo "Icon files written:"; ls -la "$R"/mipmap-xxxhdpi/ || true
+          echo "Adaptive icon definition:"; cat "$R/mipmap-anydpi-v26/ic_launcher.xml" 2>/dev/null || echo "(no adaptive icon file found)"
       - name: Add save-to-phone support
         run: |
           D=android/app/src/main/java/com/kasign/kalendar
@@ -135,6 +154,12 @@ jobs:
           "$BT/apksigner" sign --ks release.jks --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEYSTORE_PASSWORD --key-pass env:KEY_PASSWORD --out Kalendar-v1.0.${{ github.run_number }}.apk aligned.apk
           "$BT/apksigner" verify --print-certs Kalendar-v1.0.${{ github.run_number }}.apk
           rm -f release.jks aligned.apk
+      - name: Check the icon inside the APK
+        run: |
+          APK=Kalendar-v1.0.${{ github.run_number }}.apk
+          SRC=android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png
+          IN=$(unzip -l "$APK" | grep -E "mipmap-xxxhdpi.*ic_launcher_foreground" | awk '{print $4}' | head -1)
+          if [ -n "$IN" ] && [ "$(unzip -p "$APK" "$IN" | md5sum | cut -d' ' -f1)" = "$(md5sum "$SRC" | cut -d' ' -f1)" ]; then echo "ICON OK: the new icon is inside the APK"; else echo "ICON WARNING: could not confirm the new icon in the APK (listing below)"; unzip -l "$APK" | grep -i launcher || true; fi
       - name: Verify the APK contains this build
         run: |
           if [ "$STAMPED" = "yes" ]; then
