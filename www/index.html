@@ -136,6 +136,14 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 .ym{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;background:var(--sf,#fff);border:1px solid var(--bd);border-radius:14px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:inherit}.ym b{display:block;margin-bottom:4px}
 .g7{display:grid;grid-template-columns:repeat(7,1fr);font-size:11px;text-align:center;gap:1px}.g7 i{font-style:normal;opacity:.5}.g7 span{position:relative;line-height:20px}
 .g7 .tt{background:var(--ac);color:#fff;border-radius:50%}.g7 .ed::after{content:"";position:absolute;left:50%;bottom:0;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--ec,var(--ac))}.g7 .fs{text-decoration:underline;text-decoration-color:var(--ac)}
+
+.nb{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;flex-direction:column;gap:8px;max-width:520px;margin:0 auto}
+.nbi{background:var(--sf,#fff);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;flex-wrap:wrap}.nbi span{flex:1;min-width:180px}
+.bgd{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:560px;margin:0 auto}.bgd .h{text-align:center;font-size:12px;opacity:.6;padding:4px 0}
+.bc{position:relative;aspect-ratio:1/1.05;border:1px solid var(--bd);border-radius:12px;background:var(--sf,#fff);color:inherit;font:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.bc b{font:600 20px Georgia,serif}.bc small{font-size:11px;opacity:.65}.bc.t{background:var(--ac);color:#fff;border-color:var(--ac)}.bc .md{position:absolute;top:3px;right:5px;font-size:11px}
+.bc .ev{position:absolute;bottom:4px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ec,var(--ac))}.bc.f{box-shadow:inset 0 -3px 0 var(--ac)}
+.bll{max-width:560px;margin:14px auto 0;font-size:14px}.bll div{padding:4px 0;border-bottom:1px solid var(--bd)}
 </style>
 </head>
 <body>
@@ -155,7 +163,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 <div class="live" id="live">
   <canvas id="hero" class="hero"></canvas>
   <div class="lh"><div style="flex:1"><div class="lm" id="mn"></div><div class="ls" id="bsl"></div><div class="seg" id="seg" role="group" aria-label="Date style"><button type="button" data-m="ad">AD</button><button type="button" data-m="both">AD + BS</button><button type="button" data-m="bs">BS</button></div></div><div class="ly" id="yr"></div>
-    <div class="lnav"><button id="yb">Year</button><button id="td">Today</button><button id="pv" aria-label="Previous month">‹</button><button id="nx" aria-label="Next month">›</button></div></div>
+    <div class="lnav"><button id="bb">BS month</button><button id="yb">Year</button><button id="td">Today</button><button id="pv" aria-label="Previous month">‹</button><button id="nx" aria-label="Next month">›</button></div></div>
   <div class="lq" id="lq"></div>
   <div class="lw" id="lw"></div><div class="ld" id="ld"></div><div class="plx" id="plx"></div>
   <p class="lfst" id="fl"></p>
@@ -174,6 +182,7 @@ details#pvd{margin-top:12px}details#pvd summary{cursor:pointer;color:var(--mu)}
 </div>
 
 <div id="yv" class="yv" hidden><div class="yb"><button id="yp" aria-label="Previous year">‹</button><b id="yt"></b><button id="yn" aria-label="Next year">›</button><span style="flex:1"></span><button id="yx">✕ Close</button></div><div id="yg" class="yg"></div></div>
+<div id="bv" class="yv" hidden><div class="yb"><button id="bp" aria-label="Previous Nepali month">‹</button><b id="bt"></b><button id="bn" aria-label="Next Nepali month">›</button><span style="flex:1"></span><button id="bxx">✕ Close</button></div><p class="note" id="bs2" style="max-width:560px;margin:0 auto 10px"></p><div id="bg" class="bgd"></div><div id="bl" class="bll"></div></div>
 <div class="card"><b>My Calendar</b>
 <div id="up" style="margin-top:10px"></div>
 <div class="row" style="margin-top:10px"><input type="date" id="ed" class="t"><span id="ecw"></span><select id="ek" aria-label="Event color"></select><input class="t" id="et" placeholder="Event or note"><label><input type="checkbox" id="er"> Every year</label><button class="pri" id="ea">Add</button></div>
@@ -254,15 +263,15 @@ function bs2ad(by,bm,bd){
   for(let i=0;i<bm;i++)n+=BSD[by][i];
   return new Date(Date.UTC(2026,3,14+n+bd-1));
 }
-const FN={"Nepali New Year 2083":"नयाँ वर्ष २०८३","Buddha Jayanti · Labour Day":"बुद्ध जयन्ती · श्रमिक दिवस","Republic Day":"गणतन्त्र दिवस","Janai Purnima":"जनै पूर्णिमा","Gai Jatra":"गाईजात्रा","Krishna Janmashtami":"कृष्ण जन्माष्टमी","Haritalika Teej":"हरितालिका तीज","Constitution Day":"संविधान दिवस","Indra Jatra":"इन्द्रजात्रा","Jitiya":"जितिया","Ghatasthapana":"घटस्थापना","Dashain holidays":"दशैं बिदा","Vijaya Dashami":"विजया दशमी","Kaag Tihar":"काग तिहार","Laxmi Puja · Kukur Tihar":"लक्ष्मी पूजा · कुकुर तिहार","Gai Tihar":"गाई तिहार","Mha Puja":"म्ह पूजा","Bhai Tika":"भाइटीका","Yomari Punhi":"योमरी पुन्ही","Christmas":"क्रिसमस","Tamu Lhosar":"तमु ल्होसार","Prithvi Jayanti":"पृथ्वी जयन्ती","Maghe Sankranti":"माघे सङ्क्रान्ति","Martyrs' Day":"शहीद दिवस","Sonam Lhosar":"सोनाम ल्होसार","Basanta Panchami":"बसन्त पञ्चमी","Democracy Day":"प्रजातन्त्र दिवस","Maha Shivaratri":"महाशिवरात्रि","Women's Day":"महिला दिवस","Gyalpo Lhosar":"ग्याल्पो ल्होसार","Fagu Purnima (Holi, hills)":"फागु पूर्णिमा (होली, पहाड)","Holi (Terai)":"होली (तराई)","Ghode Jatra":"घोडेजात्रा","Nepali New Year 2084":"नयाँ वर्ष २०८४"};
-const FEST=[["2026-04-14","2026-04-14","Nepali New Year 2083"],["2026-05-01","2026-05-01","Buddha Jayanti · Labour Day"],["2026-05-29","2026-05-29","Republic Day"],["2026-08-28","2026-08-28","Janai Purnima"],["2026-08-29","2026-08-29","Gai Jatra"],["2026-09-04","2026-09-04","Krishna Janmashtami"],["2026-09-14","2026-09-14","Haritalika Teej"],["2026-09-19","2026-09-19","Constitution Day"],["2026-09-25","2026-09-25","Indra Jatra"],["2026-10-04","2026-10-04","Jitiya"],["2026-10-11","2026-10-11","Ghatasthapana"],["2026-10-17","2026-10-23","Dashain holidays"],["2026-10-21","2026-10-21","Vijaya Dashami"],["2026-11-07","2026-11-07","Kaag Tihar"],["2026-11-08","2026-11-08","Laxmi Puja · Kukur Tihar"],["2026-11-09","2026-11-09","Gai Tihar"],["2026-11-10","2026-11-10","Mha Puja"],["2026-11-11","2026-11-11","Bhai Tika"],["2026-12-24","2026-12-24","Yomari Punhi"],["2026-12-25","2026-12-25","Christmas"],["2026-12-30","2026-12-30","Tamu Lhosar"],["2027-01-11","2027-01-11","Prithvi Jayanti"],["2027-01-15","2027-01-15","Maghe Sankranti"],["2027-01-30","2027-01-30","Martyrs' Day"],["2027-02-07","2027-02-07","Sonam Lhosar"],["2027-02-11","2027-02-11","Basanta Panchami"],["2027-02-19","2027-02-19","Democracy Day"],["2027-03-06","2027-03-06","Maha Shivaratri"],["2027-03-08","2027-03-08","Women's Day"],["2027-03-09","2027-03-09","Gyalpo Lhosar"],["2027-03-21","2027-03-21","Fagu Purnima (Holi, hills)"],["2027-03-22","2027-03-22","Holi (Terai)"],["2027-04-06","2027-04-06","Ghode Jatra"],["2027-04-14","2027-04-14","Nepali New Year 2084"]];
+const FN={"Nepali New Year 2083":"नयाँ वर्ष २०८३","Buddha Jayanti · Labour Day":"बुद्ध जयन्ती · श्रमिक दिवस","Republic Day":"गणतन्त्र दिवस","Janai Purnima":"जनै पूर्णिमा","Gai Jatra":"गाईजात्रा","Krishna Janmashtami":"कृष्ण जन्माष्टमी","Haritalika Teej":"हरितालिका तीज","Constitution Day":"संविधान दिवस","Indra Jatra":"इन्द्रजात्रा","Jitiya":"जितिया","Ghatasthapana":"घटस्थापना","Dashain holidays":"दशैं बिदा","Vijaya Dashami":"विजया दशमी","Kaag Tihar":"काग तिहार","Laxmi Puja · Kukur Tihar":"लक्ष्मी पूजा · कुकुर तिहार","Gai Tihar":"गाई तिहार","Mha Puja":"म्ह पूजा","Bhai Tika":"भाइटीका","Falgunanda Jayanti (Kirat)":"फाल्गुनन्द जयन्ती (किरात)","Chhath Parwa":"छठ पर्व","Day of Persons with Disabilities":"अपाङ्गता भएका व्यक्तिको दिवस","Yomari Punhi":"योमरी पुन्ही","Christmas":"क्रिसमस","Tamu Lhosar":"तमु ल्होसार","Prithvi Jayanti":"पृथ्वी जयन्ती","Maghe Sankranti":"माघे सङ्क्रान्ति","Martyrs' Day":"शहीद दिवस","Sonam Lhosar":"सोनाम ल्होसार","Basanta Panchami":"बसन्त पञ्चमी","Democracy Day":"प्रजातन्त्र दिवस","Maha Shivaratri":"महाशिवरात्रि","Women's Day":"महिला दिवस","Gyalpo Lhosar":"ग्याल्पो ल्होसार","Fagu Purnima (Holi, hills)":"फागु पूर्णिमा (होली, पहाड)","Holi (Terai)":"होली (तराई)","Ghode Jatra":"घोडेजात्रा","Nepali New Year 2084":"नयाँ वर्ष २०८४"};
+const FEST=[["2026-04-14","2026-04-14","Nepali New Year 2083"],["2026-05-01","2026-05-01","Buddha Jayanti · Labour Day"],["2026-05-29","2026-05-29","Republic Day"],["2026-08-28","2026-08-28","Janai Purnima"],["2026-08-29","2026-08-29","Gai Jatra"],["2026-09-04","2026-09-04","Krishna Janmashtami"],["2026-09-14","2026-09-14","Haritalika Teej"],["2026-09-19","2026-09-19","Constitution Day"],["2026-09-25","2026-09-25","Indra Jatra"],["2026-10-04","2026-10-04","Jitiya"],["2026-10-11","2026-10-11","Ghatasthapana"],["2026-10-17","2026-10-23","Dashain holidays"],["2026-10-21","2026-10-21","Vijaya Dashami"],["2026-11-07","2026-11-07","Kaag Tihar"],["2026-11-08","2026-11-08","Laxmi Puja · Kukur Tihar"],["2026-11-09","2026-11-09","Gai Tihar"],["2026-11-10","2026-11-10","Mha Puja"],["2026-11-11","2026-11-11","Bhai Tika"],["2026-11-11","2026-11-11","Falgunanda Jayanti (Kirat)"],["2026-11-15","2026-11-15","Chhath Parwa"],["2026-12-03","2026-12-03","Day of Persons with Disabilities"],["2026-12-24","2026-12-24","Yomari Punhi"],["2026-12-25","2026-12-25","Christmas"],["2026-12-30","2026-12-30","Tamu Lhosar"],["2027-01-11","2027-01-11","Prithvi Jayanti"],["2027-01-15","2027-01-15","Maghe Sankranti"],["2027-01-30","2027-01-30","Martyrs' Day"],["2027-02-07","2027-02-07","Sonam Lhosar"],["2027-02-11","2027-02-11","Basanta Panchami"],["2027-02-19","2027-02-19","Democracy Day"],["2027-03-06","2027-03-06","Maha Shivaratri"],["2027-03-08","2027-03-08","Women's Day"],["2027-03-09","2027-03-09","Gyalpo Lhosar"],["2027-03-21","2027-03-21","Fagu Purnima (Holi, hills)"],["2027-03-22","2027-03-22","Holi (Terai)"],["2027-04-06","2027-04-06","Ghode Jatra"],["2027-04-14","2027-04-14","Nepali New Year 2084"]];
 const IC=/^(\p{Extended_Pictographic}\uFE0F?)/u,nd=x=>CU.nn?toNp(x):x;
 const tithi=(y,m,d)=>{const t=(Date.UTC(y,m,d,0,15)-Date.UTC(2000,0,1,12))/864e5,r=Math.PI/180,e=((218.316+13.176396*t+6.289*Math.sin((134.963+13.064993*t)*r))-(280.46+0.9856474*t+1.915*Math.sin((357.529+0.98560028*t)*r)))%360;return Math.floor(((e+360)%360)/12)+1};
 const CATS=[["","• Note"],["🎂","🎂 Birthday"],["💍","💍 Anniversary"],["📝","📝 Exam"],["🎉","🎉 Party"],["💼","💼 Work"],["✈️","✈️ Trip"]];
 const catSel=id=>{const s=document.createElement("select");if(id)s.id=id;CATS.forEach(c=>{const o=document.createElement("option");o.value=c[0];o.textContent=c[1];s.append(o)});return s};
 const disp=(t,y)=>{const m=/^(🎂|💍)/.test(t)&&t.match(/\b(19|20)\d{2}\b/);return m&&y>+m[0]?t.replace(m[0],"").replace(/\s+/g," ").trim()+" · "+(y-m[0])+(t[0]=="🎂"?" yrs":" yrs together"):t};
-const LFY=Math.max.apply(null,FEST.map(f=>+f[1].slice(0,4)));
-function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);const mo=[];for(let d=1;d<=new Date(S.y,S.m+1,0).getDate();d++){const t=tithi(S.y,S.m,d);if(t==15)mo.push("🌕 Purnima "+d);if(t==30)mo.push("🌑 Aunsi "+d);if(t==11||t==26)mo.push("Ekadashi "+d)}const a2=[];if(o.length)a2.push("Festivals: "+o.join(" · "));if(mo.length)a2.push(mo.join(" · ")+" (approx.)");if(S.y>LFY)a2.push("Festivals: listed through "+LFY+" only");$("fl").textContent=a2.join("  |  ")}
+const LFD=FEST.map(f=>f[1]).sort().pop(),LFB0=ad2bs(+LFD.slice(0,4),+LFD.slice(5,7)-1,+LFD.slice(8,10)),LFB=LFB0&&{y:(LFB0.m==0&&LFB0.d==1)?LFB0.y-1:LFB0.y};
+function fl(){const a=evk(S.y,S.m,1),b=evk(S.y,S.m,31),o=FEST.filter(f=>f[0]<=b&&f[1]>=a).map(f=>(f[0]==f[1]?f[0].slice(8):f[0].slice(8)+"–"+f[1].slice(8))+" "+f[2]);const mo=[];for(let d=1;d<=new Date(S.y,S.m+1,0).getDate();d++){const t=tithi(S.y,S.m,d);if(t==15)mo.push("🌕 Purnima "+d);if(t==30)mo.push("🌑 Aunsi "+d);if(t==11||t==26)mo.push("Ekadashi "+d)}const a2=[];if(o.length)a2.push("Festivals: "+o.join(" · "));if(mo.length)a2.push(mo.join(" · ")+" (approx.)");if(evk(S.y,S.m,1)>LFD)a2.push("Festivals: listed through "+(LFB?LFB.y:"")+" BS only");$("fl").textContent=a2.join("  |  ")}
 function custom(d){const o=Object.assign({},d);if(CU.ac)o.ac=CU.ac;if(CU.f&&!d.pl)o.f=FM[CU.f]||SAN;if(CU.quote)o.q=[CU.quote,CU.author];return o}
 function ridge(x,ax,aw,base,amp,seed,bot,col,smooth){
   x.beginPath();x.moveTo(ax,bot);
@@ -626,7 +635,7 @@ function evl(){
 $("ea").onclick=()=>{const v=$("ed").value,t0=$("et").value.trim(),t=t0&&$("ec").value?$("ec").value+" "+t0:t0;if(!v||!t){say("Pick a date and write a note.");return}if(+$("ek").value){EVC[($("er").checked?v.slice(5):v)+"|"+t]=+$("ek").value;sevc()}if($("er").checked){const mk=v.slice(5);(EVR[mk]=EVR[mk]||[]).push(t);sevr()}else{(EV[v]=EV[v]||[]).push(t);sev()}$("et").value="";const q=v.split("-");S.y=+q[0];S.m=+q[1]-1;draw();say("Event added.")};
 $("ed").value=evk(T.getFullYear(),T.getMonth(),T.getDate());
 ECN.forEach((n,i)=>{const o=document.createElement("option");o.value=i;o.textContent=n;$("ek").append(o)});
-$("bx").onclick=()=>{const b=new Blob([JSON.stringify({app:"kalendar",v:1,events:EV,yearly:EVR,colors:EVC},null,1)],{type:"application/json"});save("kalendar-backup-"+evk(T.getFullYear(),T.getMonth(),T.getDate())+".json",b)};
+$("bx").onclick=()=>{try{localStorage.setItem("kk-lastbk",String(Date.now()))}catch(e){}const b=new Blob([JSON.stringify({app:"kalendar",v:1,events:EV,yearly:EVR,colors:EVC},null,1)],{type:"application/json"});save("kalendar-backup-"+evk(T.getFullYear(),T.getMonth(),T.getDate())+".json",b)};
 $("bi").onchange=e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
   f.text().then(s=>{
@@ -745,9 +754,76 @@ $("yb").onclick=()=>{YVY=S.y;yview();$("yv").hidden=false;document.body.style.ov
 $("yp").onclick=()=>{YVY--;yview()};$("yn").onclick=()=>{YVY++;yview()};
 $("yx").onclick=()=>{$("yv").hidden=true;document.body.style.overflow=""};
 document.addEventListener("keydown",e=>{if(e.key=="Escape"&&!$("yv").hidden)$("yx").onclick()});
+// ---- BS (Nepali) month view
+const BYMIN=Math.min.apply(null,Object.keys(BSD).map(Number)),BYMAX=Math.max.apply(null,Object.keys(BSD).map(Number));
+let BVY=BYMIN,BVM=0;
+function bview(){
+  const dm=BSD[BVY][BVM],base=bs2ad(BVY,BVM,1),f0=(base.getUTCDay()-CU.ws+7)%7,last=new Date(base.getTime()+(dm-1)*864e5);
+  $("bt").textContent=BSN[BVM]+" "+toNp(BVY);
+  $("bs2").textContent=BSM[BVM]+" "+BVY+" BS  ·  "+MN[base.getUTCMonth()].slice(0,3)+" "+base.getUTCDate()+" – "+(base.getUTCMonth()!=last.getUTCMonth()?MN[last.getUTCMonth()].slice(0,3)+" ":"")+last.getUTCDate()+", "+last.getUTCFullYear();
+  const g=$("bg");g.innerHTML="";const wl=CU.nl?WN:["S","M","T","W","T","F","S"];
+  for(let i=0;i<7;i++){const h=document.createElement("div");h.className="h";h.textContent=wl[(i+CU.ws)%7];g.append(h)}
+  for(let i=0;i<f0;i++)g.append(document.createElement("span"));
+  const list=[];
+  for(let n=1;n<=dm;n++){
+    const d=new Date(base.getTime()+(n-1)*864e5),Y=d.getUTCFullYear(),M=d.getUTCMonth(),D=d.getUTCDate(),k=evk(Y,M,D),ee=evOn(k),fe=FEST.filter(f=>f[0]<=k&&f[1]>=k),tt=tithi(Y,M,D);
+    const b=document.createElement("button");b.type="button";b.className="bc";
+    if(Y==T.getFullYear()&&M==T.getMonth()&&D==T.getDate())b.className+=" t";
+    if(fe.length)b.className+=" f";
+    const big=document.createElement("b");big.textContent=nd(n);const sm=document.createElement("small");sm.textContent=D;b.append(big,sm);
+    if(tt==15||tt==30){const md=document.createElement("span");md.className="md";md.textContent=tt==15?"🌕":"🌑";b.append(md)}
+    if(ee.length){const e=document.createElement("i");e.className="ev";const c=ee.map(t=>evcol(k,t)).find(Boolean);if(c)e.style.setProperty("--ec",c);b.append(e)}
+    b.onclick=()=>{$("bv").hidden=true;document.body.style.overflow="";S.y=Y;S.m=M;S.sel=k;draw();scrollTo({top:0,behavior:"smooth"})};
+    g.append(b);
+    fe.forEach(f=>{if(f[0]==k||n==1)list.push([n,"★ "+f[2]])});
+    ee.forEach(t=>list.push([n,disp(t,Y)]));
+  }
+  const L=$("bl");L.innerHTML="";
+  list.forEach(z=>{const r=document.createElement("div"),a=document.createElement("span"),t=document.createElement("span");a.textContent=nd(z[0])+" "+BSN[BVM]+" — ";if(z[1].charAt(0)!="★")t.className="ue";t.textContent=z[1];r.append(a,t);L.append(r)});
+  if(!list.length)L.textContent="No festivals or events this month.";
+}
+$("bb").onclick=()=>{const t=ad2bs(S.y,S.m,15)||ad2bs(T.getFullYear(),T.getMonth(),T.getDate())||{y:BYMIN,m:0};BVY=t.y;BVM=t.m;bview();$("bv").hidden=false;document.body.style.overflow="hidden"};
+$("bp").onclick=()=>{if(BVY==BYMIN&&BVM==0)return;BVM--;if(BVM<0){BVM=11;BVY--}bview()};
+$("bn").onclick=()=>{if(BVY==BYMAX&&BVM==11)return;BVM++;if(BVM>11){BVM=0;BVY++}bview()};
+$("bxx").onclick=()=>{$("bv").hidden=true;document.body.style.overflow=""};
+document.addEventListener("keydown",e=>{if(e.key=="Escape"&&!$("bv").hidden)$("bxx").onclick()});
+// ---- Notices: new version, back-up nudge
+function notice(txt,btns){
+  let box=$("nb");if(!box){box=document.createElement("div");box.id="nb";box.className="nb";document.body.append(box)}
+  const c=document.createElement("div"),s=document.createElement("span");c.className="nbi";
+  s.textContent=txt;c.append(s);
+  btns.forEach(b=>{const e=document.createElement(b.href?"a":"button");e.textContent=b.t;
+    if(b.href){e.href=b.href;e.target="_blank";e.rel="noopener";e.style.cssText="padding:8px 14px;border-radius:999px;text-decoration:none;color:#fff;background:var(--ac)"}else if(b.pri)e.className="pri";
+    e.onclick=()=>{if(b.f)b.f();c.remove()};c.append(e)});
+  box.append(c);
+}
+(function(){
+  if(!isNative)return;
+  const bd=$("bd"),m=/build-(\d+)/.exec(bd?bd.textContent:"");if(!m)return;const cur=+m[1];
+  let last=0;try{last=+localStorage.getItem("kk-updchk")||0}catch(e){}
+  if(Date.now()<last+6*36e5)return;
+  fetch("https://api.github.com/repos/kartproduction/kalendar/releases?per_page=10",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(list=>{
+    try{localStorage.setItem("kk-updchk",String(Date.now()))}catch(e){}
+    if(!Array.isArray(list))return;let best=0;
+    list.forEach(r=>{const t=/^v\d+\.\d+\.(\d+)$/.exec(r.tag_name||"");if(t&&!r.draft&&!r.prerelease&&(r.assets||[]).some(a=>/\.apk$/i.test(a.name))&&+t[1]>best)best=+t[1]});
+    let dis=0;try{dis=+localStorage.getItem("kk-upddis")||0}catch(e){}
+    if(best>cur&&best>dis)notice("A new version of Kalendar is available (v1.0."+best+").",[
+      {t:"Update",href:"https://kartproduction.github.io/kalendarbykasign/download.html",f:()=>{try{localStorage.setItem("kk-upddis",String(best))}catch(e){}}},
+      {t:"Later",f:()=>{try{localStorage.setItem("kk-updchk",String(Date.now()+18*36e5))}catch(e){}}}]);
+  }).catch(()=>{});
+})();
+(function(){
+  const has=Object.keys(EV).length||Object.keys(EVR).length;let lb=0,sz=0;
+  try{lb=+localStorage.getItem("kk-lastbk")||0;sz=+localStorage.getItem("kk-bksnz")||0}catch(e){}
+  if(!lb){try{localStorage.setItem("kk-lastbk",String(Date.now()))}catch(e){}return}
+  if(!has||Date.now()-lb<30*864e5||Date.now()<sz)return;
+  setTimeout(()=>notice("Back up your events. They are stored only on this device.",[
+    {t:"Back up now",pri:1,f:()=>$("bx").click()},
+    {t:"Remind me later",f:()=>{try{localStorage.setItem("kk-bksnz",String(Date.now()+7*864e5))}catch(e){}}}]),1500);
+})();
 const NE={"← Main page":"← मुख्य पृष्ठ","Get the Android app":"एन्ड्रोइड एप लिनुहोस्","Beautiful calendars with Nepali dates.":"नेपाली मितिसहितका सुन्दर क्यालेन्डर।","Pick a design, add your photo or quote, and make one in a minute. Free, works offline, no account.":"डिजाइन रोज्नुहोस्, आफ्नो फोटो वा उक्ति थप्नुहोस्, र एक मिनेटमै बनाउनुहोस्। निःशुल्क, अफलाइन चल्छ, खाता चाहिँदैन।","10 designs · 5 collections · portrait & landscape · PNG & PDF export":"१० डिजाइन · ५ सङ्ग्रह · पोर्ट्रेट र ल्यान्डस्केप · PNG र PDF निर्यात","Today":"आज","Designs":"डिजाइन","Export":"निर्यात","Portrait 9:16":"पोर्ट्रेट ९:१६","Landscape 16:9":"ल्यान्डस्केप १६:९","Quote":"उक्ति","Add photos":"फोटो थप्नुहोस्","Clear photo":"फोटो हटाउनुहोस्","♡ Favorite":"♡ मनपर्ने","Save PNG":"PNG सेभ गर्नुहोस्","Save PDF":"PDF सेभ गर्नुहोस्","Full-year PDF":"पूरा वर्षको PDF","Share image":"तस्बिर सेयर गर्नुहोस्","Preview export image":"निर्यात तस्बिर हेर्नुहोस्","My Calendar":"मेरो क्यालेन्डर","Every year":"हरेक वर्ष","Add":"थप्नुहोस्","Export backup":"ब्याकअप निर्यात","Add to phone calendar (.ics)":"फोन क्यालेन्डरमा थप्नुहोस् (.ics)","Import backup":"ब्याकअप आयात","Date converter (AD ↔ BS)":"मिति परिवर्तक (AD ↔ BS)","Customize":"आफ्नै शैली","Accent":"रङ","Design font: default":"डिजाइन फन्ट: पूर्वनिर्धारित","Week starts Sunday":"हप्ता आइतबारबाट सुरु","Week starts Monday":"हप्ता सोमबारबाट सुरु","Dates: auto (Nepali designs show AD + BS)":"मिति: स्वचालित (नेपाली डिजाइनमा AD + BS)","AD only":"AD मात्र","BS emphasis":"BS मुख्य","Nepali weekdays":"नेपाली बार","Nepali digits":"नेपाली अङ्क","Reset":"रिसेट","Save my design":"मेरो डिजाइन सेभ","Use my design":"मेरो डिजाइन प्रयोग","Made with care by":"माया र लगनले बनाएको:","Coming up":"आगामी","All":"सबै","Paper":"कागज","Himalaya":"हिमालय","Words":"शब्द","Patro":"पात्रो","Bloom":"फूल","♥ Favorites":"♥ मनपर्ने","Favorites":"मनपर्ने","☰ Collections":"☰ सङ्ग्रह","Tomorrow":"भोलि","No matches.":"केही भेटिएन।","Tap a date to see festivals or add a note.":"चाडपर्व हेर्न वा नोट थप्न मिति छान्नुहोस्।","Nepali BS dates are built in for 2082–2088 BS. 2083 matches published calendars; later years come from public converter tables and are not independently checked. Festival dates for 2083 BS (April 2026 – April 2027) come from the Government of Nepal holiday notice as reproduced by public sources, plus nepcalendar.com for Tihar; they can be edited in the FEST list. Tithi, Purnima and Aunsi are calculated and approximate. Sample quotes are original placeholders; edit them in the DESIGNS list. Photos you add stay on your device and are used only for the current session.":"नेपाली मिति (BS) २०८२–२०८८ का लागि समावेश छन्। २०८३ को मिति प्रकाशित पात्रोसँग मेल खान्छ; पछिका वर्ष सार्वजनिक परिवर्तक तालिकाबाट लिइएका हुन् र स्वतन्त्र रूपमा जाँचिएका छैनन्। चाडपर्वका मिति सार्वजनिक स्रोतबाट लिइएका हुन् र FEST सूचीमा सम्पादन गर्न सकिन्छ। तिथि, औंसी र पूर्णिमा गणनाबाट निकालिएका अनुमानित मिति हुन्। तपाईंले थपेका फोटो तपाईंकै यन्त्रमा रहन्छन् र हालको सत्रमा मात्र प्रयोग हुन्छन्।"};
-Object.assign(NE,{"Year":"वर्ष","✕ Close":"✕ बन्द","Remind me":"मलाई सम्झाउनुहोस्","on the day":"त्यही दिन","1 day before":"१ दिन अघि","at":"समय","festivals too":"चाडपर्व पनि","No color":"रङ छैन","🔴 Red":"🔴 रातो","🟠 Orange":"🟠 सुन्तला","🟡 Yellow":"🟡 पहेंलो","🟢 Green":"🟢 हरियो","🔵 Blue":"🔵 निलो","🟣 Purple":"🟣 बैजनी","🌸 Pink":"🌸 गुलाबी"});
-const WR=[[/Festivals: listed through (\d+) only/g,"चाडपर्व: $1 सम्म मात्र सूचीबद्ध"],[/Festivals: /g,"चाडपर्व: "],[/\(approx\.\)/g,"(अनुमानित)"],[/Purnima/g,"पूर्णिमा"],[/Aunsi/g,"औंसी"],[/Ekadashi/g,"एकादशी"],[/Shukla/g,"शुक्ल"],[/Krishna /g,"कृष्ण "],[/Tithi/g,"तिथि"],[/Today/g,"आज"],[/In (\d+) days/g,"$1 दिनमा"],[/\bJanuary\b/g,"जनवरी"],[/\bFebruary\b/g,"फेब्रुअरी"],[/\bMarch\b/g,"मार्च"],[/\bApril\b/g,"अप्रिल"],[/\bMay\b/g,"मे"],[/\bJune\b/g,"जुन"],[/\bJuly\b/g,"जुलाई"],[/\bAugust\b/g,"अगस्ट"],[/\bSeptember\b/g,"सेप्टेम्बर"],[/\bOctober\b/g,"अक्टोबर"],[/\bNovember\b/g,"नोभेम्बर"],[/\bDecember\b/g,"डिसेम्बर"],[/\(every year\)/g,"(हरेक वर्ष)"]];
+Object.assign(NE,{"Year":"वर्ष","✕ Close":"✕ बन्द","Remind me":"मलाई सम्झाउनुहोस्","on the day":"त्यही दिन","1 day before":"१ दिन अघि","at":"समय","festivals too":"चाडपर्व पनि","No color":"रङ छैन","🔴 Red":"🔴 रातो","🟠 Orange":"🟠 सुन्तला","🟡 Yellow":"🟡 पहेंलो","🟢 Green":"🟢 हरियो","🔵 Blue":"🔵 निलो","🟣 Purple":"🟣 बैजनी","🌸 Pink":"🌸 गुलाबी","BS month":"वि.सं. महिना","No festivals or events this month.":"यो महिना चाडपर्व वा कार्यक्रम छैन।","Back up your events. They are stored only on this device.":"आफ्ना कार्यक्रमहरूको ब्याकअप लिनुहोस्। यी यही उपकरणमा मात्र सुरक्षित छन्।","Back up now":"अहिले ब्याकअप लिनुहोस्","Remind me later":"पछि सम्झाउनुहोस्","Update":"अपडेट","Later":"पछि"});
+const WR=[[/Festivals: listed through (\d+) BS only/g,"चाडपर्व: वि.सं. $1 सम्म मात्र सूचीबद्ध"],[/Festivals: /g,"चाडपर्व: "],[/\(approx\.\)/g,"(अनुमानित)"],[/Purnima/g,"पूर्णिमा"],[/Aunsi/g,"औंसी"],[/Ekadashi/g,"एकादशी"],[/Shukla/g,"शुक्ल"],[/Krishna /g,"कृष्ण "],[/Tithi/g,"तिथि"],[/Today/g,"आज"],[/In (\d+) days/g,"$1 दिनमा"],[/\bJanuary\b/g,"जनवरी"],[/\bFebruary\b/g,"फेब्रुअरी"],[/\bMarch\b/g,"मार्च"],[/\bApril\b/g,"अप्रिल"],[/\bMay\b/g,"मे"],[/\bJune\b/g,"जुन"],[/\bJuly\b/g,"जुलाई"],[/\bAugust\b/g,"अगस्ट"],[/\bSeptember\b/g,"सेप्टेम्बर"],[/\bOctober\b/g,"अक्टोबर"],[/\bNovember\b/g,"नोभेम्बर"],[/\bDecember\b/g,"डिसेम्बर"],[/\(every year\)/g,"(हरेक वर्ष)"]];
 let LANG="en";try{LANG=localStorage.getItem("kk-lang")||"en"}catch(e){}
 const ORG=new WeakMap();let busy=0;
 function trT(n){if(n.parentNode&&n.parentNode.closest&&n.parentNode.closest(".ue"))return;const t=n.nodeValue,c=ORG.get(n);if(!t.trim()||(c&&t===c.t))return;const o=t,ok=o.trim();let r=NE[ok],v;if(r===undefined){v=o;WR.forEach(w=>{v=v.replace(w[0],w[1])})}else v=o.replace(ok,r);if(v===o){ORG.delete(n);return}ORG.set(n,{o:o,t:v});n.nodeValue=v}
