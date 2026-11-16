@@ -1,100 +1,67 @@
-# Kalendar by Kasign
+# Kalendar by Kasign — app
 
-Beautiful calendars with Nepali dates. Pick a design, add your own photo or quote, and export it as an image or PDF. It is free, works offline, and needs no account.
+Offline-first calendar app with 10 designs, portrait and landscape layouts, PNG/PDF export, Nepali (BS) dates, festivals, personal events (including yearly birthdays and anniversaries), a coming-up list, event backup and restore, an AD ↔ BS date converter, event colors, a full-year view, a Nepali (BS) month view, reminder notifications (Android app), update and backup notices, and customization. One web app, also packaged as an Android app with Capacitor.
 
-- **Website:** https://kartproduction.github.io/kalendarbykasign/
 - **Web app:** https://kartproduction.github.io/kalendar/
-- **Android app:** download the latest APK from [Releases](https://github.com/kartproduction/kalendar/releases)
+- **Android app:** download from https://kartproduction.github.io/kalendarbykasign/download.html (files are published in [Releases](https://github.com/kartproduction/kalendar/releases))
+- **Website source:** https://github.com/kartproduction/kalendarbykasign
 
-> **View-only source.** This repository is public so you can see how the app was made and learn from it. The code is not free to copy, host, or reuse. See [License](#license).
+> **View-only source.** This repository is public so you can see how the app was made. The code, designs, photos and branding are **not** free to copy, host or reuse. See [LICENSE](LICENSE).
 
----
-
-## What it does
-
-- **10 designs in 5 collections:** Paper, Himalaya, Words, Patro, and Bloom. Mountain and hill scenes are drawn in code, so no photos are needed for them.
-- **Nepali (BS) dates:** switch between AD, AD + BS, or BS with one tap. Covers 2082–2088 BS, with Nepali weekday names and Nepali digits as options.
-- **English / नेपाली interface:** one button switches the page's buttons, labels and notes between English and Nepali, and remembers your choice.
-- **Export:** save a calendar page as a PNG or as a PDF (A4 or Letter), in portrait (9:16) or landscape (16:9). A **full-year PDF** makes a cover page plus all 12 months in one file, and **Share image** sends the picture straight to WhatsApp, Viber or any other app.
-- **Make it yours:** add your own photos, a custom quote and author, an accent color, one of five fonts, and choose whether the week starts on Sunday or Monday. **Save my design** keeps your choices so next month takes one tap (photos are not saved).
-- **My Calendar:** add your own events and notes by date, with an icon for birthday, anniversary, exam, party, work or trip. Birthdays and anniversaries can show the age or years together if you type the year (for example, "Ram 1996"). Search finds any event or festival across all months.
-- **Home-screen widget (Android):** shows today's Nepali and English date and the next festival, and opens the app when tapped.
-- **Phone reminders and calendar export:** export events and festivals as an `.ics` file for Google or Apple Calendar ("Every year" events repeat yearly). In the Android app, your events also set an 8:00 am reminder on the day.
-- **Festivals and holidays:** the list for 2083 BS (April 2026 to April 2027) appears under the month and on the dates, including Dashain, the five days of Tihar, Teej, Janai Purnima, Maha Shivaratri, Holi, Ghode Jatra and the Lhosar festivals.
-- **Moon and tithi:** Purnima and Aunsi are marked on the grid, Ekadashi is listed under the month, and tapping a date shows its tithi. These are calculated, so they are approximate and can differ by a day from a printed patro.
-- **Dark mode:** a button in the top bar switches the page between light and dark.
-- **Favorites:** mark designs you like.
-- **Offline-first:** after the first visit the web app works without a connection, and it can be added to a phone home screen.
-
-Events, favorites, saved designs, and customization are saved on your own device. Photos you add last only for the current session.
-
-## How it was made
-
-| Part | What it uses |
-| --- | --- |
-| App | One HTML file with its own CSS and JavaScript (`www/index.html`), drawn on an HTML canvas |
-| Reminders and sharing | [@capacitor/local-notifications](https://capacitorjs.com/docs/apis/local-notifications), [@capacitor/share](https://capacitorjs.com/docs/apis/share) and [@capacitor/filesystem](https://capacitorjs.com/docs/apis/filesystem) in the Android app; the web page uses the browser's own sharing |
-| Home-screen widget | Native Android widget (`widget/`) showing today's BS and AD date and the next festival |
-| PDF export | [jsPDF](https://github.com/parallax/jsPDF) |
-| Offline and install | A service worker (`www/sw.js`) and a web app manifest |
-| Android app | [Capacitor](https://capacitorjs.com/), plus a small custom Java bridge that saves exports to the phone's Pictures and Downloads folders (Android 10 and newer) |
-| Fonts | Fraunces, Playfair Display, Bodoni Moda, Archivo, and Tiro Devanagari Hindi, bundled so the designs look the same offline |
-| Web hosting | GitHub Pages, deployed automatically by GitHub Actions |
-| APK builds | GitHub Actions builds and signs the APK, then publishes it to Releases |
-
-### Project structure
+## Folder structure (keep files in these places)
 
 ```
 kalendar/
-├── www/                      # the app itself
-│   ├── index.html            # designs, date logic, export, UI
-│   ├── sw.js                 # offline cache
-│   ├── manifest.webmanifest  # install-to-home-screen settings
-│   ├── fonts/                # bundled fonts
-│   ├── icons/                # app icons
-│   └── assets/images/        # photos for the designs
-├── scripts/                  # build helper scripts
-├── .github/workflows/        # web deploy, APK build, release
-├── widget/                   # Android home-screen widget (Java, layout, colors)
-├── capacitor.config.json     # Android app settings
+├── www/                      the app
+│   ├── index.html            the whole app page  (replace this to update the app)
+│   ├── assets/images/        your photos: 03.jpg ... 10.jpg
+│   ├── icons/, sw.js, manifest.webmanifest
+├── .github/workflows/
+│   ├── build-apk.yml         builds the signed Android APK (Actions > Build APK)
+│   └── pages.yml             publishes www/ as the web app
+├── scripts/                  build helper scripts
+├── capacitor.config.json
 ├── package.json
-└── LICENSE
+├── LICENSE
+└── README.md
 ```
 
-### Where the festival dates come from
+Files placed outside these folders (for example an `index.html` in the repo root) are ignored by the build.
 
-The 2083 BS list was put together from the Government of Nepal public holiday notice as reproduced by public sources (Pradhan Law, College NP, ExamSanjal), checked against nepcalendar.com and Calendarific. Sources disagree on a few lunar days, so these are not official: Bhai Tika is listed on 11 November 2026 (nepcalendar.com and Nepal Hiking Team), while Calendarific shows 10 November. Check the government gazette before relying on a date, and edit the `FEST` list in `www/index.html` to correct anything. Dates for 2084 BS onward are not in the app yet.
+## Update the app
 
-### How the Nepali dates work
+1. Replace `www/index.html` (open the `www` folder first, then **Add file > Upload files**).
+2. Add photos to `www/assets/images/` as `03.jpg` ... `10.jpg` (lowercase `.jpg`).
+3. Open **Actions > Build APK > Run workflow**. The new APK appears in Releases, and the web app updates by itself.
+4. Check the line "App build: build-N-xxxxxxx" at the bottom of the app page to confirm which build you are running.
 
-Month lengths for each BS year live in a lookup table. The app counts the days between a given date and a known anchor (Baisakh 1, 2083 = 14 April 2026) and walks forward or backward through that table. The year 2083 matches published calendars. The other years come from public converter tables and have not been independently checked.
+## Data you can edit in `www/index.html`
 
-## Build and release
+- `DESIGNS`: names, colors, fonts, quotes, art type and collection for each design.
+- `BSD`: BS month lengths for 2082–2088. 2083 matches published calendars; other years come from public tables and are not independently verified. Anchor: Baisakh 1, 2083 = 14 Apr 2026.
+- `FEST`: festival list as `[start, end, name]` in AD dates.
 
-These notes are for the maintainer.
+## App icon
 
-- **Reminders, sharing and the widget:** the build installs `@capacitor/local-notifications`, `@capacitor/share` and `@capacitor/filesystem`, and `scripts/add-widget.sh` adds the widget to the Android project. `scripts/gen-widget-data.js` copies the BS month lengths and festival list from `www/index.html` into the widget, so the app and widget always agree. After the first install, check that notifications are allowed on Android 13 and newer.
-- **Fonts and offline:** keep the files in `www/fonts/` listed in `www/sw.js` so the Fraunces, Playfair, Archivo and Tiro Devanagari fonts work offline.
+The build has the Kalendar icon built in, so the app never keeps the default icon. In the build log, the step "Put the app icon into the Android project" prints the icon it used, and a later step prints "ICON OK" when the finished APK contains it.
 
-- **Web app:** every push to `main` runs the *Deploy web app* workflow and publishes the `www/` folder to GitHub Pages.
-- **Test APK:** run *Build APK* from the Actions tab. It builds a signed APK, numbers it `1.0.N`, and attaches it to a new release.
-- **Tagged release:** pushing a tag that starts with `v` (for example `v1.0.0`) runs *Android release*.
-- **Local build:** `npm run sync` copies jsPDF into `www/js/` and syncs the Android project. `npm run apk:debug` builds a debug APK.
-- **Signing key:** the keystore and its passwords are stored as GitHub Secrets and are never committed. Use the same key for every update so people can install new versions over old ones.
+To use your own logo, create a top-level `assets` folder and add `icon-only.png` (1024×1024). Optional: `icon-foreground.png` (your logo on a transparent background, kept inside the middle 60% so Android's round mask does not cut it) and `icon-background.png` (a plain color or gradient). Without a foreground file, the build makes one from `icon-only.png`. Also replace `www/icons/icon-192.png` and `icon-512.png` for the web app.
 
-## Contributing
+## Festival data
 
-Bug reports and suggestions are welcome in [Issues](https://github.com/kartproduction/kalendar/issues). Pull requests can be opened for review, but the owner decides what gets merged. By submitting a contribution, you agree it may be used in this project under the same license.
+Festival and public-holiday entries (`FEST` in `www/index.html`) follow the Ministry of Home Affairs public holiday notice for 2083 BS, plus well-known festivals. Eid al-Fitr, Eid al-Adha, Bhoto Jatra, Saruwa Pawani, Muhammad Jayanti and Guru Nanak Jayanti are announced later, so they are not listed. When the notice for 2084 BS is published, add its dates to `FEST`. Purnima, Aunsi and Ekadashi are calculated, so they can be off by a day. Nepali BS dates for 2083 match published calendars. The other years come from public tables and are not independently checked.
 
-## License
+## Notices in the Android app
 
-Copyright (c) 2026 kartproduction. All rights reserved.
+- **New version:** the app asks GitHub for the newest release number when it opens, at most every six hours, and shows an "Update" notice if a newer APK exists. It needs the "App build" stamp that **Build APK** adds.
+- **Backup nudge:** every 30 days, if you have events and have not exported a backup, the app suggests it.
 
-The source code is visible for **viewing and learning only**. You may not copy, host, redistribute, modify for your own use, or build derivative products from it without written permission. See [LICENSE](LICENSE) for the full terms.
+## Signed release (updates that install over the old app)
 
-Third-party components (jsPDF, Capacitor, and the bundled fonts) keep their own licenses. Photos, fonts, and quotes used in the designs have their own rights and are not covered by any permission to reuse this code.
+1. Create a keystore once and back it up: `keytool -genkey -v -keystore release.jks -alias kalendar -keyalg RSA -keysize 2048 -validity 10000`
+2. In GitHub **Settings > Secrets and variables > Actions**, add `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD` and `KEY_ALIAS`.
+3. Run **Build APK**. Never commit the keystore or passwords, and use the same key for every update.
 
 ## Contact
 
-Made with care by **Kasign** · Kart Production
 GitHub: [@kartproduction](https://github.com/kartproduction)
