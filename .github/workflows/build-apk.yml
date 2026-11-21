@@ -515,6 +515,211 @@ jobs:
             }
           }
           EOF
+      - name: Add home-screen widget
+        run: |
+          set -e
+          D=android/app/src/main/java/com/kasign/kalendar
+          RES=android/app/src/main/res
+          mkdir -p "$D" "$RES/xml" "$RES/layout" "$RES/drawable"
+          cat > $D/KalendarWidget.java <<'EOF'
+          package com.kasign.kalendar;
+
+          import android.app.PendingIntent;
+          import android.appwidget.AppWidgetManager;
+          import android.appwidget.AppWidgetProvider;
+          import android.content.ComponentName;
+          import android.content.Context;
+          import android.content.Intent;
+          import android.content.SharedPreferences;
+          import android.widget.RemoteViews;
+          import java.text.SimpleDateFormat;
+          import java.util.Date;
+          import java.util.Locale;
+          import org.json.JSONArray;
+          import org.json.JSONObject;
+
+          public class KalendarWidget extends AppWidgetProvider {
+
+            @Override
+            public void onUpdate(Context ctx, AppWidgetManager mgr, int[] ids) {
+              for (int id : ids) {
+                render(ctx, mgr, id);
+              }
+            }
+
+            @Override
+            public void onReceive(Context ctx, Intent intent) {
+              super.onReceive(ctx, intent);
+              String a = intent.getAction();
+              if (Intent.ACTION_DATE_CHANGED.equals(a)
+                  || Intent.ACTION_TIME_CHANGED.equals(a)
+                  || Intent.ACTION_TIMEZONE_CHANGED.equals(a)) {
+                AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
+                int[] ids = mgr.getAppWidgetIds(new ComponentName(ctx, KalendarWidget.class));
+                onUpdate(ctx, mgr, ids);
+              }
+            }
+
+            static void render(Context ctx, AppWidgetManager mgr, int id) {
+              String l1 = "Kalendar";
+              String l2 = "Open the app to load dates";
+              String l3 = "";
+              try {
+                SharedPreferences sp = ctx.getSharedPreferences("kalendar_widget", Context.MODE_PRIVATE);
+                String json = sp.getString("days", "");
+                if (json != null && json.length() > 0) {
+                  String today = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
+                  JSONArray arr = new JSONArray(json);
+                  for (int i = 0; i < arr.length(); i++) {
+                    JSONObject o = arr.getJSONObject(i);
+                    if (today.equals(o.optString("d"))) {
+                      l1 = o.optString("l1");
+                      l2 = o.optString("l2");
+                      l3 = o.optString("l3");
+                      break;
+                    }
+                  }
+                }
+              } catch (Exception e) {
+                // keep the default text
+              }
+              RemoteViews v = new RemoteViews(ctx.getPackageName(), R.layout.kalendar_widget);
+              v.setTextViewText(R.id.kw_l1, l1);
+              v.setTextViewText(R.id.kw_l2, l2);
+              v.setTextViewText(R.id.kw_l3, l3);
+              Intent open = ctx.getPackageManager().getLaunchIntentForPackage(ctx.getPackageName());
+              if (open != null) {
+                PendingIntent pi = PendingIntent.getActivity(
+                    ctx, 0, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                v.setOnClickPendingIntent(R.id.kw_root, pi);
+              }
+              mgr.updateAppWidget(id, v);
+            }
+          }
+          EOF
+          cat > $D/WidgetBridge.java <<'EOF'
+          package com.kasign.kalendar;
+
+          import android.appwidget.AppWidgetManager;
+          import android.content.ComponentName;
+          import android.content.Context;
+          import android.content.Intent;
+          import android.webkit.JavascriptInterface;
+
+          public class WidgetBridge {
+            private final Context ctx;
+
+            public WidgetBridge(Context c) {
+              ctx = c;
+            }
+
+            @JavascriptInterface
+            public String update(String json) {
+              try {
+                ctx.getSharedPreferences("kalendar_widget", Context.MODE_PRIVATE)
+                    .edit().putString("days", json).apply();
+                AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
+                int[] ids = mgr.getAppWidgetIds(new ComponentName(ctx, KalendarWidget.class));
+                if (ids != null && ids.length > 0) {
+                  Intent i = new Intent(ctx, KalendarWidget.class);
+                  i.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                  i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                  ctx.sendBroadcast(i);
+                }
+                return "ok";
+              } catch (Exception e) {
+                return "error:" + e.getMessage();
+              }
+            }
+          }
+          EOF
+          cat > $RES/xml/kalendar_widget_info.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+              android:minWidth="250dp"
+              android:minHeight="110dp"
+              android:updatePeriodMillis="1800000"
+              android:initialLayout="@layout/kalendar_widget"
+              android:resizeMode="horizontal|vertical"
+              android:widgetCategory="home_screen" />
+          EOF
+          cat > $RES/layout/kalendar_widget.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/kw_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:gravity="center_vertical"
+              android:padding="14dp"
+              android:background="@drawable/kalendar_widget_bg">
+
+              <TextView
+                  android:id="@+id/kw_l1"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="#FFFFFF"
+                  android:textSize="22sp"
+                  android:textStyle="bold"
+                  android:maxLines="1" />
+
+              <TextView
+                  android:id="@+id/kw_l2"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="#FFF2E6"
+                  android:textSize="14sp"
+                  android:maxLines="1" />
+
+              <TextView
+                  android:id="@+id/kw_l3"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="6dp"
+                  android:textColor="#FFE9D2"
+                  android:textSize="14sp"
+                  android:maxLines="2" />
+          </LinearLayout>
+          EOF
+          cat > $RES/drawable/kalendar_widget_bg.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+              <solid android:color="#B5562B" />
+              <corners android:radius="20dp" />
+          </shape>
+          EOF
+          python3 - <<'PYEOF'
+          import re
+          # 1. let the web page talk to the widget
+          p = "android/app/src/main/java/com/kasign/kalendar/MainActivity.java"
+          s = open(p).read()
+          if "kw-start" not in s:
+              key = 'new SaveBridge(this), "KalendarSave");'
+              assert key in s, "MainActivity.java has no SaveBridge line"
+              s = s.replace(key, key + '\n    // kw-start\n    getBridge().getWebView().addJavascriptInterface(new WidgetBridge(this), "KalendarWidget");\n    // kw-end')
+              open(p, "w").write(s)
+          # 2. register the widget in the manifest
+          m = "android/app/src/main/AndroidManifest.xml"
+          x = open(m).read()
+          if "kw-start" not in x:
+              rec = """    <!-- kw-start -->
+              <receiver android:name=".KalendarWidget" android:exported="true">
+                  <intent-filter>
+                      <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                      <action android:name="android.intent.action.DATE_CHANGED" />
+                      <action android:name="android.intent.action.TIME_SET" />
+                      <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                  </intent-filter>
+                  <meta-data android:name="android.appwidget.provider" android:resource="@xml/kalendar_widget_info" />
+              </receiver>
+              <!-- kw-end -->
+          """
+              assert "</application>" in x, "manifest has no </application>"
+              x = x.replace("</application>", rec + "</application>", 1)
+              open(m, "w").write(x)
+          print("Widget files added")
+          PYEOF
+          echo "Widget added: Kalendar appears in the phone's widget list"
       - name: Allow notifications (reminders)
         run: |
           M=android/app/src/main/AndroidManifest.xml
@@ -526,7 +731,14 @@ jobs:
           grep -n "versionCode\|versionName" android/app/build.gradle
       - name: Build release APK
         working-directory: android
-        run: ./gradlew assembleRelease
+        run: |
+          ./gradlew assembleRelease || {
+            echo "WIDGET: the build failed with the widget, retrying without it"
+            rm -f app/src/main/java/com/kasign/kalendar/KalendarWidget.java app/src/main/java/com/kasign/kalendar/WidgetBridge.java
+            rm -f app/src/main/res/xml/kalendar_widget_info.xml app/src/main/res/layout/kalendar_widget.xml app/src/main/res/drawable/kalendar_widget_bg.xml
+            sed -i '/kw-start/,/kw-end/d' app/src/main/AndroidManifest.xml app/src/main/java/com/kasign/kalendar/MainActivity.java
+            ./gradlew assembleRelease
+          }
       - name: Sign APK
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -546,6 +758,10 @@ jobs:
           SRC=android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png
           IN=$(unzip -l "$APK" | grep -E "mipmap-xxxhdpi.*ic_launcher_foreground" | awk '{print $4}' | head -1)
           if [ -n "$IN" ] && [ "$(unzip -p "$APK" "$IN" | md5sum | cut -d' ' -f1)" = "$(md5sum "$SRC" | cut -d' ' -f1)" ]; then echo "ICON OK: the new icon is inside the APK"; else echo "ICON WARNING: could not confirm the new icon in the APK (listing below)"; unzip -l "$APK" | grep -i launcher || true; fi
+      - name: Check the widget inside the APK
+        run: |
+          APK=Kalendar-v1.0.${{ github.run_number }}.apk
+          if unzip -p "$APK" 'classes*.dex' | grep -q "KalendarWidget"; then echo "WIDGET OK: the home-screen widget is inside the APK"; else echo "WIDGET WARNING: the APK was built without the widget (see the Build release APK step for the reason)"; fi
       - name: Verify the APK contains this build
         run: |
           if [ "$STAMPED" = "yes" ]; then
