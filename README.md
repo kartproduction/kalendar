@@ -1,6 +1,6 @@
 # Kalendar by Kasign — app
 
-Offline-first calendar app with 10 designs, portrait and landscape layouts, PNG/PDF export, Nepali (BS) dates, festivals, personal events (including yearly birthdays and anniversaries), a coming-up list, event backup and restore, an AD ↔ BS date converter, event colors, a full-year view, a Nepali (BS) month view, reminder notifications (Android app), update and backup notices, and customization. One web app, also packaged as an Android app with Capacitor.
+Offline-first calendar app with 10 designs, portrait and landscape layouts, PNG/PDF export, Nepali (BS) dates, festivals, personal events (including yearly birthdays and anniversaries), a coming-up list, event backup and restore, an AD ↔ BS date converter, event colors, a full-year view, a Nepali (BS) month view, reminder notifications and a home-screen widget (Android app), online calendar data updates, update and backup notices, and customization. One web app, also packaged as an Android app with Capacitor.
 
 - **Web app:** https://kartproduction.github.io/kalendar/
 - **Android app:** download from https://kartproduction.github.io/kalendarbykasign/download.html (files are published in [Releases](https://github.com/kartproduction/kalendar/releases))
@@ -50,6 +50,18 @@ To use your own logo, create a top-level `assets` folder and add `icon-only.png`
 ## Festival data
 
 Festival and public-holiday entries (`FEST` in `www/index.html`) follow the Ministry of Home Affairs public holiday notice for 2083 BS, plus well-known festivals. Eid al-Fitr, Eid al-Adha, Bhoto Jatra, Saruwa Pawani, Muhammad Jayanti and Guru Nanak Jayanti are announced later, so they are not listed. When the notice for 2084 BS is published, add its dates to `FEST`. Purnima, Aunsi and Ekadashi are calculated, so they can be off by a day. Nepali BS dates for 2083 match published calendars. The other years come from public tables and are not independently checked.
+
+## Calendar data updates online
+
+The Nepali month lengths (BS) and the festival list live in `data/calendar-data.json` in the **website** repository. The app has a copy built in, checks the website when it is online (at most every 12 hours), and offers a **Refresh** button when the file is newer and valid. See `data/README.md` in the website repo for how to update it, and run `scripts/check-calendar-data.py` before you publish a change.
+
+## Home-screen widget (Android)
+
+Long-press the home screen, choose Widgets, and add **Kalendar**. It shows today's BS date, the AD date and the next festival. The app sends the next 120 days to the widget each time it opens, so open the app once after installing. The build adds the widget automatically; if it ever fails to compile, the build retries without it and the log says "WIDGET WARNING".
+
+## Testing, accessibility and housekeeping
+
+The `docs` folder has: `TESTING.md` (real-phone checklist; use **About > Run self-check** in the app), `ACCESSIBILITY.md`, `CLEANUP.md` (which loose files to delete), `SIGNING-KEY.md` (keep your key safe), `RIGHTS-CHECKLIST.md` (photos, quotes, fonts) and `THIRD-PARTY-NOTICES.md`.
 
 ## Notices in the Android app
 
